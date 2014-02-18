@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="jquery-2.1.0.min.js"></script>
+	<script src="jquery-ui-1.10.4.custom.min.js"></script>
+	<script src="swipe.js"></script>
+	<script src="raphael-min.js"></script>
+	<script src="Main.js"></script>
+	<link rel="stylesheet" type="text/css" href="mainstyle.css">
+	<!--<link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui-1.10.4.custom.css">-->
+
+</head>
+<body>
+
+	<!-- Place the loader icon on the middle of the page. -->
+	<div id="loader-spinner-bla" style="position:fixed;z-index:99;left:50%;top:50%">
+		<img id="loader-spinner" src="loader.gif"/>
+	</div>
+
+	<div id="top-bar" class="top-bar no-select">
+		This is the top bar.
+	</div>
+
+	<div class="no-select" style="position:fixed; left:0px; top:95%; z-index:100" onclick="PowerViz.ViewContainer.instance.prev();">
+		Left.
+	</div>
+
+	<div class="no-select" style="position:fixed; right:0px; top:95%; z-index:100" onclick="PowerViz.ViewContainer.instance.next();">
+		Right.
+	</div>
+
+	<div id="slider" class="swipe no-select">	
+		<div id="slider-container" class="swipe-wrap no-select">
+			
+			<div id="PrognoseView" class="swipe-box no-select" style="background-color:green;">
+				This is the first screen.
+			</div>
+			<div id="viewTwo" class="swipe-box no-select" style="background-color:blue;">
+				This is the second screen.
+			</div>
+			<div id="viewThree" class="swipe-box no-select" style="background-color:red;">
+				This is the third screen.
+			</div> 
+		
+		</div>
+	</div>
+
+	<!-- Slider script and starting the PowerViz main application. -->
+	<script>
+
+		var pv = new PowerViz.Main(); //The PowerViz main application.
+
+		/*
+
+		function onSwipeStart(index, element) {
+			pv.viewContainer.onSwipeBegin(index, element.id);
+		}
+
+		function onSwipeEnd(index, element) {
+			pv.viewContainer.onSwipeEnd(index, element.id);
+		}
+
+		var slider = Swipe(document.getElementById('slider'), {
+			continuous: true,
+			disableScroll: true,
+			callback: onSwipeStart,
+			transitionEnd: onSwipeEnd
+		});
+
+		pv.viewContainer.registerSlider(slider);
+
+		*/
+
+		
+	</script>
+
+</body>
+</html>
