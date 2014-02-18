@@ -1,0 +1,51 @@
+/*Style Sheet for PowerViz2 main application page (main.html)*/
+
+body {
+	background-color:white;
+}
+
+/* Swipe required styles */
+.swipe {
+	overflow: hidden;
+	visibility: hidden;
+	position: relative;
+	width:100%;
+	position:fixed;
+	top:50px;
+	left:0px;
+}
+.swipe-wrap {
+	overflow: hidden;
+	position: relative;
+}
+
+.swipe-box {
+	float:left;
+	width:100%;
+	margin:0px;
+	padding:0px;
+	position:relative;
+	height:300px;
+	z-index:0;
+}
+
+/*------------------------------*/
+
+/*Use this class to disable selection. 
+Usefull for avoiding the accidental selection of text on screen.*/
+.no-select {
+	-moz-user-select:none;
+	-webkit-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+}
+
+/*Style for the top bar. Should always be fixed.*/
+.top-bar {
+	width:100%;
+	height:51px;
+	background-color:grey;
+	position:fixed;
+	top:0px;
+	left:0px;
+}
