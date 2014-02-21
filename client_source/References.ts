@@ -14,12 +14,14 @@
  
 //Views:
 ///<reference path="views/View.ts" />
+///<reference path="views/TestView.ts" />
 ///<reference path="views/PrognoseView.ts" />
 ///<reference path="views/TopView.ts" />
 
 
 //Controllers:
 ///<reference path="controllers/Controller.ts" />
+///<reference path="controllers/TestController.ts" />
 ///<reference path="controllers/PrognoseController.ts" />
 ///<reference path="controllers/PrognoseDummyController.ts" />
 

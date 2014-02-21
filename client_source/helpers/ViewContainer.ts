@@ -133,10 +133,12 @@ module PowerViz {
 
 		//sets the active view, enabling/disabling as needed.
 		setActiveView=(id:string)=> {
-			if(this._views[id]!=null) {
-				if(this._currentView !=null)
-					this._currentView.disable();
+			if(this._currentView != null) {
+				this._currentView.disable();
+				this._currentView = null;
+			}
 
+			if(this._views[id]!=null) {
 				this._currentView = this._views[id];
 				this._currentView.enable();
 			}

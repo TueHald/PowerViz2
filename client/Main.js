@@ -91,10 +91,12 @@ var PowerViz;
             };
             //sets the active view, enabling/disabling as needed.
             this.setActiveView = function (id) {
-                if (_this._views[id] != null) {
-                    if (_this._currentView != null)
-                        _this._currentView.disable();
+                if (_this._currentView != null) {
+                    _this._currentView.disable();
+                    _this._currentView = null;
+                }
 
+                if (_this._views[id] != null) {
                     _this._currentView = _this._views[id];
                     _this._currentView.enable();
                 }
@@ -283,6 +285,45 @@ var PowerViz;
 ///<reference path="../References.ts" />
 var PowerViz;
 (function (PowerViz) {
+    var TestView = (function () {
+        function TestView() {
+            var _this = this;
+            this._name = "TestView";
+            this._id = "#TestView";
+            this.setup = function () {
+                //Set the size of the div:
+                PowerViz.ViewUtils.setElementToViewHeight(_this._id);
+                $(_this._id).css("background-color", "yellow");
+            };
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            this.beginLoading = function () {
+            };
+            this.endLoading = function () {
+            };
+            //--------------------
+            this.setHeadline = function (txt) {
+                $(_this._id).text(txt);
+            };
+        }
+        Object.defineProperty(TestView.prototype, "controller", {
+            set: function (c) {
+                this._controller = c;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return TestView;
+    })();
+    PowerViz.TestView = TestView;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
     var PrognoseView = (function () {
         function PrognoseView() {
             var _this = this;
@@ -360,6 +401,38 @@ var PowerViz;
     PowerViz.TopView = TopView;
 })(PowerViz || (PowerViz = {}));
 //Base class for all controllers
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    var TestController = (function () {
+        function TestController() {
+            var _this = this;
+            this.enable = function () {
+                _this._timer = setInterval(_this.onTime, 2000);
+                _this._counter = 0;
+                _this.onTime(); //Run the "updating" procedure once when the view is enabled.
+            };
+            this.disable = function () {
+                if (_this._timer != null)
+                    clearInterval(_this._timer);
+                _this._timer = null;
+            };
+            this.connectView = function (v) {
+                _this._view = v;
+                _this._view.controller = _this;
+            };
+            this.onTime = function () {
+                console.log("time..." + _this._counter);
+                _this._counter += 1;
+
+                //Tell the view to set the headline:
+                _this._view.setHeadline("This is the new headline - " + _this._counter);
+            };
+        }
+        return TestController;
+    })();
+    PowerViz.TestController = TestController;
+})(PowerViz || (PowerViz = {}));
 ///<reference path="../References.ts" />
 var PowerViz;
 (function (PowerViz) {
@@ -454,12 +527,19 @@ var PowerViz;
                 //Setup the swiper:
                 PowerViz.ViewContainer.instance.createSwiper();
 
-                //Prognose view and controller:
-                var prognoseView = new PowerViz.PrognoseView();
-                var prognoseController = new PowerViz.PrognoseDummyController();
-                prognoseController.connectToView(prognoseView);
-                PowerViz.ViewContainer.instance.registerView("PrognoseView", prognoseView);
+                //Test view:
+                var testView = new PowerViz.TestView();
+                var testController = new PowerViz.TestController();
+                testController.connectView(testView);
+                PowerViz.ViewContainer.instance.registerView("TestView", testView);
 
+                //Prognose view and controller:
+                /*
+                var prognoseView = new PrognoseView();
+                var prognoseController = new PrognoseDummyController(); //new PrognoseController();
+                prognoseController.connectToView(prognoseView);
+                ViewContainer.instance.registerView("PrognoseView", prognoseView);
+                */
                 //this._controllerContainer = new ControllerContainer();
                 //Now that all views are created, set them up.
                 PowerViz.ViewContainer.instance.setupViews();

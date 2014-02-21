@@ -11,7 +11,7 @@ body {
 	position: relative;
 	width:100%;
 	position:fixed;
-	top:50px;
+	top:0px;
 	left:0px;
 }
 .swipe-wrap {
@@ -25,7 +25,7 @@ body {
 	margin:0px;
 	padding:0px;
 	position:relative;
-	height:300px;
+	height:100%;
 	z-index:0;
 }
 

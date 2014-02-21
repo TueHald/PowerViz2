@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8" />
 	<script src="jquery-2.1.0.min.js"></script>
 	<script src="jquery-ui-1.10.4.custom.min.js"></script>
 	<script src="swipe.js"></script>
@@ -16,31 +17,35 @@
 	<div id="loader-spinner-bla" style="position:fixed;z-index:99;left:50%;top:50%">
 		<img id="loader-spinner" src="loader.gif"/>
 	</div>
-
+<!--
 	<div id="top-bar" class="top-bar no-select">
 		This is the top bar.
 	</div>
-
-	<div class="no-select" style="position:fixed; left:0px; top:95%; z-index:100" onclick="PowerViz.ViewContainer.instance.prev();">
-		Left.
+-->
+	<div class="no-select" style="position:fixed; left:0px; top:40%; z-index:100" onclick="PowerViz.ViewContainer.instance.prev();">
+		<img src="ArrowLeft.svg" />
 	</div>
 
-	<div class="no-select" style="position:fixed; right:0px; top:95%; z-index:100" onclick="PowerViz.ViewContainer.instance.next();">
-		Right.
+	<div class="no-select" style="position:fixed; right:0px; top:40%; z-index:100" onclick="PowerViz.ViewContainer.instance.next();">
+		<img src="ArrowRight.svg" />
 	</div>
 
-	<div id="slider" class="swipe no-select">	
+	<div id="slider" class="swipe no-select">
 		<div id="slider-container" class="swipe-wrap no-select">
 			
-			<div id="PrognoseView" class="swipe-box no-select" style="background-color:green;">
-				This is the first screen.
+			<div id="PrognoseView" class="swipe-box no-select" style="background-color:white;">
+				<img src="sketches/sketch_Flex1.png" style="width:90%;align:center;"/>
 			</div>
 			<div id="viewTwo" class="swipe-box no-select" style="background-color:blue;">
-				This is the second screen.
+				<img src="sketches/sketch_PowerSource1.png" style="width:100%"/>
 			</div>
 			<div id="viewThree" class="swipe-box no-select" style="background-color:red;">
-				This is the third screen.
+				<img src="sketches/sketch_Pris1.png" style="width:100%"/>
 			</div> 
+
+			<div id="TestView" class="swipe-box no-select">
+
+			</div>
 		
 		</div>
 	</div>

@@ -26,12 +26,20 @@ module PowerViz {
 
 			//Setup the swiper:
 			ViewContainer.instance.createSwiper();
+
+			//Test view:
+			var testView = new TestView();
+			var testController = new TestController();
+			testController.connectView(testView);
+			ViewContainer.instance.registerView("TestView", testView);
 			
 			//Prognose view and controller:
+			/*
 			var prognoseView = new PrognoseView();
 			var prognoseController = new PrognoseDummyController(); //new PrognoseController();
 			prognoseController.connectToView(prognoseView);
 			ViewContainer.instance.registerView("PrognoseView", prognoseView);
+			*/
 
 			//this._controllerContainer = new ControllerContainer();
 
