@@ -290,27 +290,35 @@ var PowerViz;
             var _this = this;
             this._name = "TestView";
             this._id = "#TestView";
+            //Required by View interface.
             this.setup = function () {
                 //Set the size of the div:
                 PowerViz.ViewUtils.setElementToViewHeight(_this._id);
                 $(_this._id).css("background-color", "yellow");
             };
+            //Required by the View interface.
             this.enable = function () {
                 _this._controller.enable();
             };
+            //Required by the View interface.
             this.disable = function () {
                 _this._controller.disable();
             };
+            //Required by the View interface.
             this.beginLoading = function () {
             };
+            //Required by the View interface.
             this.endLoading = function () {
             };
             //--------------------
+            //Specific for this view.
             this.setHeadline = function (txt) {
                 $(_this._id).text(txt);
             };
         }
         Object.defineProperty(TestView.prototype, "controller", {
+            //Not required, but makes linking the controller to the view sligtly easier.
+            //Should only be used by the controller.
             set: function (c) {
                 this._controller = c;
             },
@@ -407,26 +415,32 @@ var PowerViz;
     var TestController = (function () {
         function TestController() {
             var _this = this;
+            //Required by the Controller interface.
             this.enable = function () {
-                _this._timer = setInterval(_this.onTime, 2000);
-                _this._counter = 0;
+                _this._timer = setInterval(_this.onTime, 2000); //Start the timer.
+                _this._counter = 0; //A counter, just for fun.
                 _this.onTime(); //Run the "updating" procedure once when the view is enabled.
             };
+            //Required by the Controller interface.
             this.disable = function () {
                 if (_this._timer != null)
                     clearInterval(_this._timer);
                 _this._timer = null;
             };
+            //Connects a view to this. Should be the only method used for connecting a view to a controller.
             this.connectView = function (v) {
                 _this._view = v;
-                _this._view.controller = _this;
+                _this._view.controller = _this; //Connect the view to this controller.
             };
+            //Internal timer function, runs every X seconds.
             this.onTime = function () {
                 console.log("time..." + _this._counter);
                 _this._counter += 1;
 
                 //Tell the view to set the headline:
-                _this._view.setHeadline("This is the new headline - " + _this._counter);
+                _this._view.setHeadline("This is the new headline - " + _this._counter); //Call a function on the view.
+                //Notice, when looking at the TestView code, that the View does not call functions inside the controller,
+                //besides the mandatory enable() and disable().
             };
         }
         return TestController;
@@ -527,6 +541,13 @@ var PowerViz;
                 //Setup the swiper:
                 PowerViz.ViewContainer.instance.createSwiper();
 
+                //Setup the test sketches:
+                //1. Set the containing div size.
+                //2. Set the image to fit withing the div.
+                _this.positionSketch("#sketchFlex", "#PrognoseView");
+                _this.positionSketch("#sketchSource", "#viewTwo");
+                _this.positionSketch("#sketchPrice", "#viewThree");
+
                 //Test view:
                 var testView = new PowerViz.TestView();
                 var testController = new PowerViz.TestController();
@@ -556,6 +577,14 @@ var PowerViz;
             enumerable: true,
             configurable: true
         });
+
+        Main.prototype.positionSketch = function (sketchId, sketchContainer) {
+            PowerViz.ViewUtils.setElementToViewHeight(sketchContainer);
+            $(sketchId).width($(sketchContainer).width());
+            $(sketchId).height($(sketchContainer).height());
+            var left = ($(sketchContainer).width() - $(sketchId).width()) / 2;
+            $(sketchId).css("left", "" + left + "px");
+        };
         return Main;
     })();
     PowerViz.Main = Main;

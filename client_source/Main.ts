@@ -27,6 +27,15 @@ module PowerViz {
 			//Setup the swiper:
 			ViewContainer.instance.createSwiper();
 
+
+			//Setup the test sketches:
+			//1. Set the containing div size.
+			//2. Set the image to fit withing the div.
+			this.positionSketch("#sketchFlex", "#PrognoseView");
+			this.positionSketch("#sketchSource", "#viewTwo");
+			this.positionSketch("#sketchPrice", "#viewThree");
+
+
 			//Test view:
 			var testView = new TestView();
 			var testController = new TestController();
@@ -48,6 +57,14 @@ module PowerViz {
 			ViewContainer.instance.setActiveView("PrognoseView");
 
 			ViewUtils.hideLoader(); 
+		}
+
+		positionSketch(sketchId:string, sketchContainer:string) {
+			ViewUtils.setElementToViewHeight(sketchContainer);
+			$(sketchId).width($(sketchContainer).width());
+			$(sketchId).height($(sketchContainer).height());
+			var left:number = ($(sketchContainer).width() - $(sketchId).width())/2;
+			$(sketchId).css("left", "" + left + "px");
 		}
 
 	}
