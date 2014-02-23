@@ -41,6 +41,10 @@ module PowerViz {
 			var testController = new TestController();
 			testController.connectView(testView);
 			ViewContainer.instance.registerView("TestView", testView);
+
+			//test topview
+
+			//var testTopView = new ScoreView();
 			
 			//Prognose view and controller:
 			/*
