@@ -169,15 +169,15 @@ var PowerViz;
         };
 
         //Sets the element to the available window width
-        ViewUtils.setElementToViewWidth = function (id) {
+        ViewUtils.setElementTopBarWidth = function (id) {
             var topWidth = $("#top-bar").width();
-            ViewUtils.setElementToWinWidth(id, topWidth);
+            $(id).css("width", "" + topWidth + "px");
         };
 
-        ViewUtils.setElementToWinWidth = function (id_string, width) {
-            //console.log(id_string);
-            //$(id).height($(window).height());
-            $(id_string).css("width", "" + width + "px");
+        //Sets the element to the available Topbar height
+        ViewUtils.setElementTopBarHeight = function (id) {
+            var topHeight = $("#top-bar").height();
+            $(id).css("height", "" + topHeight + "px");
         };
         return ViewUtils;
     })();
@@ -443,13 +443,13 @@ var PowerViz;
 ///<reference path="../References.ts" />
 var PowerViz;
 (function (PowerViz) {
-    //Class that defines a ScoreTopView, that is
+    //Class that defines a Price_TopView, that is
     //a view that is to be placed in the topbar of the view
-    var ScoreTopView = (function () {
-        function ScoreTopView() {
+    var Price_TopView = (function () {
+        function Price_TopView() {
             var _this = this;
-            this._name = "TestTopView";
-            this._id = "#TestTopView";
+            this._name = "testPrice_TopView";
+            this._id = "#testPrice_TopView";
             //Required by View interface.
             this.setup = function () {
                 //Set the size of the div:
@@ -470,17 +470,23 @@ var PowerViz;
             //Required by the View interface.
             this.endLoading = function () {
             };
+            var element = document.createElement("div");
+            element.id = this._name;
+            element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
+            document.getElementById('top-bar').appendChild(element);
+            PowerViz.ViewUtils.setElementTopBarWidth(this._id);
+            PowerViz.ViewUtils.setElementTopBarHeight(this._id);
         }
-        Object.defineProperty(ScoreTopView.prototype, "controller", {
+        Object.defineProperty(Price_TopView.prototype, "controller", {
             set: function (c) {
                 this._controller = c;
             },
             enumerable: true,
             configurable: true
         });
-        return ScoreTopView;
+        return Price_TopView;
     })();
-    PowerViz.ScoreTopView = ScoreTopView;
+    PowerViz.Price_TopView = Price_TopView;
 })(PowerViz || (PowerViz = {}));
 //Base class for all controllers
 ///<reference path="../References.ts" />
@@ -666,6 +672,9 @@ var PowerViz;
                 PowerViz.ViewContainer.instance.registerView("TestView", testView);
 
                 //test topview
+                var testTopView = new PowerViz.Price_TopView();
+                testTopView.setup();
+
                 //Prognose view and controller:
                 /*
                 var prognoseView = new PrognoseView();

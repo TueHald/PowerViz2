@@ -44,7 +44,8 @@ module PowerViz {
 
 			//test topview
 
-			
+			var testTopView = new Price_TopView();
+			testTopView.setup();
 			
 			//Prognose view and controller:
 			/*

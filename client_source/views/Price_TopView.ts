@@ -6,9 +6,19 @@ module PowerViz {
 	//a view that is to be placed in the topbar of the view
 	export class Price_TopView implements TopView{
 
-		_name:string = "TestTopView";
-		_id:string = "#TestTopView";
+		_name:string = "testPrice_TopView";
+		_id:string = "#testPrice_TopView";
 		_controller:TestTopController;
+
+		constructor(){//the constructor creates the element
+
+			var element = document.createElement("div");
+			element.id = this._name;
+    		element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
+    		document.getElementById('top-bar').appendChild(element);
+    		ViewUtils.setElementTopBarWidth(this._id);
+    		ViewUtils.setElementTopBarHeight(this._id);
+		}
 
 		//Required by View interface.
 		setup=()=> {

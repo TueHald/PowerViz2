@@ -35,15 +35,16 @@ module PowerViz {
 		}
 
 		//Sets the element to the available window width 
-		static setElementToViewWidth(id:string) {
+		static setElementTopBarWidth(id:string) {
 			var topWidth:number = $("#top-bar").width();
-			ViewUtils.setElementToWinWidth(id, topWidth);
+			$(id).css("width", ""+topWidth+"px");
+		}
+		//Sets the element to the available Topbar height 
+		static setElementTopBarHeight(id:string) {
+			var topHeight:number = $("#top-bar").height();
+			$(id).css("height", ""+topHeight+"px");
 		}
 
-		static setElementToWinWidth(id_string:string, width:number) {
-			//console.log(id_string);
-			//$(id).height($(window).height());
-			$(id_string).css("width", ""+width+"px");
-		}
+		
 	}
 }

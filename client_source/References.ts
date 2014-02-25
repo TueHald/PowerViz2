@@ -17,7 +17,9 @@
 ///<reference path="views/TestView.ts" />
 ///<reference path="views/PrognoseView.ts" />
 ///<reference path="views/TopView.ts" />
-///<reference path="views/ScoreTopView.ts" />
+///<reference path="views/Price_TopView.ts" />
+///<reference path="views/Env_TopView.ts" />
+///<reference path="views/Flex_TopView.ts" />
 
 
 
