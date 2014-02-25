@@ -44,7 +44,7 @@ module PowerViz {
 
 			//test topview
 
-			//var testTopView = new ScoreView();
+			
 			
 			//Prognose view and controller:
 			/*

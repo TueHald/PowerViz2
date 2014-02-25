@@ -167,6 +167,18 @@ var PowerViz;
         ViewUtils.hideLoader = function () {
             $("#loader-spinner").hide();
         };
+
+        //Sets the element to the available window width
+        ViewUtils.setElementToViewWidth = function (id) {
+            var topWidth = $("#top-bar").width();
+            ViewUtils.setElementToWinWidth(id, topWidth);
+        };
+
+        ViewUtils.setElementToWinWidth = function (id_string, width) {
+            //console.log(id_string);
+            //$(id).height($(window).height());
+            $(id_string).css("width", "" + width + "px");
+        };
         return ViewUtils;
     })();
     PowerViz.ViewUtils = ViewUtils;
@@ -403,10 +415,72 @@ var PowerViz;
     //in that it is not part of the view container.... yet.
     var TopView = (function () {
         function TopView() {
+            var _this = this;
+            this.setup = function () {
+                //Set the size of the div:
+                //ViewUtils.setElementToViewWidth(this._id);
+                //$(this._id).css("background-color", "green");
+            };
+            //Required by the View interface.
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            //Required by the View interface.
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            //Required by the View interface.
+            this.beginLoading = function () {
+            };
+            //Required by the View interface.
+            this.endLoading = function () {
+            };
         }
         return TopView;
     })();
     PowerViz.TopView = TopView;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    //Class that defines a ScoreTopView, that is
+    //a view that is to be placed in the topbar of the view
+    var ScoreTopView = (function () {
+        function ScoreTopView() {
+            var _this = this;
+            this._name = "TestTopView";
+            this._id = "#TestTopView";
+            //Required by View interface.
+            this.setup = function () {
+                //Set the size of the div:
+                //ViewUtils.setElementToViewWidth(this._id);
+                //$(this._id).css("background-color", "green");
+            };
+            //Required by the View interface.
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            //Required by the View interface.
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            //Required by the View interface.
+            this.beginLoading = function () {
+            };
+            //Required by the View interface.
+            this.endLoading = function () {
+            };
+        }
+        Object.defineProperty(ScoreTopView.prototype, "controller", {
+            set: function (c) {
+                this._controller = c;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return ScoreTopView;
+    })();
+    PowerViz.ScoreTopView = ScoreTopView;
 })(PowerViz || (PowerViz = {}));
 //Base class for all controllers
 ///<reference path="../References.ts" />
@@ -525,6 +599,43 @@ var PowerViz;
     })(PowerViz.PrognoseController);
     PowerViz.PrognoseDummyController = PrognoseDummyController;
 })(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    var TestTopController = (function () {
+        function TestTopController() {
+            var _this = this;
+            //Required by the Controller interface.
+            this.enable = function () {
+                _this._timer = setInterval(_this.onTime, 2000); //Start the timer.
+                _this._counter = 0; //A counter, just for fun.
+                _this.onTime(); //Run the "updating" procedure once when the view is enabled.
+            };
+            //Required by the Controller interface.
+            this.disable = function () {
+                if (_this._timer != null)
+                    clearInterval(_this._timer);
+                _this._timer = null;
+            };
+            //Connects a view to this. Should be the only method used for connecting a view to a controller.
+            this.connectView = function (v) {
+                _this._view = v;
+                //this._view.controller = this; //Connect the view to this controller.
+            };
+            //Internal timer function, runs every X seconds.
+            this.onTime = function () {
+                console.log("time..." + _this._counter);
+                _this._counter += 1;
+                //Tell the view to set the headline:
+                //this._view.setHeadline("This is the new headline - " + this._counter); //Call a function on the view.
+                //Notice, when looking at the TestView code, that the View does not call functions inside the controller,
+                //besides the mandatory enable() and disable().
+            };
+        }
+        return TestTopController;
+    })();
+    PowerViz.TestTopController = TestTopController;
+})(PowerViz || (PowerViz = {}));
 ///<reference path="References.ts"/>
 var PowerViz;
 (function (PowerViz) {
@@ -554,6 +665,7 @@ var PowerViz;
                 testController.connectView(testView);
                 PowerViz.ViewContainer.instance.registerView("TestView", testView);
 
+                //test topview
                 //Prognose view and controller:
                 /*
                 var prognoseView = new PrognoseView();

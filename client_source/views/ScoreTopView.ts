@@ -2,14 +2,15 @@
 
 module PowerViz {
 
-	//The top view is slightly different from the other views, 
-	//in that it is not part of the view container.... yet.
-	export class TopView implements View {
+	//Class that defines a ScoreTopView, that is
+	//a view that is to be placed in the topbar of the view
+	export class ScoreTopView implements TopView{
 
-		_name:string;
-		_id:string;
+		_name:string = "TestTopView";
+		_id:string = "#TestTopView";
 		_controller:TestTopController;
 
+		//Required by View interface.
 		setup=()=> {
 
 			//Set the size of the div:
@@ -37,6 +38,10 @@ module PowerViz {
 		//Required by the View interface.
 		endLoading=()=> {
 
+		}
+
+		set controller(c:TestTopController) {
+			this._controller = c;
 		}
 
 	}

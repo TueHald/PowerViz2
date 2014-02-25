@@ -35,9 +35,9 @@ module PowerViz {
 		}
 
 		//Sets the element to the available window width 
-		static setElementToViewHeight(id:string) {
+		static setElementToViewWidth(id:string) {
 			var topWidth:number = $("#top-bar").width();
-			ViewUtils.setElementToWinHeight(id, topWidth);
+			ViewUtils.setElementToWinWidth(id, topWidth);
 		}
 
 		static setElementToWinWidth(id_string:string, width:number) {

@@ -17,6 +17,8 @@
 ///<reference path="views/TestView.ts" />
 ///<reference path="views/PrognoseView.ts" />
 ///<reference path="views/TopView.ts" />
+///<reference path="views/ScoreTopView.ts" />
+
 
 
 //Controllers:
@@ -24,6 +26,7 @@
 ///<reference path="controllers/TestController.ts" />
 ///<reference path="controllers/PrognoseController.ts" />
 ///<reference path="controllers/PrognoseDummyController.ts" />
+///<reference path="controllers/TestTopController.ts" />
 
 //Model parts:
 //??
