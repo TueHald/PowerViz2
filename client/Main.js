@@ -294,6 +294,30 @@ var PowerViz;
     PowerViz.BindingManager = BindingManager;
 })(PowerViz || (PowerViz = {}));
 ///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    //class that defines a container for topviews so we can
+    //manipulate them
+    var TopViewContainer = (function () {
+        function TopViewContainer() {
+            var _this = this;
+            this.setup = function () {
+                var con = _this._container;
+
+                for (var i in con) {
+                    console.log("meeeeh");
+                }
+            };
+            this.addItem = function (view) {
+                _this._container.push(view);
+            };
+            this._container = new Array();
+        }
+        return TopViewContainer;
+    })();
+    PowerViz.TopViewContainer = TopViewContainer;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
 ///<reference path="../References.ts" />
 var PowerViz;
 (function (PowerViz) {
@@ -657,6 +681,7 @@ var PowerViz;
             this.setupViews = function () {
                 //Setup the swiper:
                 PowerViz.ViewContainer.instance.createSwiper();
+                var topContainer = new PowerViz.TopViewContainer();
 
                 //Setup the test sketches:
                 //1. Set the containing div size.
@@ -674,6 +699,11 @@ var PowerViz;
                 //test topview
                 var testTopView = new PowerViz.Price_TopView();
                 testTopView.setup();
+
+                topContainer.addItem(testTopView);
+                topContainer.addItem(testTopView);
+
+                topContainer.setup();
 
                 //Prognose view and controller:
                 /*

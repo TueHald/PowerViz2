@@ -26,6 +26,7 @@ module PowerViz {
 
 			//Setup the swiper:
 			ViewContainer.instance.createSwiper();
+			var topContainer = new TopViewContainer(); 
 
 
 			//Setup the test sketches:
@@ -46,6 +47,10 @@ module PowerViz {
 
 			var testTopView = new Price_TopView();
 			testTopView.setup();
+
+			topContainer.addItem(testTopView);
+
+			topContainer.setup();
 			
 			//Prognose view and controller:
 			/*

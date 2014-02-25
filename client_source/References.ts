@@ -11,6 +11,8 @@
 ///<reference path="helpers/ControllerContainer.ts" />
 ///<reference path="helpers/ViewUtils.ts" />
 ///<reference path="helpers/Observer.ts" />
+///<reference path="helpers/TopViewContainer.ts" />
+
  
 //Views:
 ///<reference path="views/View.ts" />
