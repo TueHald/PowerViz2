@@ -47,10 +47,17 @@ module PowerViz {
 
 			var testTopView = new Price_TopView();
 			testTopView.setup();
+            var testTopView2 = new Flex_TopView();
+            testTopView2.setup();
+            var testTopView3 = new Env_TopView();
+            testTopView3.setup();
 
 			topContainer.addItem(testTopView);
+            topContainer.addItem(testTopView2);
+            topContainer.addItem(testTopView3);
 
 			topContainer.setup();
+
 			
 			//Prognose view and controller:
 			/*

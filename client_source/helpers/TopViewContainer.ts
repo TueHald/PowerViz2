@@ -8,22 +8,38 @@ module PowerViz{
 	export class TopViewContainer{
 
 			_container: TopView[];
+            _viewWidth: number;
 
 
 			constructor(){
 
 				this._container = new Array<TopView>();
+                this._viewWidth = ViewUtils.getTopBarWidth();
 
 			}
 
 			setup=()=> {
 
-				var con = this._container;
-
-				for (var i in con) {
- 					console.log("meeeeh");
-				}
 				
+
+
+                this._viewWidth = this._viewWidth/this._container.length;
+
+                console.log("width is:" + this._viewWidth);
+
+                for (var i in this._container) {
+
+                    var element = document.getElementById(this._container[i]._name);
+
+                    element.style.width = this._viewWidth.toString()+"px";
+                    element.style.cssFloat = "left";
+
+
+                    ViewUtils.setElementTopBarHeight(this._container[i]._id);
+
+                }
+
+
 
 			}
 

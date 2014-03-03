@@ -45,6 +45,11 @@ module PowerViz {
 			$(id).css("height", ""+topHeight+"px");
 		}
 
+        static getTopBarWidth():number{
+            return  $("#top-bar").width();
+
+        }
+
 		
 	}
 }

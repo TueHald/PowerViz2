@@ -179,6 +179,10 @@ var PowerViz;
             var topHeight = $("#top-bar").height();
             $(id).css("height", "" + topHeight + "px");
         };
+
+        ViewUtils.getTopBarWidth = function () {
+            return $("#top-bar").width();
+        };
         return ViewUtils;
     })();
     PowerViz.ViewUtils = ViewUtils;
@@ -302,16 +306,24 @@ var PowerViz;
         function TopViewContainer() {
             var _this = this;
             this.setup = function () {
-                var con = _this._container;
+                _this._viewWidth = _this._viewWidth / _this._container.length;
 
-                for (var i in con) {
-                    console.log("meeeeh");
+                console.log("width is:" + _this._viewWidth);
+
+                for (var i in _this._container) {
+                    var element = document.getElementById(_this._container[i]._name);
+
+                    element.style.width = _this._viewWidth.toString() + "px";
+                    element.style.cssFloat = "left";
+
+                    PowerViz.ViewUtils.setElementTopBarHeight(_this._container[i]._id);
                 }
             };
             this.addItem = function (view) {
                 _this._container.push(view);
             };
             this._container = new Array();
+            this._viewWidth = PowerViz.ViewUtils.getTopBarWidth();
         }
         return TopViewContainer;
     })();
@@ -441,9 +453,12 @@ var PowerViz;
         function TopView() {
             var _this = this;
             this.setup = function () {
-                //Set the size of the div:
-                //ViewUtils.setElementToViewWidth(this._id);
-                //$(this._id).css("background-color", "green");
+                var element = document.createElement("div");
+                element.id = _this._name;
+                element.appendChild(document.createTextNode(_this._name));
+                document.getElementById('top-bar').appendChild(element);
+                //element.style.width = "0px";
+                //element.style.height = "0px";
             };
             //Required by the View interface.
             this.enable = function () {
@@ -465,21 +480,23 @@ var PowerViz;
     PowerViz.TopView = TopView;
 })(PowerViz || (PowerViz = {}));
 ///<reference path="../References.ts" />
+var __extends = this.__extends || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    __.prototype = b.prototype;
+    d.prototype = new __();
+};
 var PowerViz;
 (function (PowerViz) {
     //Class that defines a Price_TopView, that is
     //a view that is to be placed in the topbar of the view
-    var Price_TopView = (function () {
+    var Price_TopView = (function (_super) {
+        __extends(Price_TopView, _super);
         function Price_TopView() {
+            _super.apply(this, arguments);
             var _this = this;
             this._name = "testPrice_TopView";
             this._id = "#testPrice_TopView";
-            //Required by View interface.
-            this.setup = function () {
-                //Set the size of the div:
-                //ViewUtils.setElementToViewWidth(this._id);
-                //$(this._id).css("background-color", "green");
-            };
             //Required by the View interface.
             this.enable = function () {
                 _this._controller.enable();
@@ -494,12 +511,6 @@ var PowerViz;
             //Required by the View interface.
             this.endLoading = function () {
             };
-            var element = document.createElement("div");
-            element.id = this._name;
-            element.appendChild(document.createTextNode('The man who mistook his wife for a hat'));
-            document.getElementById('top-bar').appendChild(element);
-            PowerViz.ViewUtils.setElementTopBarWidth(this._id);
-            PowerViz.ViewUtils.setElementTopBarHeight(this._id);
         }
         Object.defineProperty(Price_TopView.prototype, "controller", {
             set: function (c) {
@@ -509,8 +520,84 @@ var PowerViz;
             configurable: true
         });
         return Price_TopView;
-    })();
+    })(PowerViz.TopView);
     PowerViz.Price_TopView = Price_TopView;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    //Class that defines a Price_TopView, that is
+    //a view that is to be placed in the topbar of the view
+    var Env_TopView = (function (_super) {
+        __extends(Env_TopView, _super);
+        function Env_TopView() {
+            _super.apply(this, arguments);
+            var _this = this;
+            this._name = "testFlex_TopView";
+            this._id = "#testFlex_TopView";
+            //Required by the View interface.
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            //Required by the View interface.
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            //Required by the View interface.
+            this.beginLoading = function () {
+            };
+            //Required by the View interface.
+            this.endLoading = function () {
+            };
+        }
+        Object.defineProperty(Env_TopView.prototype, "controller", {
+            set: function (c) {
+                this._controller = c;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Env_TopView;
+    })(PowerViz.TopView);
+    PowerViz.Env_TopView = Env_TopView;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    //Class that defines a Price_TopView, that is
+    //a view that is to be placed in the topbar of the view
+    var Flex_TopView = (function (_super) {
+        __extends(Flex_TopView, _super);
+        function Flex_TopView() {
+            _super.apply(this, arguments);
+            var _this = this;
+            this._name = "testFlex_TopView";
+            this._id = "#testFlex_TopView";
+            //Required by the View interface.
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            //Required by the View interface.
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            //Required by the View interface.
+            this.beginLoading = function () {
+            };
+            //Required by the View interface.
+            this.endLoading = function () {
+            };
+        }
+        Object.defineProperty(Flex_TopView.prototype, "controller", {
+            set: function (c) {
+                this._controller = c;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Flex_TopView;
+    })(PowerViz.TopView);
+    PowerViz.Flex_TopView = Flex_TopView;
 })(PowerViz || (PowerViz = {}));
 //Base class for all controllers
 ///<reference path="../References.ts" />
@@ -601,12 +688,6 @@ var PowerViz;
     PowerViz.PrognoseController = PrognoseController;
 })(PowerViz || (PowerViz = {}));
 ///<reference path="PrognoseController.ts" />
-var __extends = this.__extends || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    __.prototype = b.prototype;
-    d.prototype = new __();
-};
 var PowerViz;
 (function (PowerViz) {
     //Use this controller as a dummy during dev, to skip using the model.
@@ -699,9 +780,14 @@ var PowerViz;
                 //test topview
                 var testTopView = new PowerViz.Price_TopView();
                 testTopView.setup();
+                var testTopView2 = new PowerViz.Flex_TopView();
+                testTopView2.setup();
+                var testTopView3 = new PowerViz.Env_TopView();
+                testTopView3.setup();
 
                 topContainer.addItem(testTopView);
-                topContainer.addItem(testTopView);
+                topContainer.addItem(testTopView2);
+                topContainer.addItem(testTopView3);
 
                 topContainer.setup();
 

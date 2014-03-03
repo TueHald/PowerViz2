@@ -12,9 +12,12 @@ module PowerViz {
 
 		setup=()=> {
 
-			//Set the size of the div:
-			//ViewUtils.setElementToViewWidth(this._id);
-			//$(this._id).css("background-color", "green");
+            var element = document.createElement("div");
+            element.id = this._name;
+            element.appendChild(document.createTextNode(this._name));
+            document.getElementById('top-bar').appendChild(element);
+            //element.style.width = "0px";
+            //element.style.height = "0px";
 			
 
 		}
