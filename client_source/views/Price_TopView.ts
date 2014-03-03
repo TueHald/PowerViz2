@@ -13,6 +13,7 @@ module PowerViz {
 
 
 
+
 		//Required by the View interface.
 		enable=()=> {
 			this._controller.enable();

@@ -6,8 +6,8 @@ module PowerViz {
     //a view that is to be placed in the topbar of the view
     export class Env_TopView extends TopView{
 
-        _name:string = "testFlex_TopView";
-        _id:string = "#testFlex_TopView";
+        _name:string = "testEnv_TopView";
+        _id:string = "#testEnv_TopView";
         _controller:TestTopController;
 
 

@@ -91,6 +91,7 @@ var PowerViz;
             };
             //sets the active view, enabling/disabling as needed.
             this.setActiveView = function (id) {
+                console.log(id);
                 if (_this._currentView != null) {
                     _this._currentView.disable();
                     _this._currentView = null;
@@ -305,7 +306,7 @@ var PowerViz;
     var TopViewContainer = (function () {
         function TopViewContainer() {
             var _this = this;
-            this.setup = function () {
+            this.setupViews = function () {
                 _this._viewWidth = _this._viewWidth / _this._container.length;
 
                 console.log("width is:" + _this._viewWidth);
@@ -313,7 +314,8 @@ var PowerViz;
                 for (var i in _this._container) {
                     var element = document.getElementById(_this._container[i]._name);
 
-                    element.style.width = _this._viewWidth.toString() + "px";
+                    //-2 --> taking note of the border, else the element will not fit
+                    element.style.width = (_this._viewWidth - 2).toString() + "px";
                     element.style.cssFloat = "left";
 
                     PowerViz.ViewUtils.setElementTopBarHeight(_this._container[i]._id);
@@ -321,6 +323,9 @@ var PowerViz;
             };
             this.addItem = function (view) {
                 _this._container.push(view);
+            };
+            //sets the active view
+            this.setActiveView = function (viewNumber) {
             };
             this._container = new Array();
             this._viewWidth = PowerViz.ViewUtils.getTopBarWidth();
@@ -452,13 +457,18 @@ var PowerViz;
     var TopView = (function () {
         function TopView() {
             var _this = this;
+            this._selected = false;
             this.setup = function () {
                 var element = document.createElement("div");
                 element.id = _this._name;
-                element.appendChild(document.createTextNode(_this._name));
+
+                //element.appendChild(document.createTextNode(this._name));
                 document.getElementById('top-bar').appendChild(element);
+                element.style.border = "1px solid black";
+
                 //element.style.width = "0px";
                 //element.style.height = "0px";
+                _this._selected = false;
             };
             //Required by the View interface.
             this.enable = function () {
@@ -473,6 +483,15 @@ var PowerViz;
             };
             //Required by the View interface.
             this.endLoading = function () {
+            };
+            //highlight the current view if selected
+            this.setToSelected = function () {
+                if (_this._selected == false) {
+                    _this._selected = true;
+
+                    var element = document.getElementById(_this._name);
+                    element.style.color = "blue";
+                }
             };
         }
         return TopView;
@@ -533,8 +552,8 @@ var PowerViz;
         function Env_TopView() {
             _super.apply(this, arguments);
             var _this = this;
-            this._name = "testFlex_TopView";
-            this._id = "#testFlex_TopView";
+            this._name = "testEnv_TopView";
+            this._id = "#testEnv_TopView";
             //Required by the View interface.
             this.enable = function () {
                 _this._controller.enable();
@@ -747,6 +766,27 @@ var PowerViz;
     })();
     PowerViz.TestTopController = TestTopController;
 })(PowerViz || (PowerViz = {}));
+/**
+* Created by floop on 03/03/14.
+*/
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    //defines a controller that controls the TopviewContainer
+    var TopViewContainerController = (function () {
+        //constructor takes a container
+        function TopViewContainerController(container) {
+            var _this = this;
+            //this method should be called when view have changed
+            this.viewHasChanged = function (newView) {
+                _this.controllerContainer.setActiveView(newView);
+            };
+            this.controllerContainer = container;
+        }
+        return TopViewContainerController;
+    })();
+    PowerViz.TopViewContainerController = TopViewContainerController;
+})(PowerViz || (PowerViz = {}));
 ///<reference path="References.ts"/>
 var PowerViz;
 (function (PowerViz) {
@@ -789,16 +829,9 @@ var PowerViz;
                 topContainer.addItem(testTopView2);
                 topContainer.addItem(testTopView3);
 
-                topContainer.setup();
+                topContainer.setupViews();
 
-                //Prognose view and controller:
-                /*
-                var prognoseView = new PrognoseView();
-                var prognoseController = new PrognoseDummyController(); //new PrognoseController();
-                prognoseController.connectToView(prognoseView);
-                ViewContainer.instance.registerView("PrognoseView", prognoseView);
-                */
-                //this._controllerContainer = new ControllerContainer();
+                //end test topview
                 //Now that all views are created, set them up.
                 PowerViz.ViewContainer.instance.setupViews();
                 PowerViz.ViewContainer.instance.setActiveView("PrognoseView");

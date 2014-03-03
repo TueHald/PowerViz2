@@ -31,6 +31,8 @@
 ///<reference path="controllers/PrognoseController.ts" />
 ///<reference path="controllers/PrognoseDummyController.ts" />
 ///<reference path="controllers/TestTopController.ts" />
+///<reference path="controllers/TopViewContainerController.ts" />
+
 
 //Model parts:
 //??

@@ -56,18 +56,10 @@ module PowerViz {
             topContainer.addItem(testTopView2);
             topContainer.addItem(testTopView3);
 
-			topContainer.setup();
+			topContainer.setupViews();
 
-			
-			//Prognose view and controller:
-			/*
-			var prognoseView = new PrognoseView();
-			var prognoseController = new PrognoseDummyController(); //new PrognoseController();
-			prognoseController.connectToView(prognoseView);
-			ViewContainer.instance.registerView("PrognoseView", prognoseView);
-			*/
+            //end test topview
 
-			//this._controllerContainer = new ControllerContainer();
 
 			//Now that all views are created, set them up. 
 			ViewContainer.instance.setupViews();

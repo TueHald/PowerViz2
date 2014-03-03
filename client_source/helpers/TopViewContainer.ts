@@ -18,7 +18,7 @@ module PowerViz{
 
 			}
 
-			setup=()=> {
+			setupViews=()=> {
 
 				
 
@@ -30,8 +30,8 @@ module PowerViz{
                 for (var i in this._container) {
 
                     var element = document.getElementById(this._container[i]._name);
-
-                    element.style.width = this._viewWidth.toString()+"px";
+                    //-2 --> taking note of the border, else the element will not fit
+                    element.style.width = (this._viewWidth - 2).toString()+"px";
                     element.style.cssFloat = "left";
 
 
@@ -47,6 +47,12 @@ module PowerViz{
 				this._container.push(view);
 
 			}
+
+            //sets the active view
+            setActiveView=(viewNumber:string)=>{
+
+
+            }
 
 
 
