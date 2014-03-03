@@ -91,6 +91,8 @@ var PowerViz;
             };
             //sets the active view, enabling/disabling as needed.
             this.setActiveView = function (id) {
+                var topviewconatainer = new PowerViz.TopViewContainerController();
+                topviewconatainer.viewHasChanged(id);
                 console.log(id);
                 if (_this._currentView != null) {
                     _this._currentView.disable();
@@ -326,10 +328,27 @@ var PowerViz;
             };
             //sets the active view
             this.setActiveView = function (viewNumber) {
+                for (var i in _this._container) {
+                    if (_this._container[i]._refToView == viewNumber) {
+                        _this._container[i].enable();
+                    } else {
+                        _this._container[i].disable();
+                    }
+                }
             };
             this._container = new Array();
             this._viewWidth = PowerViz.ViewUtils.getTopBarWidth();
         }
+        Object.defineProperty(TopViewContainer, "instance", {
+            get: function () {
+                if (TopViewContainer._instance == null)
+                    TopViewContainer._instance = new TopViewContainer();
+                return TopViewContainer._instance;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        TopViewContainer._instance = null;
         return TopViewContainer;
     })();
     PowerViz.TopViewContainer = TopViewContainer;
@@ -472,26 +491,21 @@ var PowerViz;
             };
             //Required by the View interface.
             this.enable = function () {
-                _this._controller.enable();
+                //this._controller.enable();
+                var element = document.getElementById(_this._name);
+                element.style.backgroundColor = "blue";
             };
             //Required by the View interface.
             this.disable = function () {
-                _this._controller.disable();
+                //this._controller.disable();
+                var element = document.getElementById(_this._name);
+                element.style.backgroundColor = "gray";
             };
             //Required by the View interface.
             this.beginLoading = function () {
             };
             //Required by the View interface.
             this.endLoading = function () {
-            };
-            //highlight the current view if selected
-            this.setToSelected = function () {
-                if (_this._selected == false) {
-                    _this._selected = true;
-
-                    var element = document.getElementById(_this._name);
-                    element.style.color = "blue";
-                }
             };
         }
         return TopView;
@@ -513,17 +527,9 @@ var PowerViz;
         __extends(Price_TopView, _super);
         function Price_TopView() {
             _super.apply(this, arguments);
-            var _this = this;
             this._name = "testPrice_TopView";
             this._id = "#testPrice_TopView";
-            //Required by the View interface.
-            this.enable = function () {
-                _this._controller.enable();
-            };
-            //Required by the View interface.
-            this.disable = function () {
-                _this._controller.disable();
-            };
+            this._refToView = "viewThree";
             //Required by the View interface.
             this.beginLoading = function () {
             };
@@ -551,17 +557,10 @@ var PowerViz;
         __extends(Env_TopView, _super);
         function Env_TopView() {
             _super.apply(this, arguments);
-            var _this = this;
             this._name = "testEnv_TopView";
             this._id = "#testEnv_TopView";
-            //Required by the View interface.
-            this.enable = function () {
-                _this._controller.enable();
-            };
-            //Required by the View interface.
-            this.disable = function () {
-                _this._controller.disable();
-            };
+            //reference to the view, essentially the same as the view name
+            this._refToView = "viewTwo";
             //Required by the View interface.
             this.beginLoading = function () {
             };
@@ -589,17 +588,9 @@ var PowerViz;
         __extends(Flex_TopView, _super);
         function Flex_TopView() {
             _super.apply(this, arguments);
-            var _this = this;
             this._name = "testFlex_TopView";
             this._id = "#testFlex_TopView";
-            //Required by the View interface.
-            this.enable = function () {
-                _this._controller.enable();
-            };
-            //Required by the View interface.
-            this.disable = function () {
-                _this._controller.disable();
-            };
+            this._refToView = "PrognoseView";
             //Required by the View interface.
             this.beginLoading = function () {
             };
@@ -737,15 +728,9 @@ var PowerViz;
             var _this = this;
             //Required by the Controller interface.
             this.enable = function () {
-                _this._timer = setInterval(_this.onTime, 2000); //Start the timer.
-                _this._counter = 0; //A counter, just for fun.
-                _this.onTime(); //Run the "updating" procedure once when the view is enabled.
             };
             //Required by the Controller interface.
             this.disable = function () {
-                if (_this._timer != null)
-                    clearInterval(_this._timer);
-                _this._timer = null;
             };
             //Connects a view to this. Should be the only method used for connecting a view to a controller.
             this.connectView = function (v) {
@@ -756,10 +741,6 @@ var PowerViz;
             this.onTime = function () {
                 console.log("time..." + _this._counter);
                 _this._counter += 1;
-                //Tell the view to set the headline:
-                //this._view.setHeadline("This is the new headline - " + this._counter); //Call a function on the view.
-                //Notice, when looking at the TestView code, that the View does not call functions inside the controller,
-                //besides the mandatory enable() and disable().
             };
         }
         return TestTopController;
@@ -774,14 +755,11 @@ var PowerViz;
 (function (PowerViz) {
     //defines a controller that controls the TopviewContainer
     var TopViewContainerController = (function () {
-        //constructor takes a container
-        function TopViewContainerController(container) {
-            var _this = this;
+        function TopViewContainerController() {
             //this method should be called when view have changed
             this.viewHasChanged = function (newView) {
-                _this.controllerContainer.setActiveView(newView);
+                PowerViz.TopViewContainer.instance.setActiveView(newView);
             };
-            this.controllerContainer = container;
         }
         return TopViewContainerController;
     })();
@@ -802,7 +780,6 @@ var PowerViz;
             this.setupViews = function () {
                 //Setup the swiper:
                 PowerViz.ViewContainer.instance.createSwiper();
-                var topContainer = new PowerViz.TopViewContainer();
 
                 //Setup the test sketches:
                 //1. Set the containing div size.
@@ -825,11 +802,12 @@ var PowerViz;
                 var testTopView3 = new PowerViz.Env_TopView();
                 testTopView3.setup();
 
-                topContainer.addItem(testTopView);
-                topContainer.addItem(testTopView2);
-                topContainer.addItem(testTopView3);
+                PowerViz.TopViewContainer.instance.addItem(testTopView);
+                PowerViz.TopViewContainer.instance.addItem(testTopView2);
+                PowerViz.TopViewContainer.instance.addItem(testTopView3);
+                testTopView2.enable();
 
-                topContainer.setupViews();
+                PowerViz.TopViewContainer.instance.setupViews();
 
                 //end test topview
                 //Now that all views are created, set them up.

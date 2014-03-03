@@ -8,21 +8,15 @@ module PowerViz {
 
         _name:string = "testFlex_TopView";
         _id:string = "#testFlex_TopView";
+        _refToView:string = "PrognoseView";
+
         _controller:TestTopController;
 
 
 
 
 
-        //Required by the View interface.
-        enable=()=> {
-            this._controller.enable();
-        }
 
-        //Required by the View interface.
-        disable=()=> {
-            this._controller.disable();
-        }
 
         //Required by the View interface.
         beginLoading=()=> {

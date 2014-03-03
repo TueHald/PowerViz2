@@ -7,6 +7,13 @@ module PowerViz{
 	//manipulate them
 	export class TopViewContainer{
 
+        private static _instance : TopViewContainer = null;
+        public static get instance():TopViewContainer {
+            if(TopViewContainer._instance==null)
+                TopViewContainer._instance = new TopViewContainer();
+            return TopViewContainer._instance;
+        }
+
 			_container: TopView[];
             _viewWidth: number;
 
@@ -19,9 +26,6 @@ module PowerViz{
 			}
 
 			setupViews=()=> {
-
-				
-
 
                 this._viewWidth = this._viewWidth/this._container.length;
 
@@ -51,6 +55,21 @@ module PowerViz{
             //sets the active view
             setActiveView=(viewNumber:string)=>{
 
+
+                for (var i in this._container) {
+
+                    if(this._container[i]._refToView == viewNumber){
+
+                        this._container[i].enable();
+
+                    }
+                    else{
+
+                        this._container[i].disable();
+
+                    }
+
+                }
 
             }
 

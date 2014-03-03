@@ -8,6 +8,7 @@ module PowerViz {
 
 		_name:string;
 		_id:string;
+        _refToView:string;
         _selected = false;
 		_controller:TestTopController;
 
@@ -27,12 +28,17 @@ module PowerViz {
 
 		//Required by the View interface.
 		enable=()=> {
-			this._controller.enable();
+			//this._controller.enable();
+            var element = document.getElementById(this._name);
+            element.style.backgroundColor = "blue";
+
 		}
 
 		//Required by the View interface.
 		disable=()=> {
-			this._controller.disable();
+			//this._controller.disable();
+            var element = document.getElementById(this._name);
+            element.style.backgroundColor = "gray";
 		}
 
 		//Required by the View interface.
@@ -44,17 +50,7 @@ module PowerViz {
 		endLoading=()=> {
 
 		}
-        //highlight the current view if selected
-        setToSelected=()=> {
 
-            if(this._selected == false){
-                this._selected = true;
-
-                var element = document.getElementById(this._name);
-                element.style.color = "blue";
-            }
-
-        }
 
 	}
 

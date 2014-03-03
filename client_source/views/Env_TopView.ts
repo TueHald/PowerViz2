@@ -8,21 +8,15 @@ module PowerViz {
 
         _name:string = "testEnv_TopView";
         _id:string = "#testEnv_TopView";
+        //reference to the view, essentially the same as the view name
+        _refToView:string = "viewTwo";
         _controller:TestTopController;
 
 
 
 
 
-        //Required by the View interface.
-        enable=()=> {
-            this._controller.enable();
-        }
 
-        //Required by the View interface.
-        disable=()=> {
-            this._controller.disable();
-        }
 
         //Required by the View interface.
         beginLoading=()=> {

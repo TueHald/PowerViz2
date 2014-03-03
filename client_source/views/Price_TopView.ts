@@ -8,22 +8,14 @@ module PowerViz {
 
 		_name:string = "testPrice_TopView";
 		_id:string = "#testPrice_TopView";
+        _refToView:string = "viewThree";
 		_controller:TestTopController;
 
 
 
 
 
-		//Required by the View interface.
-		enable=()=> {
-			this._controller.enable();
 
-		}
-
-		//Required by the View interface.
-		disable=()=> {
-			this._controller.disable();
-		}
 
 		//Required by the View interface.
 		beginLoading=()=> {

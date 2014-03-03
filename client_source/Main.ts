@@ -26,7 +26,7 @@ module PowerViz {
 
 			//Setup the swiper:
 			ViewContainer.instance.createSwiper();
-			var topContainer = new TopViewContainer(); 
+
 
 
 			//Setup the test sketches:
@@ -52,11 +52,12 @@ module PowerViz {
             var testTopView3 = new Env_TopView();
             testTopView3.setup();
 
-			topContainer.addItem(testTopView);
-            topContainer.addItem(testTopView2);
-            topContainer.addItem(testTopView3);
+			TopViewContainer.instance.addItem(testTopView);
+            TopViewContainer.instance.addItem(testTopView2);
+            TopViewContainer.instance.addItem(testTopView3);
+            testTopView2.enable();
 
-			topContainer.setupViews();
+            TopViewContainer.instance.setupViews();
 
             //end test topview
 

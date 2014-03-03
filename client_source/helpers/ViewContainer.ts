@@ -134,6 +134,9 @@ module PowerViz {
 		//sets the active view, enabling/disabling as needed.
 		setActiveView=(id:string)=> {
 
+            var topviewconatainer = new TopViewContainerController();
+            topviewconatainer.viewHasChanged(id);
+            console.log(id);
 			if(this._currentView != null) {
 				this._currentView.disable();
 				this._currentView = null;
