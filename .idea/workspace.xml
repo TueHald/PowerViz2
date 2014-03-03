@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1aa6fd15-38b5-4384-93d8-c5e9255af31f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/views/Env_TopView.ts" afterPath="$PROJECT_DIR$/client_source/views/Env_TopView.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/views/Flex_TopView.ts" afterPath="$PROJECT_DIR$/client_source/views/Flex_TopView.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/Main.js" afterPath="$PROJECT_DIR$/client/Main.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/Main.ts" afterPath="$PROJECT_DIR$/client_source/Main.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/views/Price_TopView.ts" afterPath="$PROJECT_DIR$/client_source/views/Price_TopView.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/views/TopView.ts" afterPath="$PROJECT_DIR$/client_source/views/TopView.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/helpers/TopViewContainer.ts" afterPath="$PROJECT_DIR$/client_source/helpers/TopViewContainer.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/helpers/ViewUtils.ts" afterPath="$PROJECT_DIR$/client_source/helpers/ViewUtils.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/index.html" afterPath="$PROJECT_DIR$/client/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client_source/index.html" afterPath="$PROJECT_DIR$/client_source/index.html" />
-    </list>
+    <list default="true" id="1aa6fd15-38b5-4384-93d8-c5e9255af31f" name="Default" comment="" />
     <ignored path="PowerViz2.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -150,8 +139,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="291" />
-    <option name="y" value="228" />
+    <option name="y" value="22" />
     <option name="width" value="1674" />
     <option name="height" value="973" />
   </component>
@@ -342,7 +330,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="291" y="228" width="1674" height="973" extended-state="0" />
+    <frame x="0" y="22" width="1674" height="973" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
