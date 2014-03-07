@@ -101,7 +101,7 @@ module PowerViz {
 
         //var lineData = [ { "x": 1,   "y": 5},  { "x": 600,  "y": 5}];
 
-        drawGraph(lineData);
+        drawGraph(lineData,"body", "test1");
 
 
     }
@@ -243,7 +243,9 @@ module PowerViz {
 
     }
 
-    function drawGraph(CoordinateSet){
+    //function to draw a graph
+    //takes a name for the svgelement and a id string that defines an element to insert svg into.
+    function drawGraph(CoordinateSet, id:string, svgname:string){
 
 
         console.log(CoordinateSet.toString());
@@ -267,11 +269,13 @@ module PowerViz {
             .interpolate("basis-open");
 
         //The SVG Container
-        var svgContainer = d3.select("body").append("svg")
+        var svgContainer = d3.select(id).append("svg")
+            .attr("id",svgname)
             .attr("width", 1400)
             .attr("height", 200)
             .style("top", "50%")
             .style("position","absolute");
+
 
         //The line SVG Path we draw
         var lineGraph = svgContainer.append("path")

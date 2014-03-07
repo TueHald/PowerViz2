@@ -1024,7 +1024,7 @@ var PowerViz;
             { "x": 490, "y": 5 }, { "x": 1400, "y": 60 }];
 
         //var lineData = [ { "x": 1,   "y": 5},  { "x": 600,  "y": 5}];
-        drawGraph(lineData);
+        drawGraph(lineData, "body", "test1");
     }
 
     //draws a horissontal line between two x coordinates, fuzzyness
@@ -1138,7 +1138,9 @@ var PowerViz;
         return linedata;
     }
 
-    function drawGraph(CoordinateSet) {
+    //function to draw a graph
+    //takes a name for the svgelement and a id string that defines an element to insert svg into.
+    function drawGraph(CoordinateSet, id, svgname) {
         console.log(CoordinateSet.toString());
         var pathdata = [];
 
@@ -1156,7 +1158,7 @@ var PowerViz;
         }).interpolate("basis-open");
 
         //The SVG Container
-        var svgContainer = d3.select("body").append("svg").attr("width", 1400).attr("height", 200).style("top", "50%").style("position", "absolute");
+        var svgContainer = d3.select(id).append("svg").attr("id", svgname).attr("width", 1400).attr("height", 200).style("top", "50%").style("position", "absolute");
 
         //The line SVG Path we draw
         var lineGraph = svgContainer.append("path").attr("d", lineFunction(pathdata)).attr("stroke", "blue").attr("stroke-width", 4).attr("fill", "none").style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5")).style("top", "50%").style("position", "absolute");
