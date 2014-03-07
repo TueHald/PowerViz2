@@ -5,13 +5,15 @@
 ///<reference path="typescriptdefs/jquery/jquery.d.ts" />
 ///<reference path="typescriptdefs/jqueryui/jqueryui.d.ts" />
 ///<reference path="typescriptdefs/raphael/raphael.d.ts" />
+///<reference path="typescriptdefs/d3/d3.d.ts" />
 
 //Helper classes:
 ///<reference path="helpers/ViewContainer.ts" />
 ///<reference path="helpers/ControllerContainer.ts" />
 ///<reference path="helpers/ViewUtils.ts" />
 ///<reference path="helpers/Observer.ts" />
-///<reference path="helpers/TopViewContainer.ts" />
+///<reference path="helpers/TopViewContainer.ts"/>
+///<reference path="helpers/DrawUtils.ts" />
 
  
 //Views:
