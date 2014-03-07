@@ -4,19 +4,33 @@ body {
 	background-color:white;
 }
 
+/*Style for the top bar. Should always be fixed.*/
+.top-bar {
+	width:100%;
+	height:15%;
+	background-color:grey;
+	position:absolute;
+	top:0px;
+	left:0px;
+	top: 0;
+	z-index:50;
+}
+
 /* Swipe required styles */
 .swipe {
 	overflow: hidden;
 	visibility: hidden;
-	position: relative;
+	position: absolute;
 	width:100%;
-	position:fixed;
-	top:0px;
+	height:85%;
+	float:left;
+	top:15%;
 	left:0px;
+	bottom: 0;
 }
 .swipe-wrap {
 	overflow: hidden;
-	position: relative;
+	position: inherit;
 }
 
 .swipe-box {
@@ -40,12 +54,3 @@ Usefull for avoiding the accidental selection of text on screen.*/
 	user-select:none;
 }
 
-/*Style for the top bar. Should always be fixed.*/
-.top-bar {
-	width:100%;
-	height:51px;
-	background-color:gray;
-	position:fixed;
-	top:0px;
-	left:0px;
-}

@@ -33,5 +33,23 @@ module PowerViz {
 		static hideLoader() {
 			$("#loader-spinner").hide();
 		}
+
+		//Sets the element to the available window width 
+		static setElementTopBarWidth(id:string) {
+			var topWidth:number = $("#top-bar").width();
+			$(id).css("width", ""+topWidth+"px");
+		}
+		//Sets the element to the available Topbar height 
+		static setElementTopBarHeight(id:string) {
+			var topHeight:number = $("#top-bar").height();
+			$(id).css("height", ""+topHeight+"px");
+		}
+
+        static getTopBarWidth():number{
+            return  $("#top-bar").width();
+
+        }
+
+		
 	}
 }

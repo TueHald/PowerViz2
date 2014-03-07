@@ -6,6 +6,7 @@
 	<script src="jquery-ui-1.10.4.custom.min.js"></script>
 	<script src="swipe.js"></script>
 	<script src="raphael-min.js"></script>
+    <script src="d3.min.js"></script>
 	<script src="Main.js"></script>
 	<link rel="stylesheet" type="text/css" href="mainstyle.css">
 	<!--<link rel="stylesheet" type="text/css" href="css/smoothness/jquery-ui-1.10.4.custom.css">-->
@@ -17,11 +18,10 @@
 	<div id="loader-spinner-bla" style="position:fixed;z-index:99;left:50%;top:50%">
 		<img id="loader-spinner" src="loader.gif"/>
 	</div>
-<!--
+
 	<div id="top-bar" class="top-bar no-select">
-		This is the top bar.
 	</div>
--->
+
 	<div class="no-select" style="position:fixed; left:0px; top:40%; z-index:100" onclick="PowerViz.ViewContainer.instance.prev();">
 		<img src="ArrowLeft.svg" />
 	</div>
@@ -30,24 +30,24 @@
 		<img src="ArrowRight.svg" />
 	</div>
 
-	<div id="slider" class="swipe no-select">
+	<!--<div id="slider" class="swipe no-select">
 		<div id="slider-container" class="swipe-wrap no-select">
 			
 			<div id="PrognoseView" class="swipe-box no-select" style="background-color:white;width:100%">
-				<img id="sketchFlex" src="sketches/sketch_Flex1.png" style="position:relative; width:90%;"/>
+				<img id="sketchFlex" src="sketches/sketch_Flex2.png" style="position:relative; width:90%;"/>
 			</div>
 			<div id="viewTwo" class="swipe-box no-select" style="background-color:white;">
-				<img id="sketchSource" src="sketches/sketch_PowerSource1.png" style="position:relative;width:100%"/>
+				<img id="sketchSource" src="sketches/sketch_PowerSource2.png" style="position:relative;width:100%"/>
 			</div>
 			<div id="viewThree" class="swipe-box no-select" style="background-color:white;">
-				<img id="sketchPrice" src="sketches/sketch_Pris1.png" style="position:relative;width:100%"/>
+				<img id="sketchPrice" src="sketches/sketch_Pris2.png" style="position:relative;width:100%"/>
 			</div> 
 
-			<div id="TestView" class="swipe-box no-select">
+			<!--<div id="TestView" class="swipe-box no-select">-->
 
 			</div>
 		
-		</div>
+		</div> -->
 	</div>
 
 	<!-- Slider script and starting the PowerViz main application. -->
