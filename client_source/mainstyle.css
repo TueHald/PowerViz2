@@ -44,7 +44,7 @@ Usefull for avoiding the accidental selection of text on screen.*/
 .top-bar {
 	width:100%;
 	height:51px;
-	background-color:grey;
+	background-color:gray;
 	position:fixed;
 	top:0px;
 	left:0px;
