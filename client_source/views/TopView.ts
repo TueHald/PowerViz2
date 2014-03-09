@@ -22,6 +22,12 @@ module PowerViz {
             //element.style.width = "0px";
             //element.style.height = "0px";
             this._selected = false;
+
+            var topelement = document.getElementById(this._name);
+            topelement.className = "bar-element";
+            //topelement.getElementById('top-bar').appendChild(element);
+
+            element.innerHTML = "<h3>This is a heading</h3>";
 			
 
 		}

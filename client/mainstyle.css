@@ -2,6 +2,25 @@
 
 body {
 	background-color:white;
+
+}
+
+@font-face {
+    font-family: 'humor_sansregular';
+    src: url('Fonts/humor-sans-1.0-webfont.eot');
+    src: url('Fonts/humor-sans-1.0-webfont.eot?#iefix') format('embedded-opentype'),
+    url('Fonts/humor-sans-1.0-webfont.woff') format('woff'),
+    url('Fonts/humor-sans-1.0-webfont.ttf') format('truetype'),
+    url('Fonts/humor-sans-1.0-webfont.svg#humor_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+.bar-element {
+
+    font-family: 'humor_sansregular';
+
 }
 
 /*Style for the top bar. Should always be fixed.*/
