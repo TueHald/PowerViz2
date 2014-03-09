@@ -99,6 +99,7 @@ module PowerViz {
                             { "x": 240,  "y": 20}, { "x": 280,  "y": 40},
                            { "x": 490,  "y": 5},  { "x": 1400, "y": 60}];
 
+
         var lineData2 = [ { "x": 1,   "y": 24},  { "x": 75,  "y": 50},
             { "x": 120,  "y": 45}, { "x": 290,  "y": 250},
             { "x": 560,  "y": 0},  { "x": 1400, "y": 300}];
@@ -109,7 +110,13 @@ module PowerViz {
         DrawUtils.drawGraph(lineData2,"body", "test2","red");
 
 
+
+
     }
+
+
+
+
 
 
 
