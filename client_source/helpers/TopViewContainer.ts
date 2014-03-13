@@ -33,9 +33,10 @@ module PowerViz{
 
                 for (var i in this._container) {
 
-                    var element = document.getElementById(this._container[i]._name);
+                    var element = document.getElementById(this._container[i]._name +"_container");
                     //-2 --> taking note of the border, else the element will not fit
-                    element.style.width = (this._viewWidth - 2).toString()+"px";
+                    element.style.width = "33.33%";
+                    element.style.height = "100%";
                     element.style.cssFloat = "left";
 
 

@@ -6,9 +6,10 @@ module PowerViz {
     //a view that is to be placed in the topbar of the view
     export class Flex_TopView extends TopView{
 
-        _name:string = "testFlex_TopView";
-        _id:string = "#testFlex_TopView";
-        _refToView:string = "PrognoseView";
+        _name:string = "belastning_TopView";
+        _id:string = "#belastning_TopView";
+        _refToView:string = "belastningView";
+        _textFieldText:string = "Belastning";
 
         _controller:TestTopController;
 

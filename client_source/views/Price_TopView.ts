@@ -6,9 +6,10 @@ module PowerViz {
 	//a view that is to be placed in the topbar of the view
 	export class Price_TopView extends TopView{
 
-		_name:string = "testPrice_TopView";
-		_id:string = "#testPrice_TopView";
-        _refToView:string = "viewThree";
+		_name:string = "price_TopView";
+		_id:string = "#price_TopView";
+        _refToView:string = "priceView";
+        _textFieldText:string = "Pris";
 		_controller:TestTopController;
 
 
