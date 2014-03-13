@@ -172,5 +172,16 @@ CREATE TABLE IF NOT EXISTS PowerPrices (
   toTime datetime NOT NULL COMMENT 'End pf the price timeslot',
   dk1 float NOT NULL COMMENT 'Price pr mwh in kr, west of storebaelt.',
   dk2 float NOT NULL COMMENT 'Price pr mwh in kr, east of storebaelt.',
+  acquired datetime NOT NULL COMMENT 'Time when this data was acquired.',
   PRIMARY KEY (fromTime)
+) ENGINE=InnoDB;
+
+--National consumption. 
+CREATE TABLE IF NOT EXISTS NationalConsumption (
+    fromTime datetime NOT NULL COMMENT 'Start of the timeslot',
+    toTime datetime NOT NULL COMMENT 'End of the timeslot',
+    dk1 int(11) NOT NULL COMMENT 'National consumption west of storebaelt measured in megawatt/hours',
+    dk2 int(11) NOT NULL COMMENT 'National consumption east of storebaelt measured in megawatt/hours',
+    acquired datetime NOT NULL COMMENT 'Time when this data was acquired',
+    PRIMARY KEY (fromTime)
 ) ENGINE=InnoDB;

@@ -4,38 +4,54 @@ import DbConnect;
 
 
 typedef WeatherEntry = {
-	var from:Date;
-	var to:Date;
-	var windspeed:Float; //Wind speed in mps.
+	var from:String;
+	var to:String;
+	var windSpeed:Float; //Wind speed in mps.
 	var weatherIcon:String; //openWeatherMap icon ID for the current weather.
 }
 
-typedef WeatherDataset = {
-	var forecast:Array<WeatherEntry>;
+class WeatherData {
+	public var forecast:Array<WeatherEntry>;
+	public function new() {
+		forecast = new Array<WeatherEntry>();
+	}
 }
 
-typedef WeatherResult = {
-	@:optional var error:String;
-	@:optional var data:WeatherDataset;
-}
+
 
 
 class WeatherQueries {
 
 
 	/*Returns an object like this:*/
-	public static function getWindData(houseId:Int) {
+	public static function getWindData(houseId:Int, from:Date, to:Date) : Dynamic {
 
-		//Check if there is recent weather data in the database:
-		var lastDownload:Date = lastDataDownload(houseId);
-		if(lastDownload==null || (Date.now().getTime() - lastDownload.getTime() ) > DateTools.minutes(10) ) {
-			var cityId = getCityId(houseId);
-			downloadWeatherData(cityId); //Download data, since no recent weather data in DB.
-		} 
+		try {
 
-		var cityIdSelect = '(SELECT cityId FROM House WHERE houseId=${houseId})';
-		var query = 'SELECT * FROM WeatherData WHERE cityId IN ${cityIdSelect} ORDER BY fromTime ASC;';
-		//php.Lib.println(query);
+			//Check if there is recent weather data in the database:
+			var lastDownload:Date = lastDataDownload(houseId);
+			if(lastDownload==null || (Date.now().getTime() - lastDownload.getTime() ) > DateTools.minutes(10) ) {
+				var cityId = getCityId(houseId);
+				downloadWeatherData(cityId); //Download data, since no recent weather data in DB.
+			} 
+
+			var cityIdSelect = '(SELECT cityId FROM House WHERE houseId=${houseId})';
+			var query = 'SELECT * FROM WeatherData WHERE cityId IN ${cityIdSelect} AND fromTime>="${from.toString()}" AND toTime<"${to.toString()}" ORDER BY fromTime ASC;';
+
+			var cnx = DbConnect.connect();
+			var dataResult = cnx.request(query);
+
+			var result = new WeatherData();
+			for(row in dataResult) {
+				result.forecast.push({from:row.fromTime.toString(), to:row.toTime.toString(), windSpeed:row.windSpeed, weatherIcon:row.weatherIcon});
+			}
+			return result;
+		}
+		catch(err:String) {
+			return {error : err};
+		}
+
+		return null;
 
 	}
 
