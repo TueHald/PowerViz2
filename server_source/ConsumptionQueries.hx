@@ -142,5 +142,14 @@ class ConsumptionQueries {
 		return DateTools.delta(d, -DateTools.days(weekday));
 	}
 
+	public function getConsumptionPrognosis(args:StringMap<String>) {
+		//Make a SQL query that selects and groups consumption 
+
+
+		var query = 'SELECT * FROM TotalConsumption WHERE '; 
+		
+		
+	}
+
 
 }

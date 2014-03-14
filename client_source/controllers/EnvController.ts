@@ -115,9 +115,17 @@ module PowerViz {
 				}
 				
 				//Make array of consumption data (48 points)
+				var consDataArray:any = [];
+				var max:number = 1200;
 				for(var j=0; j<consumptionData.consumption.length; j++) {
-					console.log(consumptionData.consumption[j].load);
+					consDataArray[j] = {"x":j, "y":(consumptionData.consumption[j].load/max)*100};
 				}
+				while(consDataArray.length<48) {
+					consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
+				}	
+				console.log(consDataArray);
+
+				//Prognosis data and add it to the consDataArray
 
 				//Make array of weather data:
 				for(var i=0; i<windData.forecast.length; i++) {
