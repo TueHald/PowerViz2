@@ -162,6 +162,7 @@ CREATE TABLE IF NOT EXISTS WeatherData (
 CREATE TABLE IF NOT EXISTS House (
   houseId int(11) NOT NULL COMMENT 'The ID of the house',
   cityId int(11) NOT NULL COMMENT 'The city ID used for obtaining weather data.',
+  loadMax int(11) NOT NULL COMMENT 'The maximum expected load for the house.',
   PRIMARY KEY (houseId)
 ) ENGINE=InnoDB;
 

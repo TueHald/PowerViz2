@@ -107,12 +107,22 @@ module PowerViz {
 			if(this._consumptionDataObtained==true && this._windDataObtained==true) {
 				//Handle the data and make it into some useful form. 
 
-				console.log("Both pieces of data was obtained");
-				var windData = jQuery.parseJSON(this._windData);
-				var consumptionData = jQuery.parseJSON(this._consumptionData);
-				console.log(consumptionData);
-				console.log(windData);
-				console.log("----");
+				var windData:any = jQuery.parseJSON(this._windData);
+				var consumptionData:any = jQuery.parseJSON(this._consumptionData);
+
+				if(windData.error!=null || consumptionData.error!=null) {
+					console.log("Error!");
+				}
+				
+				//Make array of consumption data (48 points)
+				for(var j=0; j<consumptionData.consumption.length; j++) {
+					console.log(consumptionData.consumption[j].load);
+				}
+
+				//Make array of weather data:
+				for(var i=0; i<windData.forecast.length; i++) {
+					console.log(windData.forecast[i].windSpeed);
+				}
 
 				this._windDataObtained = false;
 				this._consumptionDataObtained = false;
