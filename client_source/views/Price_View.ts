@@ -38,7 +38,7 @@ module PowerViz {
                 { "x": 2,  "y": 0}, { "x": 3,  "y": 20},
                 { "x": 4,  "y": 20},  { "x": 5, "y": 57}];
 
-            this.update(lineData,lineData2);
+            //this.update(lineData,lineData2);
 
 
 

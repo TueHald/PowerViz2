@@ -45,7 +45,6 @@ module PowerViz{
                 }
 
 
-
 			}
 
 			addItem=(view:TopView)=>{

@@ -40,7 +40,7 @@ module PowerViz {
 
 
 
-            this.update(lineData,lineData2);
+            //this.update(lineData,lineData2);
 
 
         }
