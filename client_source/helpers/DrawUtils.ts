@@ -725,6 +725,18 @@ module PowerViz {
             //The SVG Container
             var svgContainer = d3.select("#"+svgname.toString());
 
+            //if the element was not found, we create it
+            if(d3.select("#"+svgname.toString()).empty()){
+
+                svgContainer = d3.select("#"+id+'_graphcanvas').append("svg")
+                    .attr("id",svgname)
+                    .attr("width", container.offsetWidth.toString()+"px")
+                    .attr("height", container.offsetHeight.toString() + "px")
+                    //.style("top", "00%")
+                    .style("position","absolute");
+
+            }
+
 
             //remove path
             svgContainer.select("path").remove();
