@@ -8,6 +8,12 @@ module PowerViz {
 		_frequency:number = 15*60	; //seconds between updates. 
 		_enabled:boolean = false;
 
+		_consumptionData:string;
+		_windData:string; 
+
+		_consumptionDataObtained:boolean = false;
+		_windDataObtained:boolean = false; 
+
 		constructor() {
 
 		}
@@ -48,9 +54,10 @@ module PowerViz {
 		private requestConsumptionData=()=> {
 
 			var request = new XMLHttpRequest();
+			var that = this;
 			request.onreadystatechange = function() {
 				console.log(request.responseText);
-				this.onConsumptionDataObtained(request.responseText);
+				that.onConsumptionDataObtained(request.responseText);
 			}
 			var to = new Date();
 			var from = new Date();
@@ -64,16 +71,59 @@ module PowerViz {
 			request.send();
 		}
 
-		private onConsumptionDataObtained=(data:String)=> {
+		private onConsumptionDataObtained=(data:string)=> {
 			//Form the data into something that the view can present on screen.
+
+			if(data != "") {
+				this._consumptionData = data;
+				this._consumptionDataObtained=true;
+				this.sendDataToView();
+			}
+
 		}
 
 		private requestWindData=()=> {
-			//Form the wind  data into something that the view can present on screen. 
+
+			var request = new XMLHttpRequest();
+			var that = this;
+			request.onreadystatechange = function() {
+				console.log(request.responseText);
+				that.onWindDataObtained(request.responseText);
+			}
+			var to = new Date();
+			var from = new Date();
+			from.setHours(to.getHours()-12);
+			to.setHours(from.getHours()+24);
+
+			var froms = DateHelper.dateToJsString(from);
+			var tos = DateHelper.dateToJsString(to);
+			var url = "../server/query/?query=getWind&houseId=1&from="+froms+"&to="+tos;
+			console.log("Getting data from " + url);
+			request.open("GET", url);
+			request.send();
 		}
 
-		private onWindDataObtained=(data:String)=> {
+		private onWindDataObtained=(data:string)=> {
 
+			if(data!="") {
+				this._windData = data;
+				this._windDataObtained = true;
+				this.sendDataToView();
+			}
+		}
+
+		private sendDataToView=()=> {
+			if(this._consumptionDataObtained && this._windDataObtained) {
+				//Handle the data and make it into some useful form. 
+
+				console.log("Both pieces of data was obtained");
+				console.log(this._windData);
+				console.log(this._consumptionData);
+				console.log("----");
+
+			}
+			this._windDataObtained = false;
+			this._consumptionDataObtained = false;
 		}
 
 		public static test() {
