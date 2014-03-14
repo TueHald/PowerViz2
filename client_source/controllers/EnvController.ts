@@ -56,16 +56,12 @@ module PowerViz {
 			var request = new XMLHttpRequest();
 			var that = this;
 			request.onreadystatechange = function() {
-				console.log(request.responseText);
-				that.onConsumptionDataObtained(request.responseText);
+				if(request.readyState == 4) {
+					that.onConsumptionDataObtained(request.responseText); 
+				}
 			}
-			var to = new Date();
-			var from = new Date();
-			from.setHours(to.getHours()-12);
 
-			var froms = DateHelper.dateToJsString(from);
-			var tos = DateHelper.dateToJsString(to);
-			var url = "../server/query/?query=getTotalConsumption&houseId=1&from="+froms+"&to="+tos;
+			var url = "../server/query/?query=getTotalConsumption&houseId=1&timespan=-12";
 			console.log("Getting data from " + url);
 			request.open("GET", url);
 			request.send();
@@ -87,17 +83,12 @@ module PowerViz {
 			var request = new XMLHttpRequest();
 			var that = this;
 			request.onreadystatechange = function() {
-				console.log(request.responseText);
-				that.onWindDataObtained(request.responseText);
+				if(request.readyState == 4) {
+					that.onWindDataObtained(request.responseText);
+				}
 			}
-			var to = new Date();
-			var from = new Date();
-			from.setHours(to.getHours()-12);
-			to.setHours(from.getHours()+24);
 
-			var froms = DateHelper.dateToJsString(from);
-			var tos = DateHelper.dateToJsString(to);
-			var url = "../server/query/?query=getWind&houseId=1&from="+froms+"&to="+tos;
+			var url = "../server/query/?query=getWind&houseId=1&timespan=-12";
 			console.log("Getting data from " + url);
 			request.open("GET", url);
 			request.send();
@@ -113,17 +104,20 @@ module PowerViz {
 		}
 
 		private sendDataToView=()=> {
-			if(this._consumptionDataObtained && this._windDataObtained) {
+			if(this._consumptionDataObtained==true && this._windDataObtained==true) {
 				//Handle the data and make it into some useful form. 
 
 				console.log("Both pieces of data was obtained");
-				console.log(this._windData);
-				console.log(this._consumptionData);
+				var windData = jQuery.parseJSON(this._windData);
+				var consumptionData = jQuery.parseJSON(this._consumptionData);
+				console.log(consumptionData);
+				console.log(windData);
 				console.log("----");
 
+				this._windDataObtained = false;
+				this._consumptionDataObtained = false;
 			}
-			this._windDataObtained = false;
-			this._consumptionDataObtained = false;
+			
 		}
 
 		public static test() {

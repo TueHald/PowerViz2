@@ -43,6 +43,14 @@ class ConsumptionQueries {
 		var houseId:Int = Std.parseInt(args.get("houseId"));
 		var from:String = args.get("from");
 		var to:String = args.get("to");
+		var timespan:Int = Std.parseInt(args.get("timespan")); //Timespan in hours. 
+
+		if(args.get("timespan") != null) {
+			if(timespan<0) {
+				to = Date.now().toString();
+				from = DateTools.delta(Date.now(), DateTools.hours(timespan)).toString();
+			}
+		}
 
 		if(granularity==null)
 			granularity="";

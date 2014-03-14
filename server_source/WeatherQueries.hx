@@ -1,5 +1,7 @@
 package;
 
+import haxe.ds.StringMap;
+
 import DbConnect;
 
 
@@ -24,7 +26,24 @@ class WeatherQueries {
 
 
 	/*Returns an object like this:*/
-	public static function getWindData(houseId:Int, from:Date, to:Date) : Dynamic {
+	public static function getWindData(args:StringMap<String>) : Dynamic {
+
+		var houseId:Int = Std.parseInt(args.get("houseId"));
+		var from:Date = args.get("from")==null ? null : Helpers.JsDateToDate(args.get("from"));
+		var to:Date = args.get("to")==null ? null : Helpers.JsDateToDate(args.get("to"));
+
+		if(args.get("timespan")!=null) {
+			var now = args.get("now")==null ? Date.now() : Helpers.JsDateToDate(args.get("now"));
+			var timespan:Int = Std.parseInt(args.get("timespan"));
+			if(timespan<0) {
+				to = now;
+				from = DateTools.delta(to, DateTools.hours(timespan));
+			}
+			else {
+				from = now;
+				to = DateTools.delta(from, DateTools.hours(timespan));
+			}
+		}
 
 		try {
 

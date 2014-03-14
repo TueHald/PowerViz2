@@ -54,7 +54,7 @@ class Query {
 	//Returns a list of windspeeds in the specified time interval. 
 	//Returned as a JSON-stringify-able Dynamic object. 
 	static function getWind(args:StringMap<String>) : Dynamic {
-		return WeatherQueries.getWindData(Std.parseInt( args.get("houseId")), Helpers.JsDateToDate(args.get("from")), Helpers.JsDateToDate(args.get("to")));	
+		return WeatherQueries.getWindData(args);	
 	}
 
 
