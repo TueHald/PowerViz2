@@ -20,11 +20,351 @@ module PowerViz {
             )
     }
 
+
+
+
+        //returns a random path to a file
+        static choose():string{
+
+        var filename = "Images/timelineelement_0.svg";
+
+        var random = Math.random();
+
+        if(random <0.10)
+        {
+            return "Images/timelineelement_0.svg";
+        }
+        else if(random < 0.2 && random > 0.1 ){
+
+            return "Images/timelineelement_1.svg";
+        }
+        else if(random < 0.3 && random > 0.2 ){
+
+            return "Images/timelineelement_2.svg";
+        }
+        else if(random < 0.4 && random > 0.3 ){
+
+            return "Images/timelineelement_3.svg";
+        }else if(random < 0.5 && random > 0.4 ){
+
+            return "Images/timelineelement_4.svg";
+        }else if(random < 0.6 && random > 0.5 ){
+
+            return "Images/timelineelement_5.svg";
+        }else if(random < 0.7 && random > 0.6 ){
+
+            return "Images/timelineelement_6.svg";
+        }else if(random < 0.8 && random > 0.7 ){
+
+            return "Images/timelineelement_7.svg";
+        }else if(random < 0.9 && random > 0.8 ){
+
+            return "Images/timelineelement_8.svg";
+        }else if(random < 1.0 && random > 0.9 ){
+
+            return "Images/timelineelement_9.svg";
+        }
+        else if(random == 1.0  ){
+
+            return "Images/timelineelement_10.svg";
+        }
+
+
+        return filename;
+
+
+    }
+
+        //creates an array of hour numbers to go into the timeline
+        static createTimeLine():any{
+
+
+        var currentdate = new Date();
+        var dateArray = [];
+
+
+
+
+
+
+        var hour = currentdate.getHours() + 1;
+
+
+
+        if(currentdate.getMinutes() <= 15){
+
+            hour = currentdate.getHours();
+        }
+
+        for(i=12;i>0;i--){
+
+            if(hour == 0){
+                hour = 23;
+            }
+            else{
+                hour = hour-1;
+
+            }
+
+        }
+
+
+        dateArray.push(hour);
+        for(var i = 0; i<22;i++){
+
+            if(hour == 23)
+            {hour = -1;}
+            dateArray.push(hour+1);
+            hour = hour + 1;
+
+        }
+        return dateArray;
+    }
+
+
+
+        static calcTime():number{
+
+
+        var currentdate = new Date();
+
+
+
+        if(currentdate.getMinutes() < 15){
+
+            return 0;
+        }
+        else if(currentdate.getMinutes() < 30 && currentdate.getMinutes() >= 15){
+
+            return 3;
+        }
+        else if(currentdate.getMinutes() < 45 && currentdate.getMinutes() >= 30){
+            return 2;
+        }
+        else if(currentdate.getMinutes() < 60 && currentdate.getMinutes() >= 45){
+            return 1;
+        }
+        else{
+
+            return 0;
+        }
+
+    }
+
+        //creates a canvas which the graphs can be drawn
+        //view is the calling views name
+        static createGraphCanvas(view:string){
+
+
+            //create a container for the vertical line
+            var graphCanvas = document.createElement('div');
+            graphCanvas.id = view +'_graphcanvas';
+
+
+
+
+            var hor_lineContainer = document.getElementById(view +'_horizontallinecontainer');
+            var ver_lineContainer = document.getElementById(view +'_verticallinecontainer');
+
+
+            graphCanvas.style.width = hor_lineContainer.offsetWidth.toString()+"px";
+            graphCanvas.style.height = "547px";
+
+
+            graphCanvas.style.position = "absolute";
+            graphCanvas.style.left = "50%";
+
+
+            //get the contentframe
+            var contentframe = document.getElementById(view +'_contentframe');
+            contentframe.appendChild(graphCanvas);
+
+            graphCanvas.style.bottom =  ""+(ViewUtils.getTotalHeight()-ver_lineContainer.getBoundingClientRect().top).toString()+"px";
+            graphCanvas.style.marginLeft = "-"+(hor_lineContainer.offsetWidth/2).toString()+"px";
+
+        }
+        //draws a square in the frame
+        //**NOT USED**
+        static drawSquare(id:string, width:number, height:number, color:string){
+
+
+            var canvas = d3.select(id)
+                .append("svg:svg")
+                .attr("width", "100%")//canvasWidth)
+                .attr("height", "100%")
+                .style("position","absolute")
+                .style("margin-right","auto")
+                .style("margin-left","auto");
+
+
+
+            var rectangle = canvas.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("fill",color);
+
+
+        }
+
+        //draws a horissontal line between two x coordinates, fuzzyness
+        //is the randomness of the line, eg. how sketchy it looks.
+        static drawHorisontalLine(from:number,to:number,fuzzyness:number){
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .style("top","50%")
+                .style("position","absolute");
+
+
+            var lineData = d3.range(from,to,fuzzyness).map(function(x) {
+                return {x: x, y: 10 + Math.floor(Math.random()*6)-3}
+            });
+
+            var lineFunction = d3.svg.line()
+                .x(function(d) { return d.x; })
+                .y(function(d) { return d.y; })
+                .interpolate("basis");
+
+            function draw(points) {
+
+                var lineGraph = svg.append("path")
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 1)
+                    .attr("fill", "none")
+                    .attr("d", lineFunction(points));
+
+                if (points.length < lineData.length)
+
+                    draw(lineData);
+
+            }
+
+            draw([]);
+        }
+
+        //draws a horissontal line between two x coordinates, fuzzyness
+        //is the randomness of the line, eg. how sketchy it looks.
+        //roughly based on: http://stackoverflow.com/questions/20695723/d3-smoothly-animate-a-hand-drawn-line
+        static drawVerticalLine(from:number,to:number,fuzzyness:number){
+
+            var svg = d3.select("body").append("svg")
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .style("top","50%")
+                .style("position","absolute");
+
+
+
+
+            var lineData = d3.range(from,to,fuzzyness).map(function(y) {
+                return {y: y, x: 10 + Math.floor(Math.random()*6)-3}
+            });
+
+            var lineFunction = d3.svg.line()
+                .x(function(d) { return d.x; })
+                .y(function(d) { return d.y; })
+                .interpolate("cardinal");
+
+            function draw(points) {
+
+                var lineGraph = svg.append("path")
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 1)
+                    .attr("fill", "none")
+                    .attr("d", lineFunction(points));
+
+                if (points.length < lineData.length)
+
+                    draw(lineData);
+
+            }
+
+            draw([]);
+        }
+
+
+
+        static redrawContentFrame(id:string){
+
+
+            var framewidt = 1227;
+            var distancefromBottom = "12%";
+            var timeDistance = 4;
+
+            var hor_linecontainer = document.getElementById(id +'_horizontallinecontainer');
+
+            //remove the timeelements
+            d3.select("#"+id+"_horizontallinecontainer").selectAll("#"+id +"_horizontalTimecontainer").remove();
+
+
+
+            var len = hor_linecontainer.offsetWidth;
+            var x_coord = 0;
+            var y_coord = hor_linecontainer.getBoundingClientRect().top;
+
+
+
+            var time_line_marks_len = len/96;
+            var len_array = [];
+
+
+            //get offset
+            var offset = DrawUtils.calcTime();
+
+            var timeLineArray = DrawUtils.createTimeLine();
+
+            var count = x_coord + (time_line_marks_len*offset);
+            console.log(count);
+
+            len_array.push(count)
+
+            for(var i = 0; i<23;i++){
+                len_array.push(count + (time_line_marks_len*4));
+                count = count + (time_line_marks_len*4);
+
+            }
+
+            //create vertical timelineelements
+            for(var j = 0; j<len_array.length;j++){
+
+
+                //move the element to the new position
+                var temp_timeline = document.getElementById(id +'_horizontallinecontainer'+ j.toString());
+                temp_timeline.style.left = len_array[j].toString()+"px";
+                temp_timeline.className =  "time_container";
+                //temp_timeline.style.bottom = distancefromBottom;
+
+
+
+               if(timeLineArray[j]%timeDistance == 0){
+
+                    var temp_timebox = document.createElement('div');
+                    temp_timebox.id = id +'_horizontalTimecontainer';
+                    temp_timebox.style.width = "5px";
+                    temp_timebox.style.height = "20px";
+                    temp_timebox.style.position = "absolute";
+                    temp_timebox.style.left = len_array[j].toString()+"px";
+                    temp_timebox.style.bottom = "0%";
+                    temp_timebox.className = "time-element";
+
+                    temp_timebox.innerHTML = timeLineArray[j].toString();
+
+                    hor_linecontainer.appendChild(temp_timebox);
+
+                }
+            }
+
+        }
+
+
 // inspired by this paper
 // http://iwi.eldoc.ub.rug.nl/FILES/root/2008/ProcCAGVIMeraj/2008ProcCAGVIMeraj.pdf
         static handDrawLine(ctx, x0, y0, x1, y1){
 
-        console.log("logged");
+
         var coords = [];
         ctx.moveTo(x0, y0)
 
@@ -97,7 +437,7 @@ module PowerViz {
 
                 break;
             }
-            console.log("outer");
+
             this.handDrawLine(ctx, coords[i].x, coords[i].y, coords[i+1].x, coords[i+1].y);
 
         }
@@ -131,7 +471,7 @@ module PowerViz {
             var y1 = y+Math.sin(t1)*r*ys;
 
             this.storeCoordinate(x0, y0, coords);
-            ctx.bezierCurveTo(this.fuzz(x0, f), this.fuzz(y0, f), x1, y1);
+            ctx.bezierCurveTo(DrawUtils.fuzz(x0, f), DrawUtils.fuzz(y0, f), x1, y1);
 
             ctx.moveTo(x1, y1);
             //ctx.stroke();
@@ -143,7 +483,7 @@ module PowerViz {
             var x = coords[i].x;
             var y = coords[i].y;
             lineData.push({"x":x,"y":y});
-            console.log("x="+ x.toString()+"y="+ y.toString());
+
         }
 
 
@@ -168,82 +508,7 @@ module PowerViz {
 
 
 
-        //draws a horissontal line between two x coordinates, fuzzyness
-        //is the randomness of the line, eg. how sketchy it looks.
-        static drawHorisontalLine(from:number,to:number,fuzzyness:number){
 
-        var svg = d3.select("body").append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%")
-            .style("top","50%")
-            .style("position","absolute");
-
-
-        var lineData = d3.range(from,to,fuzzyness).map(function(x) {
-            return {x: x, y: 10 + Math.floor(Math.random()*6)-3}
-        });
-
-        var lineFunction = d3.svg.line()
-            .x(function(d) { return d.x; })
-            .y(function(d) { return d.y; })
-            .interpolate("basis");
-
-        function draw(points) {
-
-            var lineGraph = svg.append("path")
-                .attr("stroke", "blue")
-                .attr("stroke-width", 1)
-                .attr("fill", "none")
-                .attr("d", lineFunction(points));
-
-            if (points.length < lineData.length)
-
-                draw(lineData);
-
-        }
-
-        draw([]);
-    }
-
-        //draws a horissontal line between two x coordinates, fuzzyness
-        //is the randomness of the line, eg. how sketchy it looks.
-        //roughly based on: http://stackoverflow.com/questions/20695723/d3-smoothly-animate-a-hand-drawn-line
-        static drawVerticalLine(from:number,to:number,fuzzyness:number){
-
-        var svg = d3.select("body").append("svg")
-            .attr("width", "100%")
-            .attr("height", "100%")
-            .style("top","50%")
-            .style("position","absolute");
-
-
-
-
-        var lineData = d3.range(from,to,fuzzyness).map(function(y) {
-            return {y: y, x: 10 + Math.floor(Math.random()*6)-3}
-        });
-
-        var lineFunction = d3.svg.line()
-            .x(function(d) { return d.x; })
-            .y(function(d) { return d.y; })
-            .interpolate("cardinal");
-
-        function draw(points) {
-
-            var lineGraph = svg.append("path")
-                .attr("stroke", "blue")
-                .attr("stroke-width", 1)
-                .attr("fill", "none")
-                .attr("d", lineFunction(points));
-
-            if (points.length < lineData.length)
-
-                draw(lineData);
-
-        }
-
-        draw([]);
-    }
 
         static slopedline(x0, y0, x1, y1, fuzzyness){
         var dx = Math.abs(x1-x0);
@@ -262,7 +527,7 @@ module PowerViz {
         var interval = Math.floor((100/vectorLength)+fuzzyness);
         var intervalCount = 0;
 
-            console.log("int "+interval.toString());
+
 
         for(var i=0; i<interval;i++){
 
@@ -314,7 +579,7 @@ module PowerViz {
         static drawGraph(CoordinateSet, id:string, svgname:string, color:string){
 
 
-        console.log(CoordinateSet.toString());
+
         var pathdata = [];
 
         var container = document.getElementById(id+'_graphcanvas');
@@ -334,13 +599,13 @@ module PowerViz {
         //else if(CoordinateSet.length >= 96){
             //ensure that the array is exactly 96 spaces long
             var newCoordinateset = CoordinateSet.slice(0,96);
-            console.log(newCoordinateset.length.toString());
+
 
         for(var i=0;i<newCoordinateset.length-1;i++){
 
             var tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
                 (newCoordinateset[i+1].y*y_height),4);
-            console.log(tempdata.toString());
+
             pathdata = pathdata.concat(tempdata);
 
         }
@@ -402,62 +667,85 @@ module PowerViz {
 
     }
 
-        //creates a canvas which the graphs can be drawn
-        //view is the calling views name
-        static createGraphCanvas(view:string){
 
 
-            //create a container for the vertical line
-            var graphCanvas = document.createElement('div');
-            graphCanvas.id = view +'_graphcanvas';
+        //function to draw a graph
+        //takes a name for the svgelement and a id string that defines an element to insert svg into.
+        static redrawGraph(CoordinateSet, id:string, svgname:string, color:string){
 
 
 
+            var pathdata = [];
 
-            var hor_lineContainer = document.getElementById(view +'_horizontallinecontainer');
-            var ver_lineContainer = document.getElementById(view +'_verticallinecontainer');
+            var container = document.getElementById(id+'_graphcanvas');
+
+            var y_height = container.offsetHeight/100;
+            var x_len = container.offsetWidth/96;
+
+            //if(CoordinateSet.length < 96){
+
+            //write message to user
+            //    container.innerHTML = "Graf ikke tilgængelig på nuværende tidspunkt!";
 
 
-            graphCanvas.style.width = hor_lineContainer.offsetWidth.toString()+"px";
-            graphCanvas.style.height = "547px";
 
 
-            graphCanvas.style.position = "absolute";
-            graphCanvas.style.left = "50%";
+            // }
+            //else if(CoordinateSet.length >= 96){
+            //ensure that the array is exactly 96 spaces long
+            var newCoordinateset = CoordinateSet.slice(0,96);
 
 
-            //get the contentframe
-            var contentframe = document.getElementById(view +'_contentframe');
-            contentframe.appendChild(graphCanvas);
+            for(var i=0;i<newCoordinateset.length-1;i++){
 
-            graphCanvas.style.bottom =  ""+(ViewUtils.getTotalHeight()-ver_lineContainer.getBoundingClientRect().top).toString()+"px";
-            graphCanvas.style.marginLeft = "-"+(hor_lineContainer.offsetWidth/2).toString()+"px";
+                var tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
+                    (newCoordinateset[i+1].y*y_height),4);
+
+                pathdata = pathdata.concat(tempdata);
+
+            }
+
+
+            for(var t = 0; t<pathdata.length;t++){
+
+
+
+                pathdata[t].y = (container.offsetHeight-10) - pathdata[t].y;
+
+            }
+
+            console.log("wait "+pathdata.length.toString());
+
+            //This is the accessor function we talked about above
+            var lineFunction = d3.svg.line()
+                .x(function(d) { return d.x; })
+                .y(function(d) { return d.y; })
+                .interpolate("bundle");
+
+            //The SVG Container
+            var svgContainer = d3.select("#"+svgname.toString());
+
+
+            //remove path
+            svgContainer.select("path").remove();
+
+
+            //The line SVG Path we draw
+            var lineGraph = svgContainer.append("path")
+                .attr("d", lineFunction(pathdata))
+                .attr("stroke", color)
+                .attr("stroke-width", 4)
+                .attr("fill", "none")
+                //comment this in if dashes is needed
+                //.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
+                .style("bottom0", "0%")
+                .style("position","absolute");
+
+            // }
+
 
         }
-        //draws a square in the frame
-        //**NOT USED**
-        static drawSquare(id:string, width:number, height:number, color:string){
 
-
-            var canvas = d3.select(id)
-                .append("svg:svg")
-                .attr("width", "100%")//canvasWidth)
-                .attr("height", "100%")
-                .style("position","absolute")
-                .style("margin-right","auto")
-                .style("margin-left","auto");
-
-
-
-            var rectangle = canvas.append("rect")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("width", "100%")
-                .attr("height", "100%")
-                .attr("fill",color);
-
-
-        }
 
         //method to draw contentframe inside the main view
         //id should be the id of the sourrounding containter
@@ -501,7 +789,6 @@ module PowerViz {
             //IMPORT VERTICAL LINE SVG FILE
             d3.xml("Images/vertical_line.svg", "image/svg+xml", function(xml) {
                 var importedNode = document.importNode(xml.documentElement, true);
-                //console.log(importedNode.attributes.getNamedItem("id").toString());
 
                var svg = d3.select("#"+id +'_verticallinecontainer').node().appendChild(importedNode);
 
@@ -563,10 +850,9 @@ module PowerViz {
 
 
             //get offset
-            var offset = calcTime();
-            console.log(offset);
+            var offset = DrawUtils.calcTime();
 
-            var timeLineArray = createTimeLine();
+            var timeLineArray = DrawUtils.createTimeLine();
 
             var count = x_coord + (time_line_marks_len*offset);
             console.log(count);
@@ -588,6 +874,7 @@ module PowerViz {
                 temp_timeline.style.height = "20px";
                 temp_timeline.style.position = "absolute";
                 temp_timeline.style.left = len_array[j].toString()+"px";
+                temp_timeline.className =  "time_container";
                 //temp_timeline.style.bottom = distancefromBottom;
 
 
@@ -600,7 +887,7 @@ module PowerViz {
                if(timeLineArray[j]%timeDistance == 0){
 
                    var temp_timebox = document.createElement('div');
-                   temp_timebox.id = id +'_horizontalTimecontainer'+ j.toString();
+                   temp_timebox.id = id +'_horizontalTimecontainer';
                    temp_timebox.style.width = "5px";
                    temp_timebox.style.height = "20px";
                    temp_timebox.style.position = "absolute";
@@ -638,7 +925,7 @@ module PowerViz {
 
 
                 //IMPORT VERTICAL LINE SVG FILE
-                d3.xml(choose(), "image/svg+xml", function(xml) {
+                d3.xml(DrawUtils.choose(), "image/svg+xml", function(xml) {
 
 
                     var importedNode = document.importNode(xml.documentElement, true);
@@ -654,139 +941,18 @@ module PowerViz {
                 });(countstring)
 
 
-              //returns a random path to a file
-              function choose():string{
 
-                  var filename = "Images/timelineelement_0.svg";
-
-                  var random = Math.random();
-
-                  if(random <0.10)
-                  {
-                      return "Images/timelineelement_0.svg";
-                  }
-                  else if(random < 0.2 && random > 0.1 ){
-
-                      return "Images/timelineelement_1.svg";
-                  }
-                  else if(random < 0.3 && random > 0.2 ){
-
-                      return "Images/timelineelement_2.svg";
-                  }
-                  else if(random < 0.4 && random > 0.3 ){
-
-                      return "Images/timelineelement_3.svg";
-                  }else if(random < 0.5 && random > 0.4 ){
-
-                      return "Images/timelineelement_4.svg";
-                  }else if(random < 0.6 && random > 0.5 ){
-
-                      return "Images/timelineelement_5.svg";
-                  }else if(random < 0.7 && random > 0.6 ){
-
-                      return "Images/timelineelement_6.svg";
-                  }else if(random < 0.8 && random > 0.7 ){
-
-                      return "Images/timelineelement_7.svg";
-                  }else if(random < 0.9 && random > 0.8 ){
-
-                      return "Images/timelineelement_8.svg";
-                  }else if(random < 1.0 && random > 0.9 ){
-
-                      return "Images/timelineelement_9.svg";
-                  }
-                  else if(random == 1.0  ){
-
-                      return "Images/timelineelement_10.svg";
-                  }
-
-
-                  return filename;
-
-
-              }
 
 
 
             }
-
-            function calcTime():number{
-
-
-                var currentdate = new Date();
-
-
-
-                if(currentdate.getMinutes() < 15){
-
-                        return 0;
-                }
-                else if(currentdate.getMinutes() < 30 && currentdate.getMinutes() >= 15){
-
-                        return 3;
-                }
-                else if(currentdate.getMinutes() < 45 && currentdate.getMinutes() >= 30){
-                        return 2;
-                }
-                else if(currentdate.getMinutes() < 60 && currentdate.getMinutes() >= 45){
-                        return 1;
-                }
-                else{
-
-                   return 0;
-                }
-
-            }
-
-            //creates an array of hour numbers to go into the timeline
-            function createTimeLine():any{
-
-
-                var currentdate = new Date();
-                var dateArray = [];
-
-
-
-
-
-
-                var hour = currentdate.getHours() + 1;
-
-
-
-                if(currentdate.getMinutes() <= 15){
-
-                    hour = currentdate.getHours();
-                }
-
-                for(i=12;i>0;i--){
-
-                    if(hour == 0){
-                        hour = 23;
-                    }
-                    else{
-                    hour = hour-1;
-
-                    }
-
-                }
-
-
-                dateArray.push(hour);
-                for(var i = 0; i<22;i++){
-
-                    if(hour == 23)
-                    {hour = -1;}
-                    dateArray.push(hour+1);
-                    hour = hour + 1;
-
-                }
-                return dateArray;
-            }
-
 
 
         }
+
+
+
+
 
 
 

@@ -30,7 +30,7 @@ module PowerViz {
                 { "x": 4,  "y": 0},  { "x": 5, "y": 0}];
 
             //create some data 2
-            var lineData2 = [ { "x": 0,   "y": 0},  { "x": 1,  "y": 0},
+            var lineData2 = [ { "x": 0,   "y": 20},  { "x": 1,  "y": 0},
                 { "x": 2,  "y": 0}, { "x": 3,  "y": 50},
                 { "x": 4,  "y": 40},  { "x": 5, "y": 100},
                 { "x": 2,  "y": 20}, { "x": 3,  "y": 30},
@@ -41,6 +41,9 @@ module PowerViz {
             DrawUtils.drawGraph(lineData,this._name, "test1","blue");
 
             DrawUtils.drawGraph(lineData2,this._name, "test2","red");
+
+
+            this.update();
 
 
         }
@@ -68,6 +71,32 @@ module PowerViz {
 
         //Required by the View interface.
         endLoading=()=> {
+
+        }
+
+        update=()=>{
+
+
+            DrawUtils.redrawContentFrame(this._name);
+
+
+            //create some data 2
+            var lineData3 = [ { "x": 0,   "y": 100},  { "x": 1,  "y": 0},
+                { "x": 2,  "y": 0}, { "x": 3,  "y": 50},
+                { "x": 4,  "y": 60},  { "x": 5, "y": 100},
+                { "x": 2,  "y": 20}, { "x": 3,  "y": 100},
+                { "x": 4,  "y": 70},  { "x": 5, "y": 90},
+                { "x": 2,  "y": 0}, { "x": 3,  "y": 80},
+                { "x": 4,  "y": 20},  { "x": 5, "y": 57}];
+
+
+            DrawUtils.redrawGraph(lineData3,this._name, "test1","blue");
+            //DrawUtils.testRedraw(this._name,"100%","100%");
+
+           // DrawUtils.drawContentFrame(this._name,"100%","100%");
+
+            //DrawUtils.createGraphCanvas(this._name);
+            //DrawUtils.drawGraph(lineData2,this._name, "test2","red");
 
         }
 
