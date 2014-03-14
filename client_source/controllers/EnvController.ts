@@ -5,7 +5,7 @@ module PowerViz {
 	export class EnvController implements Controller {
 
 		_timer:any = null;
-		_frequency:number = 15; //seconds between updates. 
+		_frequency:number = 15*60	; //seconds between updates. 
 		_enabled:boolean = false;
 
 		constructor() {
@@ -40,9 +40,17 @@ module PowerViz {
 			//Get data from the server and send it to the view.
 			//Simple as that. Now, go implement it. 
 
+			this.requestConsumptionData();
+			this.requestWindData();
+
+		}
+
+		private requestConsumptionData=()=> {
+
 			var request = new XMLHttpRequest();
 			request.onreadystatechange = function() {
-
+				console.log(request.responseText);
+				this.onConsumptionDataObtained(request.responseText);
 			}
 			var to = new Date();
 			var from = new Date();
@@ -53,6 +61,18 @@ module PowerViz {
 			var url = "../server/query/?query=getTotalConsumption&houseId=1&from="+froms+"&to="+tos;
 			console.log("Getting data from " + url);
 			request.open("GET", url);
+			request.send();
+		}
+
+		private onConsumptionDataObtained=(data:String)=> {
+			//Form the data into something that the view can present on screen.
+		}
+
+		private requestWindData=()=> {
+			//Form the wind  data into something that the view can present on screen. 
+		}
+
+		private onWindDataObtained=(data:String)=> {
 
 		}
 

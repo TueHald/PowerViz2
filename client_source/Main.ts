@@ -6,6 +6,7 @@ module PowerViz {
 
 		_controllerContainer:ControllerContainer;
 
+
 		get controllerContainer():ControllerContainer { 
 			return this._controllerContainer; 
 		}

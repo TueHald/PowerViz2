@@ -19,6 +19,7 @@
 
 ///<reference path="helpers/TopViewContainer.ts"/>
 ///<reference path="helpers/DrawUtils.ts" />
+///<reference path="helpers/DateHelper.ts" />
 
 
  
@@ -43,6 +44,7 @@
 ///<reference path="controllers/PrognoseDummyController.ts" />
 ///<reference path="controllers/TestTopController.ts" />
 ///<reference path="controllers/TopViewContainerController.ts" />
+///<reference path="controllers/EnvController.ts" />
 
 
 //Model parts:
