@@ -8,6 +8,22 @@ module PowerViz {
 
     export class DrawUtils {
 
+        //sets the graph interprolation function parameter
+        //interprolation type
+        static _interprolation = "bundle";
+        //sets number of points on the x axis
+        static _numPointsX = 96;
+        //the thickness of the graph
+        static _graphthickness = 6;
+
+        //the width of the graph frame
+        static _framewidt = 1227;
+        //Distance from bottom - all elements
+        static _distancefromBottom = "12%";
+
+        //the interval between time elements. eg. every 4 hours
+        static _timeDistance = 4;
+
         // estimate the movement of the arm
 // x0: start
 // x1: end
@@ -360,8 +376,8 @@ module PowerViz {
         }
 
 
-// inspired by this paper
-// http://iwi.eldoc.ub.rug.nl/FILES/root/2008/ProcCAGVIMeraj/2008ProcCAGVIMeraj.pdf
+        // inspired by this paper
+        // http://iwi.eldoc.ub.rug.nl/FILES/root/2008/ProcCAGVIMeraj/2008ProcCAGVIMeraj.pdf
         static handDrawLine(ctx, x0, y0, x1, y1){
 
 
@@ -429,7 +445,7 @@ module PowerViz {
 
     }
 
-     static handDrawnGraph(ctx, coords){
+        static handDrawnGraph(ctx, coords){
 
         for(var i = 0; i <= coords.length-1; i++)
         {
@@ -444,11 +460,11 @@ module PowerViz {
 
     }
 
-// hand draw a circle
-// ctx: Context2D
-// x, y: Coordinates
-// r: radius
-    static handDrawCircle(ctx, x, y, r){
+       // hand draw a circle
+        // ctx: Context2D
+        // x, y: Coordinates
+        // r: radius
+        static handDrawCircle(ctx, x, y, r){
         var steps = Math.ceil(Math.sqrt(r)*3);
 
         // fuzzyness dependent on radius
@@ -504,75 +520,63 @@ module PowerViz {
         static lineFunction = d3.svg.line()
         .x(function(d) { return d.x; })
         .y(function(d) { return d.y; })
-        .interpolate("cardinal");
+        .interpolate("cardinal").tension(0.50);
 
 
 
 
 
         static slopedline(x0, y0, x1, y1, fuzzyness){
-        var dx = Math.abs(x1-x0);
-        var dy = Math.abs(y1-y0);
-        var sx = (x0 < x1) ? 1 : -1;
-        var sy = (y0 < y1) ? 1 : -1;
-        var err = dx-dy;
-        var linedata = [];
+
+            console.log("y1 "+y1);
+            var dx = Math.abs(x1-x0);
+            var dy = Math.abs(y1-y0);
+            var sx = (x0 < x1) ? 1 : -1;
+            var sy = (y0 < y1) ? 1 : -1;
+            var err = dx-dy;
+            var linedata = [];
 
 
 
-        var vectorLength = this.jitterFunction((x0-x1),(y0,y1));
+            var vectorLength = this.jitterFunction((x0-x1),(y0,y1));
 
 
-        //set the interval of the points
-        var interval = Math.floor((100/vectorLength)+fuzzyness);
-        var intervalCount = 0;
+            //set the interval of the points
+            var interval = Math.floor((100/vectorLength)+fuzzyness);
+            var intervalCount = 0;
 
 
 
-        for(var i=0; i<interval;i++){
+            for(var i=0; i<interval;i++){
 
 
                 addLineData(x0 + Math.floor(Math.random()*6)-2,y0 + Math.floor(Math.random()*6)-2,linedata);
 
 
 
-            intervalCount ++;
-            if ((x0==x1) && (y0==y1)) break;
-            var e2 = 2*err;
-            if (e2 >-dy){ err -= dy; x0  += sx; }
-            if (e2 < dx){ err += dx; y0  += sy; }
-        }
-
-        /*//This is the accessor function we talked about above
-         var lineFunction = d3.svg.line()
-         .x(function(d) { return d.x; })
-         .y(function(d) { return d.y; })
-         .interpolate("cardinal");
-
-         //The SVG Container
-         var svgContainer = d3.select("body").append("svg")
-         .attr("width", 200)
-         .attr("height", 200);
-
-         //The line SVG Path we draw
-         var lineGraph = svgContainer.append("path")
-         .attr("d", lineFunction(linedata))
-         .attr("stroke", "blue")
-         .attr("stroke-width", 2)
-         .attr("fill", "none");*/
+                intervalCount ++;
+                if ((x0==x1) && (y0==y1)) break;
+                var e2 = 2*err;
+                if (e2 >-dy){ err -= dy; x0  += sx; }
+                if (e2 < dx){ err += dx; y0  += sy; }
+            }
 
 
+            function addLineData(x:number, y: number, array){
 
-        function addLineData(x:number, y: number, array){
+                array.push({"x": x,   "y": y})
 
-            array.push({"x": x,   "y": y})
+
+            }
+            for(var i = 0; i<linedata.length;i++){
+
+                console.log("linedata "+linedata[i].y.toString());
+
+            }
+            return linedata;
+
 
         }
-
-        return linedata;
-
-
-    }
 
         //function to draw a graph
         //takes a name for the svgelement and a id string that defines an element to insert svg into.
@@ -585,7 +589,7 @@ module PowerViz {
         var container = document.getElementById(id+'_graphcanvas');
 
         var y_height = container.offsetHeight/100;
-        var x_len = container.offsetWidth/96;
+        var x_len = container.offsetWidth/DrawUtils._numPointsX;
 
         //if(CoordinateSet.length < 96){
 
@@ -625,7 +629,7 @@ module PowerViz {
         var lineFunction = d3.svg.line()
             .x(function(d) { return d.x; })
             .y(function(d) { return d.y; })
-            .interpolate("bundle");
+            .interpolate(DrawUtils._interprolation);
 
         //The SVG Container
         var svgContainer = d3.select("#"+id+'_graphcanvas').append("svg")
@@ -640,7 +644,7 @@ module PowerViz {
         var lineGraph = svgContainer.append("path")
             .attr("d", lineFunction(pathdata))
             .attr("stroke", color)
-            .attr("stroke-width", 4)
+            .attr("stroke-width", DrawUtils._graphthickness)
             .attr("fill", "none")
             //comment this in if dashes is needed
             //.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
@@ -680,7 +684,7 @@ module PowerViz {
             var container = document.getElementById(id+'_graphcanvas');
 
             var y_height = container.offsetHeight/100;
-            var x_len = container.offsetWidth/96;
+            var x_len = container.offsetWidth/DrawUtils._numPointsX;
 
             //if(CoordinateSet.length < 96){
 
@@ -720,10 +724,22 @@ module PowerViz {
             var lineFunction = d3.svg.line()
                 .x(function(d) { return d.x; })
                 .y(function(d) { return d.y; })
-                .interpolate("bundle");
+                .interpolate(DrawUtils._interprolation).tension(0.90);
 
             //The SVG Container
             var svgContainer = d3.select("#"+svgname.toString());
+
+            //if the element was not found, we create it
+            if(d3.select("#"+svgname.toString()).empty()){
+
+                svgContainer = d3.select("#"+id+'_graphcanvas').append("svg")
+                    .attr("id",svgname)
+                    .attr("width", container.offsetWidth.toString()+"px")
+                    .attr("height", container.offsetHeight.toString() + "px")
+                    //.style("top", "00%")
+                    .style("position","absolute");
+
+            }
 
 
             //remove path
@@ -734,7 +750,7 @@ module PowerViz {
             var lineGraph = svgContainer.append("path")
                 .attr("d", lineFunction(pathdata))
                 .attr("stroke", color)
-                .attr("stroke-width", 4)
+                .attr("stroke-width", DrawUtils._graphthickness)
                 .attr("fill", "none")
                 //comment this in if dashes is needed
                 //.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
@@ -755,9 +771,7 @@ module PowerViz {
 
             //variables to be used in parts of the function
 
-            var framewidt = 1227;
-            var distancefromBottom = "12%";
-            var timeDistance = 4;
+
 
             //create the contentframe
             var frame = document.createElement('div');
@@ -803,12 +817,12 @@ module PowerViz {
             //create a container for the vertical line
             var hor_linecontainer = document.createElement('div');
             hor_linecontainer.id = id +'_horizontallinecontainer';
-            hor_linecontainer.style.width = framewidt.toString() +"px";
+            hor_linecontainer.style.width = DrawUtils._framewidt.toString() +"px";
             hor_linecontainer.style.height = "70px"
             hor_linecontainer.style.position = "absolute";
             hor_linecontainer.style.left = "50%";
             hor_linecontainer.style.bottom = "8%";
-            hor_linecontainer.style.marginLeft = "-"+(framewidt/2).toString()+"px";
+            hor_linecontainer.style.marginLeft = "-"+(DrawUtils._framewidt/2).toString()+"px";
             hor_linecontainer.style.display = "block";
 
 
@@ -884,7 +898,7 @@ module PowerViz {
 
                 var countstring = "#"+id +'_horizontallinecontainer'+ j.toString();
 
-               if(timeLineArray[j]%timeDistance == 0){
+               if(timeLineArray[j]%DrawUtils._timeDistance == 0){
 
                    var temp_timebox = document.createElement('div');
                    temp_timebox.id = id +'_horizontalTimecontainer';

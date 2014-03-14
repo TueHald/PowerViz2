@@ -51,7 +51,7 @@ module PowerViz {
 		enable=()=> {
 			//this._controller.enable();
             var element = document.getElementById(this._name +"_container");
-            element.style.backgroundColor = "blue";
+            element.style.opacity = ("1.0");
 
 		}
 
@@ -60,7 +60,7 @@ module PowerViz {
 		disable=()=> {
 			//this._controller.disable();
             var element = document.getElementById(this._name +"_container");
-            element.style.backgroundColor = "gray";
+            element.style.opacity = ("0.4");
 		}
 
 		//Required by the View interface.

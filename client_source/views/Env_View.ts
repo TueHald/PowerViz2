@@ -38,12 +38,9 @@ module PowerViz {
                 { "x": 2,  "y": 0}, { "x": 3,  "y": 20},
                 { "x": 4,  "y": 20},  { "x": 5, "y": 57}];
 
-            DrawUtils.drawGraph(lineData,this._name, "test1","blue");
-
-            DrawUtils.drawGraph(lineData2,this._name, "test2","red");
 
 
-            this.update();
+            //this.update(lineData,lineData2);
 
 
         }
@@ -73,30 +70,22 @@ module PowerViz {
         endLoading=()=> {
 
         }
-
-        update=()=>{
+        //The update function is used to update the entire view
+        //the redrawcontentfram shifts the timeline
+        //the redrawgraph draws a new graph based on inputdata
+        update=(houseArray:any,envArray:any)=>{
 
 
             DrawUtils.redrawContentFrame(this._name);
 
 
             //create some data 2
-            var lineData3 = [ { "x": 0,   "y": 100},  { "x": 1,  "y": 0},
-                { "x": 2,  "y": 0}, { "x": 3,  "y": 50},
-                { "x": 4,  "y": 60},  { "x": 5, "y": 100},
-                { "x": 2,  "y": 20}, { "x": 3,  "y": 100},
-                { "x": 4,  "y": 70},  { "x": 5, "y": 90},
-                { "x": 2,  "y": 0}, { "x": 3,  "y": 80},
-                { "x": 4,  "y": 20},  { "x": 5, "y": 57}];
+            var lineData1 = houseArray;
+            var lineData2 = envArray;
 
 
-            DrawUtils.redrawGraph(lineData3,this._name, "test1","blue");
-            //DrawUtils.testRedraw(this._name,"100%","100%");
-
-           // DrawUtils.drawContentFrame(this._name,"100%","100%");
-
-            //DrawUtils.createGraphCanvas(this._name);
-            //DrawUtils.drawGraph(lineData2,this._name, "test2","red");
+            DrawUtils.redrawGraph(lineData1,this._name, this._name+"houseConsump","blue");
+            DrawUtils.redrawGraph(lineData2,this._name, this._name+"envConsump","red");
 
         }
 
