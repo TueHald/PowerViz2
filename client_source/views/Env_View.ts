@@ -7,7 +7,7 @@ module PowerViz {
 
         _name:string = "envView";
         _id:string = "#envView";
-        _controller:TestController;
+        _controller:EnvController;
 
         //Required by View interface.
         setup=()=> {
@@ -47,12 +47,13 @@ module PowerViz {
 
         //Not required, but makes linking the controller to the view sligtly easier.
         //Should only be used by the controller.
-        set controller(c:TestController) {
+        set controller(c:EnvController) {
             this._controller = c;
         }
 
         //Required by the View interface.
         enable=()=> {
+            console.log("envView enabled");
             this._controller.enable();
         }
 

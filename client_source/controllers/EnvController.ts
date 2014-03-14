@@ -4,6 +4,8 @@ module PowerViz {
 
 	export class EnvController implements Controller {
 
+		_view:Env_View;
+
 		_timer:any = null;
 		_frequency:number = 15*60	; //seconds between updates. 
 		_enabled:boolean = false;
@@ -14,8 +16,10 @@ module PowerViz {
 		_consumptionDataObtained:boolean = false;
 		_windDataObtained:boolean = false; 
 
-		constructor() {
 
+		public connectView=(view:Env_View)=> {
+			this._view = view;
+			this._view.controller = this;
 		}
 
 		public enable=()=> {
@@ -26,6 +30,7 @@ module PowerViz {
 			}
 			this._enabled = true;
 			this.onTime();
+			console.log("EnvController enabled");
 		
 		}
 
@@ -38,6 +43,7 @@ module PowerViz {
 				this._timer=null;
 			}
 			this._enabled = false;
+			console.log("EnvController disabled");
 
 		}
 
@@ -103,6 +109,7 @@ module PowerViz {
 			}
 		}
 
+		//This is very much a work in progress. 
 		private sendDataToView=()=> {
 			if(this._consumptionDataObtained==true && this._windDataObtained==true) {
 				//Handle the data and make it into some useful form. 
@@ -123,17 +130,29 @@ module PowerViz {
 				while(consDataArray.length<48) {
 					consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
 				}	
-				console.log(consDataArray);
 
-				//Prognosis data and add it to the consDataArray
+				//TEMP: Make the array 96 in length. This should be prognosis data.
+				while(consDataArray.length<96) {
+					consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
+				}
+
+				//TODO: Add consumption prognosis data to the consDataArray, 
+						//so that first 48 is consumed energy, last 48 is expected consumption.
 
 				//Make array of weather data:
 				for(var i=0; i<windData.forecast.length; i++) {
-					console.log(windData.forecast[i].windSpeed);
+					//console.log(windData.forecast[i].windSpeed);
+				}
+
+				var windDataArray:any = [];
+				for(var k=0; k<96; k++) {
+					windDataArray[k] = {"x":k, "y":42};
 				}
 
 				this._windDataObtained = false;
 				this._consumptionDataObtained = false;
+
+				this._view.update(consDataArray, windDataArray);
 			}
 			
 		}

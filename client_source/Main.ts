@@ -45,11 +45,17 @@ module PowerViz {
 			//ViewContainer.instance.registerView("TestView", testView);
 
             var priceView = new Price_View();
+            ViewContainer.instance.registerView("priceView", priceView);
             priceView.setup();
             var envView = new Env_View();
+            ViewContainer.instance.registerView("envView", envView);
             envView.setup();
             var flexView = new Flex_View();
+            ViewContainer.instance.registerView("belastningView", flexView);
             flexView.setup();
+
+            var envController = new EnvController();
+            envController.connectView(envView);
 
             //ViewContainer.instance.registerView("TestView", testView);
 
@@ -74,7 +80,7 @@ module PowerViz {
 
 
 			//Now that all views are created, set them up. 
-			ViewContainer.instance.setupViews();
+			//ViewContainer.instance.setupViews();
 			ViewContainer.instance.setActiveView("belastningView");
 
             //////MICHAELS PLAYGROUND!!!!/////////////
