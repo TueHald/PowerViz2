@@ -29,6 +29,7 @@ module PowerViz {
             topelement.style.marginBottom = "auto";
             topelement.style.marginTop = "auto";
             topelement.style.zIndex = "60";
+            topelement.onclick = function() { ViewContainer.instance.setActiveView(this._refToView.toString()) };
 
 
             var textfield = document.createElement("div");
@@ -42,7 +43,7 @@ module PowerViz {
             document.getElementById(this._name +"_container").appendChild(textfield);
 
 
-			
+			console.log("WAAAAAAT:"+ this._refToView.toString());
 
 		}
 
