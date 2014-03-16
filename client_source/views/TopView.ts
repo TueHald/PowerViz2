@@ -29,7 +29,11 @@ module PowerViz {
             topelement.style.marginBottom = "auto";
             topelement.style.marginTop = "auto";
             topelement.style.zIndex = "60";
-            topelement.onclick = function() { ViewContainer.instance.setActiveView(this._refToView.toString()) };
+            var div = document.createElement("div");
+            div.id = this._refToView;
+
+
+            topelement.onclick = function() { ViewContainer.instance.onSwipeBegin(1,div); ViewContainer.instance.moveTo(this._refToView); };
 
 
             var textfield = document.createElement("div");

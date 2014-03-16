@@ -67,6 +67,8 @@ module PowerViz {
 
 		//Invoked once a second.
 		private ontimer=()=> {
+
+
 			this._inactiveCounter += 1;
 			if(this._inactiveCounter>this._inactiveWait) { //If there have been no activity for _inactiveWait seconds.
 				this._swipeCounter += 1;
@@ -78,7 +80,8 @@ module PowerViz {
 			}
 		}
 
-		private onSwipeBegin=(index:number, element:any)=> { //Invoked when the swiper starts moving.
+		onSwipeBegin=(index:number, element:any)=> { //Invoked when the swiper starts moving.
+            this.moveTo(element.id);
 			this.setActiveView(element.id);
 		}
 
@@ -117,6 +120,7 @@ module PowerViz {
 
 		//Moves the slider to the specified selector id.
 		moveTo=(id:string)=> {
+
 
 			var pos:number=-1;
 			$(".swipe-box").each(function(index, element){
