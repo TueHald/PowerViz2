@@ -32,8 +32,8 @@ module PowerViz {
             var div = document.createElement("div");
             div.id = this._refToView;
 
-
-            topelement.onclick = function() { ViewContainer.instance.onSwipeBegin(1,div); ViewContainer.instance.moveTo(this._refToView); };
+            
+            topelement.onclick = function() { ViewContainer.instance.setActiveView(div.id); ViewContainer.instance.moveTo(div.id); };
 
 
             var textfield = document.createElement("div");

@@ -81,8 +81,7 @@ module PowerViz {
 		}
 
 		onSwipeBegin=(index:number, element:any)=> { //Invoked when the swiper starts moving.
-            this.moveTo(element.id);
-			this.setActiveView(element.id);
+            this.setActiveView(element.id);
 		}
 
 		private onSwipeEnd=(index:number, element:any)=> { //Invoked when the swiper stops moving.
@@ -140,7 +139,6 @@ module PowerViz {
 
             var topviewconatainer = new TopViewContainerController();
             topviewconatainer.viewHasChanged(id);
-            console.log(id);
 			if(this._currentView != null) {
 				this._currentView.disable();
 				this._currentView = null;
