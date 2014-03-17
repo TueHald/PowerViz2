@@ -63,10 +63,13 @@ module PowerViz {
 			//test topview
 
 			var priceTopView = new Price_TopView();
+            priceTopView._refToView = "priceView";
             priceTopView.setup();
             var flexTopView = new Flex_TopView();
+            flexTopView._refToView = "belastningView";
             flexTopView.setup();
             var envTopView = new Env_TopView();
+            envTopView._refToView = "envView";
             envTopView.setup();
 
 			TopViewContainer.instance.addItem(priceTopView);

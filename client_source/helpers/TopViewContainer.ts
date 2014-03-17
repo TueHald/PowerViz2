@@ -54,7 +54,7 @@ module PowerViz{
 
             //sets the active view
             setActiveView=(viewNumber:string)=>{
-
+        console.log(viewNumber.toString());
 
                 for (var i in this._container) {
 

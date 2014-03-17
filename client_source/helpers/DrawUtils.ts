@@ -333,7 +333,6 @@ module PowerViz {
             var timeLineArray = DrawUtils.createTimeLine();
 
             var count = x_coord + (time_line_marks_len*offset);
-            console.log(count);
 
             len_array.push(count)
 
@@ -528,7 +527,6 @@ module PowerViz {
 
         static slopedline(x0, y0, x1, y1, fuzzyness){
 
-            console.log("y1 "+y1);
             var dx = Math.abs(x1-x0);
             var dy = Math.abs(y1-y0);
             var sx = (x0 < x1) ? 1 : -1;
@@ -568,11 +566,7 @@ module PowerViz {
 
 
             }
-            for(var i = 0; i<linedata.length;i++){
 
-                console.log("linedata "+linedata[i].y.toString());
-
-            }
             return linedata;
 
 
@@ -623,7 +617,6 @@ module PowerViz {
 
         }
 
-        console.log(pathdata.length.toString());
 
         //This is the accessor function we talked about above
         var lineFunction = d3.svg.line()
@@ -718,7 +711,6 @@ module PowerViz {
 
             }
 
-            console.log("wait "+pathdata.length.toString());
 
             //This is the accessor function we talked about above
             var lineFunction = d3.svg.line()
@@ -869,7 +861,6 @@ module PowerViz {
             var timeLineArray = DrawUtils.createTimeLine();
 
             var count = x_coord + (time_line_marks_len*offset);
-            console.log(count);
 
             len_array.push(count)
 
