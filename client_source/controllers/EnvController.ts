@@ -96,7 +96,9 @@ module PowerViz {
 				}
 			}
 
-			var url = "../server/query/?query=getWind&houseId=1&timespan=-12";
+			var now = new Date();
+
+			var url = "../server/query/?query=getWind&houseId=1&timespanFrom=12&timespanTo=12&granularity=15m&now="+DateHelper.dateToJsString(now);
 			console.log("Getting data from " + url);
 			request.open("GET", url);
 			request.send();
@@ -121,8 +123,6 @@ module PowerViz {
 
 		private formConsumptionAndPrognosisData=(consumptionData:any, prognosisData:any) : any => {
 
-			console.log(consumptionData);
-
 			var consDataArray:any = [];
 			var max:number = 1200;
 			for(var j=0; j<consumptionData.consumption.length; j++) {
@@ -141,8 +141,6 @@ module PowerViz {
 				consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
 			}
 
-			console.log(consDataArray);
-
 			return consDataArray;
 		}
 
@@ -153,10 +151,10 @@ module PowerViz {
 
 			var windArray:any = [];
 			for(var i=0; i<96; i++) {
-				windArray[i] = {"x":i, "y":50};
+				windArray[i] = {"x":i, "y":(windData.forecast[i].windSpeed/28)*100};
 			}
 
-			console.log(windArray);
+			console.log(windData);
 
 			return windArray;
 		}

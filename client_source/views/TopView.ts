@@ -23,7 +23,7 @@ module PowerViz {
             this._selected = false;
 
             var topelement = document.getElementById(this._name +"_container");
-            topelement.className = "bar-element";
+            topelement.className = "bar-element no-select";
 
             topelement.style.verticalAlign = "middle";
             topelement.style.marginBottom = "auto";

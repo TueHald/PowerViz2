@@ -1,3 +1,5 @@
+///<reference path="../References.ts" />
+
 module PowerViz {
 
 	export class DateHelper {

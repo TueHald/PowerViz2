@@ -6,8 +6,8 @@ import haxe.ds.StringMap;
 typedef ConsumptionEntry = {
 	@:optional var outletId:Int;
 	@:optional var activityId:Int;
-	var from:Date; 
-	var to:Date;
+	var from:String; 
+	var to:String;
 	var load:Int;
 	@:optional var weekNumber:Int;
 }
@@ -81,7 +81,7 @@ class ConsumptionQueries {
 			var interval:{from:Date, to:Date} = null;
 			for(row in result) {
 				interval = granularityToTimespan(row.time, granularity);
-				entry = {from : interval.from, to : interval.to, load : row.load, weekNumber : row.week};
+				entry = {from : Helpers.dateToJSFormat(interval.from), to : Helpers.dateToJSFormat(interval.to), load : row.load, weekNumber : row.week};
 				data.consumption.push(entry);
 			}
 
