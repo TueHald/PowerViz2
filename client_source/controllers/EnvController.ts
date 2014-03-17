@@ -7,14 +7,16 @@ module PowerViz {
 		_view:Env_View;
 
 		_timer:any = null;
-		_frequency:number = 15*60	; //seconds between updates. 
+		_frequency:number = 15*60; //seconds between updates. 
 		_enabled:boolean = false;
 
 		_consumptionData:string;
 		_windData:string; 
+		_prognosisData:string;
 
 		_consumptionDataObtained:boolean = false;
 		_windDataObtained:boolean = false; 
+		_prognosisDataObtained:boolean = false;
 
 
 		public connectView=(view:Env_View)=> {
@@ -109,6 +111,57 @@ module PowerViz {
 			}
 		}
 
+		private requestPrognosisData=()=> {
+
+		}
+
+		private onPrognosisDataObtained=(data:string)=> {
+
+		}
+
+		private formConsumptionAndPrognosisData=(consumptionData:any, prognosisData:any) : any => {
+
+			console.log(consumptionData);
+
+			var consDataArray:any = [];
+			var max:number = 1200;
+			for(var j=0; j<consumptionData.consumption.length; j++) {
+				consDataArray[j] = {"x":j, "y":(consumptionData.consumption[j].load/max)*100};
+			}
+
+			//If there is no data, then set the first element with empty data.
+			if(consumptionData.consumption.length==0) 
+				consDataArray[0] = {"x":0, "y":0};
+
+			while(consDataArray.length<48) {
+				consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
+			}
+
+			while(consDataArray.length<96) {
+				consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
+			}
+
+			console.log(consDataArray);
+
+			return consDataArray;
+		}
+
+
+		private formWindData=(windData:any) : any => {
+
+			//Find out the first point in time for the first forecast element. 
+
+			var windArray:any = [];
+			for(var i=0; i<96; i++) {
+				windArray[i] = {"x":i, "y":50};
+			}
+
+			console.log(windArray);
+
+			return windArray;
+		}
+
+
 		//This is very much a work in progress. 
 		private sendDataToView=()=> {
 			if(this._consumptionDataObtained==true && this._windDataObtained==true) {
@@ -120,39 +173,15 @@ module PowerViz {
 				if(windData.error!=null || consumptionData.error!=null) {
 					console.log("Error!");
 				}
-				
-				//Make array of consumption data (48 points)
-				var consDataArray:any = [];
-				var max:number = 1200;
-				for(var j=0; j<consumptionData.consumption.length; j++) {
-					consDataArray[j] = {"x":j, "y":(consumptionData.consumption[j].load/max)*100};
-				}
-				while(consDataArray.length<48) {
-					consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
-				}	
 
-				//TEMP: Make the array 96 in length. This should be prognosis data.
-				while(consDataArray.length<96) {
-					consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
-				}
-
-				//TODO: Add consumption prognosis data to the consDataArray, 
-						//so that first 48 is consumed energy, last 48 is expected consumption.
-
-				//Make array of weather data:
-				for(var i=0; i<windData.forecast.length; i++) {
-					//console.log(windData.forecast[i].windSpeed);
-				}
-
-				var windDataArray:any = [];
-				for(var k=0; k<96; k++) {
-					windDataArray[k] = {"x":k, "y":42};
-				}
+				var consumptionArray = this.formConsumptionAndPrognosisData(consumptionData, null);
+				var windArray = this.formWindData(windData);
 
 				this._windDataObtained = false;
 				this._consumptionDataObtained = false;
 
-				this._view.update(consDataArray, windDataArray);
+				this._view.update(consumptionArray, windArray);
+				
 			}
 			
 		}

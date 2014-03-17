@@ -53,7 +53,6 @@ module PowerViz {
 
         //Required by the View interface.
         enable=()=> {
-            console.log("envView enabled");
             this._controller.enable();
         }
 
