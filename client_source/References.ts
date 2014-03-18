@@ -20,6 +20,8 @@
 ///<reference path="helpers/TopViewContainer.ts"/>
 ///<reference path="helpers/DrawUtils.ts" />
 ///<reference path="helpers/DateHelper.ts" />
+///<reference path="helpers/DataObtainer.ts" />
+///<reference path="helpers/DataFormat.ts" />
 
 
  
@@ -46,6 +48,8 @@
 ///<reference path="controllers/TopViewContainerController.ts" />
 ///<reference path="controllers/EnvController.ts" />
 ///<reference path="controllers/FlexController.ts" />
+///<reference path="controllers/ConsumptionComponent.ts" />
+///<reference path="controllers/PriceController.ts" />
 
 
 //Model parts:

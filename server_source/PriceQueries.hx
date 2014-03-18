@@ -3,20 +3,27 @@ package ;
 import haxe.htmlparser.HtmlDocument;
 import haxe.htmlparser.HtmlNodeElement;
 
-/*
-typedef PriceInfo = {
-	var from:String; //Date
-	var to:String; //Date
-	var price:Float; //Price in kr pr. kwh. 
+import haxe.ds.StringMap;
+
+
+//Datatypes, designed for easy conversion to JSON.
+typedef Slot = {
+	var from:String; //Date.
+	var to:String; //Date.
+	var dk1:Float;
+	var dk2:Float;
 }
 
-class PriceData {
-	public var prices:Array<PriceInfo>;
+class PowerPrice {
+	public var date:String;
+	public var slots:Array<Slot>;
+
 	public function new() {
-		prices = new Array<PriceInfo>();
+		date = Date.now().toString();
+		slots = new Array<Slot>();
 	}
+
 }
-*/
 
 class PriceQueries {
 
@@ -25,7 +32,20 @@ class PriceQueries {
 
 
 	//Returns price data as an array of simple PriceInfo structures. 
-	public static function getPriceData(from:Date, to:Date) : PowerPrice {
+	public static function getPriceData(args:StringMap<String>) : PowerPrice {
+
+		var from:Date;
+		var to:Date;
+
+		if(args.get("from")!=null || args.get("to")!=null) {
+			from = Helpers.JsDateToDate(args.get("from"));
+			to = Helpers.JsDateToDate(args.get("to"));
+		}
+		else {
+			var now = DateTools.delta(Date.now(), DateTools.hours(1));
+			from = DateTools.delta(now, DateTools.hours(-12));
+			to = DateTools.delta(now, DateTools.hours(12));
+		}
 
 		downloadIfNoRecentData(); //Ensure that there is recent data in the database. 
 
@@ -33,13 +53,52 @@ class PriceQueries {
 
 		//Get price data for the specified time interval.
 		var queryData = 'SELECT * FROM PowerPrices WHERE fromTime >= "${from.toString()}" AND toTime <= "${to.toString()}";';
-		php.Lib.println(queryData);
 		var dataResult = cnx.request(queryData);
 		var result = new PowerPrice();
 		for(row in dataResult) {
 			result.slots.push({from:row.fromTime.toString(), to:row.toTime.toString(), dk1:((row.dk1 / 1000)*EXCHANGE_RATE), dk2:((row.dk2 / 1000)*EXCHANGE_RATE)});
 		}
+		result.slots = splitSlots(result.slots);
 		return result;
+	}
+
+	private static function splitSlots(slots:Array<Slot>) : Array<Slot> {
+
+		var result = new Array<Slot>();
+		for(i in 0...slots.length) {
+			if(i<slots.length-1) {
+				result = result.concat(splitSlot(slots[i], slots[i+1], 4));
+			} else {
+				result = result.concat(splitSlot(slots[i], slots[i], 4));
+			}
+		}
+		return result;
+	} 
+
+	private static function splitSlot(slot:Slot, next:Slot, parts:Int) : Array<Slot> {
+
+		var result = new Array<Slot>();
+		var from = Date.fromString(slot.from).getTime();
+		var to = Date.fromString(slot.to).getTime();
+
+		var timeStep = (to-from) / parts;
+		var valueStep1 = (next.dk1 - slot.dk1) / parts;
+		var valueStep2 = (next.dk2 - slot.dk2) / parts;
+
+		var newDk1:Float=0;
+		var newDk2:Float=0;
+		var newFrom:Date;
+		var newTo:Date;
+		for(i in 0...parts) {
+			newFrom = Date.fromTime(from + (i * timeStep));
+			newTo = Date.fromTime(newFrom.getTime() + timeStep);
+			newDk1 = slot.dk1 + (valueStep1 * i);
+			newDk2 = slot.dk2 + (valueStep2 * i);
+			result.push({from:newFrom.toString(), to:newTo.toString(), dk1:newDk1, dk2:newDk2});
+		}
+
+		return result;
+
 	}
 
 
@@ -143,21 +202,3 @@ class PriceQueries {
 }
 
 
-//Datatypes, designed for easy conversion to JSON.
-typedef Slot = {
-	var from:String; //Date.
-	var to:String; //Date.
-	var dk1:Float;
-	var dk2:Float;
-}
-
-class PowerPrice {
-	public var date:String;
-	public var slots:Array<Slot>;
-
-	public function new() {
-		date = Date.now().toString();
-		slots = new Array<Slot>();
-	}
-
-}

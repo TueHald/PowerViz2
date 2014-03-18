@@ -7,7 +7,7 @@ module PowerViz {
 
         _name:string = "priceView";
         _id:string = "#priceView";
-        _controller:TestController;
+        _controller:PriceController;
 
         //Required by View interface.
         setup=()=> {
@@ -46,7 +46,7 @@ module PowerViz {
 
         //Not required, but makes linking the controller to the view sligtly easier.
         //Should only be used by the controller.
-        set controller(c:TestController) {
+        set controller(c:PriceController) {
             this._controller = c;
         }
 

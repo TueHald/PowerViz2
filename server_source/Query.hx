@@ -53,7 +53,6 @@ class Query {
 
 
 
-
 	//Returns a list of windspeeds in the specified time interval. 
 	//Returned as a JSON-stringify-able Dynamic object. 
 	static function getWind(args:StringMap<String>) : Dynamic {
@@ -62,7 +61,7 @@ class Query {
 
 
 	static function getPowerPrices(args:StringMap<String>) : Dynamic {
-		return PriceQueries.getPriceData(Helpers.JsDateToDate(args.get("from")), Helpers.JsDateToDate(args.get("to")));
+		return PriceQueries.getPriceData(args);
 	}
 
 

@@ -29,7 +29,6 @@ module PowerViz {
 		
 		}
 
-
 		public disable=()=> {
 
 			//Stop timer.

@@ -8,6 +8,20 @@ import haxe.htmlparser.HtmlNodeElement;
 http://www.nordpoolspot.com/Market-data1/Power-system-data/Consumption1/Consumption-prognosis/DK/Hourly/
 */
 
+typedef NCPSlot = {
+	var from:String;
+	var to:String;
+	var dk1:Int; //Consumption measured in mwh
+	var dk2:Int; // --||--
+}
+
+class NationalConsumptionPrognosis {
+	public var slots : Array<NCPSlot>;
+	public function new() {
+		slots = new Array<NCPSlot>();
+	}
+}
+
 class NationalConsumptionQueries {
 
 	private static var MINUTES_BETWEEN_DOWNLOADS = 15;
@@ -18,6 +32,18 @@ class NationalConsumptionQueries {
 		try {
 
 			downloadIfNoRecentData(); //Check that data is recent. 
+
+			var now = DateTools.delta(Date.now(), DateTools.hours(1));
+			var from = DateTools.delta(now, DateTools.hours(-12));
+			var to = DateTools.delta(now, DateTools.hours(12));
+
+			var query = 'SELECT * FROM NationalConsumption WHERE fromTime >= "${from.toString()}" AND toTime <= "${to.toString()}";';
+
+			var cnx = DbConnect.connect();
+			var result = cnx.request(query);
+			for(r in result) {
+				php.Lib.println(r);
+			}
 
 		//Then, get and form the data and return it. 
 		}
@@ -91,6 +117,10 @@ class NationalConsumptionQueries {
 		var tds = row.find("td");
 		var dk1 = Std.parseInt(StringTools.replace(tds[2].innerHTML, " ", ""));
 		var dk2 = Std.parseInt(StringTools.replace(tds[3].innerHTML, " ", ""));
+
+		dk1 = dk1 == null ? 0 : dk1;
+		dk2 = dk2 == null ? 0 : dk2;
+
 		var from:Date = new Date(day.getFullYear(), day.getMonth(), day.getDate(), count, 0,0);
 		var to:Date = DateTools.delta(from, DateTools.hours(1));
 
@@ -99,16 +129,3 @@ class NationalConsumptionQueries {
 
 }
 
-typedef NCPSlot = {
-	var from:String;
-	var to:String;
-	var dk1:Int; //Consumption measured in mwh
-	var dk2:Int; // --||--
-}
-
-class NationalConsumptionPrognosis {
-	public var slots : Array<NCPSlot>;
-	public function new() {
-		slots = new Array<NCPSlot>();
-	}
-}
