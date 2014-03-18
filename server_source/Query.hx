@@ -30,6 +30,9 @@ class Query {
 			case "getTotalConsumption":
 				return ConsumptionQueries.getTotalConsumption(args);
 
+			case "getConsumptionPrognosis":
+				return ConsumptionQueries.getConsumptionPrognosis(args);
+
 			case "getWind":
 				return getWind(args);
 

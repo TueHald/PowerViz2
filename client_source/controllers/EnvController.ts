@@ -32,7 +32,6 @@ module PowerViz {
 			}
 			this._enabled = true;
 			this.onTime();
-			console.log("EnvController enabled");
 		
 		}
 
@@ -45,7 +44,6 @@ module PowerViz {
 				this._timer=null;
 			}
 			this._enabled = false;
-			console.log("EnvController disabled");
 
 		}
 
@@ -56,6 +54,7 @@ module PowerViz {
 
 			this.requestConsumptionData();
 			this.requestWindData();
+			this.requestPrognosisData();
 
 		}
 
@@ -70,7 +69,6 @@ module PowerViz {
 			}
 
 			var url = "../server/query/?query=getTotalConsumption&houseId=1&timespan=-12";
-			console.log("Getting data from " + url);
 			request.open("GET", url);
 			request.send();
 		}
@@ -99,7 +97,6 @@ module PowerViz {
 			var now = new Date();
 
 			var url = "../server/query/?query=getWind&houseId=1&timespanFrom=12&timespanTo=12&granularity=15m&now="+DateHelper.dateToJsString(now);
-			console.log("Getting data from " + url);
 			request.open("GET", url);
 			request.send();
 		}
@@ -115,28 +112,53 @@ module PowerViz {
 
 		private requestPrognosisData=()=> {
 
+			var request = new XMLHttpRequest();
+			var that = this;
+			request.onreadystatechange = function() {
+				if(request.readyState == 4) {
+					that.onPrognosisDataObtained(request.responseText); 
+				}
+			}
+
+			var url = "../server/query/?query=getConsumptionPrognosis&houseId=1";
+			request.open("GET", url);
+			request.send();
 		}
 
 		private onPrognosisDataObtained=(data:string)=> {
+
+			if(data!="") {
+				this._prognosisData = data;
+				this._prognosisDataObtained = true;
+				this.sendDataToView();
+			}
 
 		}
 
 		private formConsumptionAndPrognosisData=(consumptionData:any, prognosisData:any) : any => {
 
 			var consDataArray:any = [];
-			var max:number = 1200;
+			var max:number = 1000;
+
+			//If there is no data, then fill the first element with empty data.
+			if(consumptionData.consumption.length==0) 
+				consDataArray[0] = {"x":0, "y":0};
+
 			for(var j=0; j<consumptionData.consumption.length; j++) {
 				consDataArray[j] = {"x":j, "y":(consumptionData.consumption[j].load/max)*100};
 			}
 
-			//If there is no data, then set the first element with empty data.
-			if(consumptionData.consumption.length==0) 
-				consDataArray[0] = {"x":0, "y":0};
-
+			//Make sure that there is at least 48 elements in the first part of the array:
 			while(consDataArray.length<48) {
 				consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
 			}
 
+			//Add the prognosis data:
+			for(var k=0; k<prognosisData.consumption.length; k++) {
+				consDataArray[k+48] = {"x":k+48, "y":(prognosisData.consumption[k].load/max)*100};
+			}
+
+			//Make sure that there always is the correct number of entries:
 			while(consDataArray.length<96) {
 				consDataArray[consDataArray.length] = consDataArray[consDataArray.length-1];
 			}
@@ -154,8 +176,6 @@ module PowerViz {
 				windArray[i] = {"x":i, "y":(windData.forecast[i].windSpeed/28)*100};
 			}
 
-			console.log(windData);
-
 			return windArray;
 		}
 
@@ -167,12 +187,13 @@ module PowerViz {
 
 				var windData:any = jQuery.parseJSON(this._windData);
 				var consumptionData:any = jQuery.parseJSON(this._consumptionData);
+				var prognosisData:any = jQuery.parseJSON(this._prognosisData);
 
-				if(windData.error!=null || consumptionData.error!=null) {
+				if(windData.error!=null || consumptionData.error!=null || consumptionData.error!=null) {
 					console.log("Error!");
 				}
 
-				var consumptionArray = this.formConsumptionAndPrognosisData(consumptionData, null);
+				var consumptionArray = this.formConsumptionAndPrognosisData(consumptionData, prognosisData);
 				var windArray = this.formWindData(windData);
 
 				this._windDataObtained = false;

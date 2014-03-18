@@ -8,7 +8,7 @@ typedef ConsumptionEntry = {
 	@:optional var activityId:Int;
 	var from:String; 
 	var to:String;
-	var load:Int;
+	var load:Float;
 	@:optional var weekNumber:Int;
 }
 
@@ -20,23 +20,9 @@ typedef ConsumptionDataset = {
 
 
 
+
 class ConsumptionQueries {
 	
-		/*
-	//Returns a dynamic object of the form:
-	{
-		"houseId" : number,
-		"granularity" : string,
-		"consumption" : [ 
-			{
-				"from" : datetime,
-				"to" : datetime,
-				"load" : number,
-				"weekNumber" : number //optional.
-			}
-		]
-	}
-	*/
 	public static function getTotalConsumption(args:StringMap<String>) : Dynamic {
 
 		var granularity = args.get("granularity");
@@ -45,10 +31,12 @@ class ConsumptionQueries {
 		var to:String = args.get("to");
 		var timespan:Int = Std.parseInt(args.get("timespan")); //Timespan in hours. 
 
+		var now:Date = DateTools.delta(Date.now(), DateTools.hours(1));
+
 		if(args.get("timespan") != null) {
 			if(timespan<0) {
-				to = Date.now().toString();
-				from = DateTools.delta(Date.now(), DateTools.hours(timespan)).toString();
+				to = now.toString();
+				from = DateTools.delta(now, DateTools.hours(timespan)).toString();
 			}
 		}
 
@@ -142,12 +130,53 @@ class ConsumptionQueries {
 		return DateTools.delta(d, -DateTools.days(weekday));
 	}
 
-	public function getConsumptionPrognosis(args:StringMap<String>) {
-		//Make a SQL query that selects and groups consumption 
+	public static function getConsumptionPrognosis(args:StringMap<String>) : Dynamic {
 
+		var houseId:Int = 1;
 
-		var query = 'SELECT * FROM TotalConsumption WHERE '; 
-		
+		var now = DateTools.delta( Date.now(), DateTools.hours(1));
+		var froms = new Array<Date>();
+		var tos = new Array<Date>();
+		for(i in 0...3) {
+			froms[i] = DateTools.delta(now, -DateTools.days(7+(i*7)));
+			tos[i] = DateTools.delta(froms[i], DateTools.hours(12));
+		}
+
+		var query = 'SELECT TotalConsumption.time AS "time", 
+						SUM(TotalConsumption.load) as "load" 
+						FROM TotalConsumption WHERE 
+						houseId = ${houseId} AND (
+						(time >= "${froms[0].toString()}" AND time < "${tos[0].toString()}") OR 
+						(time >= "${froms[1].toString()}" AND time < "${tos[1].toString()}") OR
+						(time >= "${froms[2].toString()}" AND time < "${tos[2].toString()}") )
+						GROUP BY TotalConsumption.houseId, HOUR(time), MINUTE(time)
+						ORDER BY YEAR(time), MONTH(TIME), DAY(time), HOUR(time), MINUTE(time) ASC;'; 
+
+		try {
+
+			var cnx = DbConnect.connect();
+			var reqresult = cnx.request(query);
+
+			var result = new Array<ConsumptionEntry>();
+			var from:Date;
+			var to:Date;
+			for(res in reqresult) {
+				from = res.time;
+				to = DateTools.delta(from, DateTools.minutes(15));
+				result.push({	from : from.toString(), 
+								to : to.toString(),
+								load : res.load/3});
+			}
+
+			var rtn:ConsumptionDataset = {houseId:1, granularity:"", consumption:result};
+			return rtn;
+
+		}
+		catch(err:String) {
+			return {error:'${err}'};
+		}
+
+		return {error:"Unexpected function end"};
 		
 	}
 
