@@ -7,7 +7,7 @@ module PowerViz {
 
         _name:string = "belastningView";
         _id:string = "#belastningView";
-        _controller:TestController;
+        _controller:FlexController;
 
         //Required by View interface.
         setup=()=> {
@@ -50,7 +50,7 @@ module PowerViz {
 
         //Not required, but makes linking the controller to the view sligtly easier.
         //Should only be used by the controller.
-        set controller(c:TestController) {
+        set controller(c:FlexController) {
             this._controller = c;
         }
 

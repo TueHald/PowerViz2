@@ -45,6 +45,7 @@
 ///<reference path="controllers/TestTopController.ts" />
 ///<reference path="controllers/TopViewContainerController.ts" />
 ///<reference path="controllers/EnvController.ts" />
+///<reference path="controllers/FlexController.ts" />
 
 
 //Model parts:
