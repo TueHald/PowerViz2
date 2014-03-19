@@ -57,6 +57,9 @@ module PowerViz {
             var envController = new EnvController();
             envController.connectView(envView);
 
+            var priceController = new PriceController();
+            priceController.connectView(priceView);
+
             //ViewContainer.instance.registerView("TestView", testView);
 
 

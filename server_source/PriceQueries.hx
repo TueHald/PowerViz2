@@ -59,6 +59,7 @@ class PriceQueries {
 			result.slots.push({from:row.fromTime.toString(), to:row.toTime.toString(), dk1:((row.dk1 / 1000)*EXCHANGE_RATE), dk2:((row.dk2 / 1000)*EXCHANGE_RATE)});
 		}
 		result.slots = splitSlots(result.slots);
+		result.slots = fillEmptyDataFront(result.slots, from, to);
 		return result;
 	}
 
@@ -99,6 +100,27 @@ class PriceQueries {
 
 		return result;
 
+	}
+
+	//If the first part of the data array does not go back to the 'from' time, data
+	//is filled in at the front at the array to match. 
+	public static function fillEmptyDataFront(data:Array<Slot>, from:Date, to:Date) : Array<Slot> {
+
+		var result = new Array<Slot>();
+		for(d in data) {
+			result.push(d);
+		}
+
+		var sfrom = Helpers.JsDateToDate( result[0].from );
+		var newSlot:Slot;
+		while(sfrom.getTime() > from.getTime()) {
+			newSlot = {from:"", to:"", dk1:result[0].dk1, dk2:result[0].dk2};
+			newSlot.to = result[0].from;
+			newSlot.from = DateTools.delta(Helpers.JsDateToDate(newSlot.to), DateTools.minutes(-15)).toString();
+			result.insert(0, newSlot);
+			sfrom = Helpers.JsDateToDate(result[0].from);
+		}
+		return result;
 	}
 
 
