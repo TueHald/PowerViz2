@@ -3,16 +3,21 @@ package;
 import haxe.htmlparser.HtmlDocument;
 import haxe.htmlparser.HtmlNodeElement;
 
+using Lambda;
+using DateTools;
+using Std;
+using StringTools;
+
 
 /*
 http://www.nordpoolspot.com/Market-data1/Power-system-data/Consumption1/Consumption-prognosis/DK/Hourly/
 */
 
-typedef NCPSlot = {
+typedef NCPSlot = { //National Consumption Prognosis timeslot.
 	var from:String;
 	var to:String;
-	var dk1:Int; //Consumption measured in mwh
-	var dk2:Int; // --||--
+	var dk1:Float; //Consumption measured in mwh
+	var dk2:Float; // --||--
 }
 
 class NationalConsumptionPrognosis {
@@ -33,24 +38,85 @@ class NationalConsumptionQueries {
 
 			downloadIfNoRecentData(); //Check that data is recent. 
 
-			var now = DateTools.delta(Date.now(), DateTools.hours(1));
-			var from = DateTools.delta(now, DateTools.hours(-12));
-			var to = DateTools.delta(now, DateTools.hours(12));
+			var now = Date.now().delta(DateTools.hours(1));
+			var from = now.delta(DateTools.hours(-12));
+			var to = now.delta(DateTools.hours(12));
 
-			var query = 'SELECT * FROM NationalConsumption WHERE fromTime >= "${from.toString()}" AND toTime <= "${to.toString()}";';
+			var query = 'SELECT * FROM NationalConsumption WHERE toTime >= "${from.toString()}" AND fromTime <= "${to.toString()}";';
 
 			var cnx = DbConnect.connect();
 			var result = cnx.request(query);
+			var rtn = new NationalConsumptionPrognosis();
 			for(r in result) {
-				php.Lib.println(r);
+				rtn.slots.push({from:r.fromTime.toString(), to:r.toTime.toString(), dk1:r.dk1, dk2:r.dk2});
 			}
+			rtn.slots = filterSlots( splitSlots(rtn.slots), from, to);
+			return rtn;
 
-		//Then, get and form the data and return it. 
 		}
 		catch(err:String) {
 			php.Lib.println(err);
+			return {error:err};
 		}
-		return null;
+		return {error:"Unexpected end of function!"};
+	}
+
+
+	private static function splitSlots(slots:Array<NCPSlot>) : Array<NCPSlot> {
+		var result = new Array<NCPSlot>();
+		for(i in 0...slots.length) {
+			if(i<slots.length-1) {
+				result = result.concat(splitSlot(slots[i], slots[i+1], 4));
+			}
+			else {
+				result = result.concat(splitSlot(slots[i], slots[i], 4));
+			}
+		}
+		return result;
+	}
+
+
+	private static function splitSlot(slot:NCPSlot, next:NCPSlot, parts:Int) : Array<NCPSlot> {
+
+		var result = new Array<NCPSlot>();
+
+		var from = Helpers.JsDateToDate(slot.from);
+		var to = Helpers.JsDateToDate(slot.to);
+		var timeStep = (to.getTime() - from.getTime()) / parts;
+		var valueStep1 = (next.dk1 - slot.dk1) / parts;
+		var valueStep2 = (next.dk2 - slot.dk2) / parts;
+
+		var newFrom:Date = null;
+		var newTo:Date = null;
+		var newDk1:Float=0;
+		var newDk2:Float=0;
+		for(i in 0...parts) {
+			newFrom = from.delta(timeStep * i); 
+			newTo = newFrom.delta(timeStep); 
+			newDk1 = slot.dk1 + (valueStep1 * i);
+			newDk2 = slot.dk2 + (valueStep2 * i);
+			result.push({from:newFrom.toString(), to:newTo.toString(), dk1:newDk1, dk2:newDk2});
+		}
+		return result;
+	}
+
+	//Filters out the slots that does not fit within the timeslot specified.
+	private static function filterSlots(slots:Array<NCPSlot>, from:Date, to:Date) : Array<NCPSlot> {
+
+		var filtFunc = function(slot:NCPSlot) {
+			
+			var f:Date = Helpers.JsDateToDate(slot.from);
+			var t:Date = Helpers.JsDateToDate(slot.to);
+			if(f.getTime()<from.getTime() && t.getTime()<from.getTime())
+				return false;
+			if(f.getTime()>to.getTime())
+				return false;
+			return true; 
+			
+		};
+
+		return slots.filter(filtFunc).array();
+
 	}
 
 
@@ -115,14 +181,14 @@ class NationalConsumptionQueries {
 	//Parse the row with the consumption prognosis data in it. 
 	private static function parseDataRow(row:HtmlNodeElement, count:Int, day:Date) : NCPSlot {
 		var tds = row.find("td");
-		var dk1 = Std.parseInt(StringTools.replace(tds[2].innerHTML, " ", ""));
-		var dk2 = Std.parseInt(StringTools.replace(tds[3].innerHTML, " ", ""));
+		var dk1 = tds[2].innerHTML.replace(" ", "").parseInt();
+		var dk2 = tds[3].innerHTML.replace(" ", "").parseInt();
 
 		dk1 = dk1 == null ? 0 : dk1;
 		dk2 = dk2 == null ? 0 : dk2;
 
 		var from:Date = new Date(day.getFullYear(), day.getMonth(), day.getDate(), count, 0,0);
-		var to:Date = DateTools.delta(from, DateTools.hours(1));
+		var to:Date = from.delta(DateTools.hours(1));
 
 		return {from:from.toString(), to:to.toString(), dk1:dk1, dk2:dk2};
 	}

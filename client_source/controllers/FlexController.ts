@@ -26,6 +26,11 @@ module PowerViz {
 			this._consumptionComponent.onDataObtained = this.onConsumptionDataObtained;
 			this._consumptionComponent.requestData();
 			this.requestNationalData();
+
+			var url="../server/query/?query=getNationalConsumptionPrognosis";
+			this._nationalObtainer = new DataObtainer(url);
+			this._nationalObtainer.onDataObtained = this.onPrognosisDataObtained;
+			this._nationalObtainer.obtain();
 		}
 
 
