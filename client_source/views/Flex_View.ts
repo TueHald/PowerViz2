@@ -41,7 +41,7 @@ module PowerViz {
                 { "x": 4,  "y": 20},  { "x": 5, "y": 57}];
 
 
-            this.update(lineData,lineData2);
+            //this.update(lineData,lineData2);
 
 
 
@@ -86,11 +86,11 @@ module PowerViz {
             var lineData1 = houseArray;
             var lineData2 = flexArray;
 
-            console.log("Timer called....");
 
-            DrawUtils.redrawGraph(lineData1,this._name, this._name+"houseConsump","blue");
 
-            DrawUtils.redrawGraph(lineData2,this._name, this._name+"flexConsump","red");
+
+            DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
+            DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","green");
 
         }
 
