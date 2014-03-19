@@ -84,8 +84,10 @@ module PowerViz {
             var lineData2 = envArray;
 
 
-            DrawUtils.redrawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            DrawUtils.redrawGraph(lineData2,this._name, this._name+"envConsump","red");
+            DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
+            DrawUtils.drawGraph(lineData2,this._name, this._name+"envConsump","red");
+
+
 
         }
 

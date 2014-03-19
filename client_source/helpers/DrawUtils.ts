@@ -572,82 +572,22 @@ module PowerViz {
 
         }
 
-        //function to draw a graph
+        //function to draw a graph, doesnt actually draw anything but splits data in two
         //takes a name for the svgelement and a id string that defines an element to insert svg into.
         static drawGraph(CoordinateSet, id:string, svgname:string, color:string){
 
 
 
-        var pathdata = [];
-
-        var container = document.getElementById(id+'_graphcanvas');
-
-        var y_height = container.offsetHeight/100;
-        var x_len = container.offsetWidth/DrawUtils._numPointsX;
-
-        //if(CoordinateSet.length < 96){
-
-            //write message to user
-        //    container.innerHTML = "Graf ikke tilgængelig på nuværende tidspunkt!";
+            var newCoordinateset1 = CoordinateSet.slice(0,48);
+            var newCoordinateset2 = CoordinateSet.slice(47,95);
 
 
+            DrawUtils.redrawGraph(newCoordinateset1,id, svgname+"1",color,false);
+            DrawUtils.redrawGraph(newCoordinateset1,id, svgname+"2",color,true);
 
 
-       // }
-        //else if(CoordinateSet.length >= 96){
-            //ensure that the array is exactly 96 spaces long
-            var newCoordinateset = CoordinateSet.slice(0,96);
-
-
-        for(var i=0;i<newCoordinateset.length-1;i++){
-
-            var tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
-                (newCoordinateset[i+1].y*y_height),4);
-
-            pathdata = pathdata.concat(tempdata);
 
         }
-
-
-        for(var t = 0; t<pathdata.length;t++){
-
-
-
-            pathdata[t].y = (container.offsetHeight-10) - pathdata[t].y;
-
-        }
-
-
-        //This is the accessor function we talked about above
-        var lineFunction = d3.svg.line()
-            .x(function(d) { return d.x; })
-            .y(function(d) { return d.y; })
-            .interpolate(DrawUtils._interprolation);
-
-        //The SVG Container
-        var svgContainer = d3.select("#"+id+'_graphcanvas').append("svg")
-            .attr("id",svgname)
-            .attr("width", container.offsetWidth.toString()+"px")
-            .attr("height", container.offsetHeight.toString() + "px")
-            //.style("top", "00%")
-            .style("position","absolute");
-
-
-        //The line SVG Path we draw
-        var lineGraph = svgContainer.append("path")
-            .attr("d", lineFunction(pathdata))
-            .attr("stroke", color)
-            .attr("stroke-width", DrawUtils._graphthickness)
-            .attr("fill", "none")
-            //comment this in if dashes is needed
-            //.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
-            .style("bottom0", "0%")
-            .style("position","absolute");
-
-       // }
-
-
-    }
         //function that calculates vector
         //and returns it
         static jitterFunction(x:number,y:number){
@@ -668,7 +608,7 @@ module PowerViz {
 
         //function to draw a graph
         //takes a name for the svgelement and a id string that defines an element to insert svg into.
-        static redrawGraph(CoordinateSet, id:string, svgname:string, color:string){
+        static redrawGraph(CoordinateSet, id:string, svgname:string, color:string, dotted:boolean){
 
 
 
@@ -744,10 +684,15 @@ module PowerViz {
                 .attr("stroke", color)
                 .attr("stroke-width", DrawUtils._graphthickness)
                 .attr("fill", "none")
-                //comment this in if dashes is needed
-                //.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
-                .style("bottom0", "0%")
+                .style("bottom", "0%")
+                .style("left", "50%")
                 .style("position","absolute");
+            //should the line be dashed?
+            if(dotted)
+            {
+                lineGraph.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
+            }
+
 
             // }
 
@@ -785,6 +730,7 @@ module PowerViz {
             linecontainer.style.bottom = "15%";
             linecontainer.style.marginLeft = "50%";
             linecontainer.style.marginRight = "50%";
+            linecontainer.style.zIndex = "100";
 
             //get the contentframe
             var contentframe = document.getElementById(id +'_contentframe');
