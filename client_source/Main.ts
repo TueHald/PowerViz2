@@ -60,6 +60,9 @@ module PowerViz {
             var priceController = new PriceController();
             priceController.connectView(priceView);
 
+            var flexController = new FlexController();
+            flexController.connectView(flexView);
+
             //ViewContainer.instance.registerView("TestView", testView);
 
 

@@ -56,12 +56,12 @@ module PowerViz {
 
         //Required by the View interface.
         enable=()=> {
-            //this._controller.enable();
+            this._controller.enable();
         }
 
         //Required by the View interface.
         disable=()=> {
-            //this._controller.disable();
+            this._controller.disable();
         }
 
         //Required by the View interface.
