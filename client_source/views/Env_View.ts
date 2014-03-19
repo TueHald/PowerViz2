@@ -85,7 +85,7 @@ module PowerViz {
 
 
             DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            DrawUtils.drawGraph(lineData2,this._name, this._name+"envConsump","red");
+            DrawUtils.drawGraph(lineData2,this._name, this._name+"envConsump","green");
 
 
 

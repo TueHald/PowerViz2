@@ -83,8 +83,9 @@ module PowerViz {
             var lineData2 = priceArray;
 
 
+
             DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","red");
+            DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","green");
 
         }
 

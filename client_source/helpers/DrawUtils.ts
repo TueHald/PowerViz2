@@ -578,12 +578,15 @@ module PowerViz {
 
 
 
-            var newCoordinateset1 = CoordinateSet.slice(0,48);
-            var newCoordinateset2 = CoordinateSet.slice(47,95);
+            var newCoordinateset1 = CoordinateSet.slice(0,49);
+            var newCoordinateset2 = CoordinateSet.slice(47,96);
 
 
+            //draw normal line
             DrawUtils.redrawGraph(newCoordinateset1,id, svgname+"1",color,false);
-            DrawUtils.redrawGraph(newCoordinateset1,id, svgname+"2",color,true);
+
+            //draw dotted line
+            DrawUtils.redrawGraph(newCoordinateset2,id, svgname+"2",color,true);
 
 
 
@@ -619,18 +622,22 @@ module PowerViz {
             var y_height = container.offsetHeight/100;
             var x_len = container.offsetWidth/DrawUtils._numPointsX;
 
-            //if(CoordinateSet.length < 96){
+
+
+            if(CoordinateSet.length < 48){
 
             //write message to user
-            //    container.innerHTML = "Graf ikke tilgængelig på nuværende tidspunkt!";
+                container.innerHTML = "Graf ikke tilgængelig på nuværende tidspunkt!";
 
 
 
 
-            // }
-            //else if(CoordinateSet.length >= 96){
+             }
+            else if(CoordinateSet.length >= 48){
             //ensure that the array is exactly 96 spaces long
-            var newCoordinateset = CoordinateSet.slice(0,96);
+            var newCoordinateset = CoordinateSet.slice(0,50);
+
+                console.log("length"+newCoordinateset.length.toString());
 
 
             for(var i=0;i<newCoordinateset.length-1;i++){
@@ -642,7 +649,24 @@ module PowerViz {
 
             }
 
+            //if dotted it means that all xcoordinates should be changed to the right of vertical line
+           if(dotted){
 
+               x_len = ((container.offsetWidth/2)/pathdata.length);
+            //half length
+            var temp_x_len = (0 + (container.offsetWidth/2))-x_len;
+
+            //change x coordinate to half
+            for(var t = 0; t<pathdata.length;t++){
+
+                pathdata[t].x = temp_x_len + (t*x_len);
+
+            }
+
+            }
+
+
+            //change all y coordinates from relative height to actual height
             for(var t = 0; t<pathdata.length;t++){
 
 
@@ -652,7 +676,7 @@ module PowerViz {
             }
 
 
-            //This is the accessor function we talked about above
+            //function that is used for getting x and y coordinates
             var lineFunction = d3.svg.line()
                 .x(function(d) { return d.x; })
                 .y(function(d) { return d.y; })
@@ -685,7 +709,6 @@ module PowerViz {
                 .attr("stroke-width", DrawUtils._graphthickness)
                 .attr("fill", "none")
                 .style("bottom", "0%")
-                .style("left", "50%")
                 .style("position","absolute");
             //should the line be dashed?
             if(dotted)
@@ -694,7 +717,7 @@ module PowerViz {
             }
 
 
-            // }
+             }
 
 
         }
