@@ -186,3 +186,13 @@ CREATE TABLE IF NOT EXISTS NationalConsumption (
     acquired datetime NOT NULL COMMENT 'Time when this data was acquired',
     PRIMARY KEY (fromTime)
 ) ENGINE=InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS DisplayLog2 (
+  houseId int(11) NOT NULL COMMENT 'HouseId of the display interacted with.',
+  time datetime NOT NULL COMMENT 'Time of the interaction',
+  screen varchar(32) NOT NULL COMMENT 'Screen that is now in focus.',
+  data1 varchar(64) NOT NULL COMMENT 'Additional data 1',
+  data2 varchar(64) NOT NULL COMMENT 'Additional data 2',
+  PRIMARY KEY(houseId, time)
+) ENGINE = InnoDB;

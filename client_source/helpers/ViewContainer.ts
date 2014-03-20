@@ -24,6 +24,7 @@ module PowerViz {
 
 		_inactiveCounter:number = 0; //Counts seconds that the screen is inactive.
 		_inactiveTimer:any = null;
+		_autoswipeMode:boolean = false;
 
 		_currentView:View=null;
 		_views:any={};
@@ -63,15 +64,16 @@ module PowerViz {
 			//Reset the timer:
 			this._inactiveCounter = 0;
 			this._swipeCounter = 0;
+			this._autoswipeMode = false;
 		}
 
 		//Invoked once a second.
 		private ontimer=()=> {
 
-
 			this._inactiveCounter += 1;
 			if(this._inactiveCounter>this._inactiveWait) { //If there have been no activity for _inactiveWait seconds.
 				this._swipeCounter += 1;
+				this._autoswipeMode = true;
 			}
 			if(this._swipeCounter >= this._autoswipeTime) {
 				//this._slider.next();
@@ -82,6 +84,12 @@ module PowerViz {
 
 		onSwipeBegin=(index:number, element:any)=> { //Invoked when the swiper starts moving.
             this.setActiveView(element.id);
+
+            if(ClientConfig.getInteractionLogging()==true) {
+            	var url:string = "server/query/?query=sendLogData&houseId=" + ClientConfig.getHouseId() + "&screen=" + element.id;
+            	var obtainer = new DataObtainer(url);
+            	obtainer.obtain();
+            }
 		}
 
 		private onSwipeEnd=(index:number, element:any)=> { //Invoked when the swiper stops moving.

@@ -7,6 +7,7 @@ import WeatherQueries;
 import ConsumptionQueries;
 import PriceQueries;
 import NationalConsumptionQueries;
+import InteractionLog;
 
 class Query {
 	
@@ -41,6 +42,9 @@ class Query {
 
 			case "getNationalConsumptionPrognosis":
 				return getNationalConsumptionPrognosis(args);
+
+			case "sendLogData":
+				return InteractionLog.logInteraction(args);
 
 			default:
 				return {error:'Error handling query. Unidentified query ${args.get("query")}'};

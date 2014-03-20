@@ -1,4 +1,4 @@
-package;
+package ;
 
 import haxe.ds.StringMap;
 
@@ -21,8 +21,6 @@ typedef ConsumptionDataset = {
 	var granularity:String;
 	var consumption:Array<ConsumptionEntry>;
 }
-
-
 
 
 class ConsumptionQueries {
