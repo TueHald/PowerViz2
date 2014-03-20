@@ -18,7 +18,7 @@ module PowerViz {
             ViewUtils.setElementToViewHeight(this._id);
             //$(this._id).css("background-color", "yellow");
 
-            DrawUtils.drawContentFrame(this._name,"100%","100%");
+            DrawUtils.drawContentFrame(this._name,"100","100");
 
             DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2);
 
