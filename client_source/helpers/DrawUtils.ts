@@ -15,19 +15,17 @@ module PowerViz {
         static _numPointsX = 96;
         //the thickness of the graph
         static _graphthickness = 6;
-
         //the width of the graph frame
         static _framewidt = 1227;
         //Distance from bottom - all elements
         static _distancefromBottom = "12%";
-
         //the interval between time elements. eg. every 4 hours
         static _timeDistance = 4;
 
         // estimate the movement of the arm
-// x0: start
-// x1: end
-// t: step from 0 to 1
+        // x0: start
+        // x1: end
+        // t: step from 0 to 1
         static handDrawMovement(x0, x1, t){
         return x0 + (x0-x1)*(
             15*Math.pow(t, 4) -
@@ -35,9 +33,6 @@ module PowerViz {
                 10*Math.pow(t,3)
             )
     }
-
-
-
 
         //returns a random path to a file
         static choose():string{
@@ -137,8 +132,6 @@ module PowerViz {
         return dateArray;
     }
 
-
-
         static calcTime():number{
 
 
@@ -176,9 +169,6 @@ module PowerViz {
             var graphCanvas = document.createElement('div');
             graphCanvas.id = view +'_graphcanvas';
 
-
-
-
             var hor_lineContainer = document.getElementById(view +'_horizontallinecontainer');
             var ver_lineContainer = document.getElementById(view +'_verticallinecontainer');
 
@@ -189,7 +179,6 @@ module PowerViz {
 
             graphCanvas.style.position = "absolute";
             graphCanvas.style.left = "50%";
-
 
             //get the contentframe and position it
             var contentframe = document.getElementById(view +'_contentframe');
@@ -212,11 +201,8 @@ module PowerViz {
 
             contentframe.appendChild(IconContainer);
 
-
-
             //append icons
             DrawUtils.appendIcons(view,iconPath1,iconPath2);
-
 
 
         }
@@ -318,6 +304,7 @@ module PowerViz {
 
 
         }
+
         //draws a square in the frame
         //**NOT USED**
         static drawSquare(id:string, width:number, height:number, color:string){
@@ -420,8 +407,6 @@ module PowerViz {
             draw([]);
         }
 
-
-
         static redrawContentFrame(id:string){
 
 
@@ -492,7 +477,6 @@ module PowerViz {
             }
 
         }
-
 
         // inspired by this paper
         // http://iwi.eldoc.ub.rug.nl/FILES/root/2008/ProcCAGVIMeraj/2008ProcCAGVIMeraj.pdf
@@ -578,7 +562,7 @@ module PowerViz {
 
     }
 
-       // hand draw a circle
+        // hand draw a circle
         // ctx: Context2D
         // x, y: Coordinates
         // r: radius
@@ -624,25 +608,19 @@ module PowerViz {
 
    }
 
-
+        //fuzzyness function
         static fuzz(x, f){
         return x + Math.random()*f - f/2;
-    }
-
+        }
 
         static storeCoordinate(xVal, yVal, array) {
         array.push({x: xVal, y: yVal});
     }
 
-
         static lineFunction = d3.svg.line()
         .x(function(d) { return d.x; })
         .y(function(d) { return d.y; })
         .interpolate("cardinal").tension(0.50);
-
-
-
-
 
         static slopedline(x0, y0, x1, y1, fuzzyness){
 
@@ -711,6 +689,7 @@ module PowerViz {
             return ycoord;
 
         }
+
         //function that calculates vector
         //and returns it
         static jitterFunction(x:number,y:number){
@@ -730,11 +709,6 @@ module PowerViz {
         //places icons on y axis
         static placeIcons(viewName:string, y1:number, y2:number){
 
-
-            console.log("y1: "+ y1.toString());
-
-            console.log("y2: "+ y2.toString());
-
             //get the contentframe
             var container = document.getElementById(viewName    +'_graphcanvas');
 
@@ -746,13 +720,40 @@ module PowerViz {
 
             icon.style.top = ((container.offsetHeight-30) - y).toString() + "px";
 
-
             var icon2 =document.getElementById(viewName +'_icon_icon1');
 
-            y = y2*y_height;
 
-            icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+            //if they are placed in the same area we move it!
+            if(y2 < y1-10 || y2 > y1-10 ){
 
+                console.log("second clause");
+
+
+                if(y2 <= y1){
+
+
+                    y = y2 *y_height - 50;
+
+                    icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+
+                }
+                else if(y2 > y1){
+
+                    y = y2 *y_height + 50;
+
+                    icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+
+                }
+            }
+            else{
+
+                console.log("first clause");
+
+                y = y2*y_height;
+
+                icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+
+            }
 
         }
 
@@ -783,7 +784,7 @@ module PowerViz {
 
 
             }
-            else if(CoordinateSet.length >= 48){
+            else if(CoordinateSet.length >= 49){
             //ensure that the array is exactly 96 spaces long
             var newCoordinateset = CoordinateSet.slice(0,50);
 
@@ -876,7 +877,6 @@ module PowerViz {
 
         }
 
-
         //method to draw contentframe inside the main view
         //id should be the id of the sourrounding containter
         //e.g the slider
@@ -909,15 +909,15 @@ module PowerViz {
             linecontainer.style.width = "10px";
             linecontainer.style.position = "absolute";
             linecontainer.style.bottom = "15%";
-            linecontainer.style.marginLeft = "50%";
-            linecontainer.style.marginRight = "50%";
+            linecontainer.style.left = "50%";
             linecontainer.style.zIndex = "100";
+            linecontainer.style.marginLeft = "-"+(15).toString()+"px";
 
             //get the contentframe
             var contentframe = document.getElementById(id +'_contentframe');
             contentframe.appendChild(linecontainer);
 
-
+            //linecontainer.style.marginLeft = "-"+((linecontainer.offsetWidth/2)-40).toString()+"px";
 
             //IMPORT VERTICAL LINE SVG FILE
             d3.xml("Images/vertical_line.svg", "image/svg+xml", function(xml) {
