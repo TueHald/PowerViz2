@@ -911,7 +911,7 @@ module PowerViz {
             linecontainer.style.bottom = "15%";
             linecontainer.style.left = "50%";
             linecontainer.style.zIndex = "100";
-            linecontainer.style.marginLeft = "-"+(15).toString()+"px";
+            linecontainer.style.marginLeft = "-"+(0).toString()+"px";
 
             //get the contentframe
             var contentframe = document.getElementById(id +'_contentframe');
