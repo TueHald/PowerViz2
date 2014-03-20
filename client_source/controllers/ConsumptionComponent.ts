@@ -23,12 +23,12 @@ module PowerViz {
 
 		public requestData() {
 
-			var url = "../server/query/?query=getTotalConsumption&houseId=1&timespan=-12";
+			var url = "../server/query/?query=getTotalConsumption&timespan=-12&houseId="+ClientConfig.getHouseId();
 			this._consumptionObtainer = new DataObtainer(url);
 			this._consumptionObtainer.onDataObtained = this.onConsumptionDataObtained;
 			this._consumptionObtainer.obtain();
 
-			var urlProg = "../server/query/?query=getConsumptionPrognosis&houseId=1";
+			var urlProg = "../server/query/?query=getConsumptionPrognosis&houseId="+ClientConfig.getHouseId();
 
 			this._prognosisObtainer = new DataObtainer(urlProg);
 			this._prognosisObtainer.onDataObtained = this.onPrognosisDataObtained;

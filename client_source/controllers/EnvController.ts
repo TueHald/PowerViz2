@@ -41,7 +41,7 @@ module PowerViz {
 		private requestWindData=()=> {
 
 			var now = new Date();
-			var url = "../server/query/?query=getWind&houseId=1&timespanFrom=12&timespanTo=12&granularity=15m&now="+DateHelper.dateToJsString(now);
+			var url = "../server/query/?query=getWind&houseId=" + ClientConfig.getHouseId() + "&timespanFrom=12&timespanTo=12&granularity=15m&now="+DateHelper.dateToJsString(now);
 
 			this._windObtainer = new DataObtainer(url);
 			this._windObtainer.onDataObtained = this.onWindDataObtained;

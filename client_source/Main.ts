@@ -28,6 +28,7 @@ module PowerViz {
 			//Setup the swiper:
 			ViewContainer.instance.createSwiper();
 
+            ClientConfig.readFromUrl();
 
 
 			//Setup the test sketches:

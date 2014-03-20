@@ -2,6 +2,10 @@ package;
 
 import haxe.ds.StringMap;
 
+using Std;
+using DateTools;
+using Lambda;
+
 //Return types for consumption data:
 typedef ConsumptionEntry = {
 	@:optional var outletId:Int;
@@ -29,14 +33,14 @@ class ConsumptionQueries {
 		var houseId:Int = Std.parseInt(args.get("houseId"));
 		var from:String = args.get("from");
 		var to:String = args.get("to");
-		var timespan:Int = Std.parseInt(args.get("timespan")); //Timespan in hours. 
+		var timespan:Int = args.get("timespan").parseInt(); //Timespan in hours. 
 
-		var now:Date = DateTools.delta(Date.now(), DateTools.hours(1));
+		var now:Date = Date.now().delta(DateTools.hours(1)); 
 
 		if(args.get("timespan") != null) {
 			if(timespan<0) {
 				to = now.toString();
-				from = DateTools.delta(now, DateTools.hours(timespan)).toString();
+				from = now.delta(DateTools.hours(timespan)).toString(); //DateTools.delta(now, DateTools.hours(timespan)).toString();
 			}
 		}
 
@@ -50,7 +54,7 @@ class ConsumptionQueries {
 				throw 'Error handling query. Arguments required are houseId, from, to and granularity.';
 			}
 
-			if(Lambda.has(["", "1H", "1D", "1W", "1M"], granularity)==false)
+			if(["", "1H", "1D", "1W", "1M"].has(granularity)==false)
 				throw 'Error handling query. Invalid granularity ${granularity}';
 
 			//Connect and query:
@@ -84,7 +88,7 @@ class ConsumptionQueries {
 
 	public static function getOutletConsumption(args:StringMap<String>) : Dynamic {
 		var granularity = args.get("granularity");
-		var houseId:Int = Std.parseInt(args.get("houseId"));
+		var houseId:Int = args.get("houseId").parseInt();
 		var from:String = args.get("from");
 		var to:String = args.get("to");
 
@@ -103,20 +107,20 @@ class ConsumptionQueries {
 
 		switch(granularity) {
 			case "":
-				fd = DateTools.delta(from, -DateTools.minutes(15));
-				return {from:fd, to:DateTools.delta(fd, DateTools.minutes(15))};
+				fd =  from.delta(-DateTools.minutes(15)); 
+				return {from:fd, to:fd.delta(DateTools.minutes(15))};
 			case "1H":
 				fd = from;
-				return {from:fd, to:DateTools.delta(fd, DateTools.hours(1))};
+				return {from:fd, to:fd.delta(DateTools.hours(1))};
 			case "1D":
 				fd = new Date(from.getFullYear(), from.getMonth(), from.getDate(), 0,0,0);
-				return {from:fd, to:DateTools.delta(fd, DateTools.hours(24))};
+				return {from:fd, to:fd.delta(DateTools.hours(24))};
 			case "1W":
 				fd = getFirstDayOfWeek(from);
-				return {from:fd, to:DateTools.delta(fd, DateTools.days(7))};
+				return {from:fd, to:fd.delta(DateTools.days(7))};
 			case "1M":
 				fd = new Date(from.getFullYear(), from.getMonth(), 1, 0,0,0);
-				return {from:fd, to:DateTools.delta(fd, DateTools.days(DateTools.getMonthDays(fd)))};
+				return {from:fd, to:fd.delta(DateTools.days(DateTools.getMonthDays(fd)))};
 		}
 
 		return null; 
@@ -127,19 +131,19 @@ class ConsumptionQueries {
 		var weekday = d.getDay() + 6; //Weekday, starting on sunday.
 		while(weekday>=7) //We want to start on a monday. 
 			weekday -= 7;
-		return DateTools.delta(d, -DateTools.days(weekday));
+		return d.delta(-DateTools.days(weekday));
 	}
 
 	public static function getConsumptionPrognosis(args:StringMap<String>) : Dynamic {
 
-		var houseId:Int = 1;
+		var houseId:Int = args.get("houseId").parseInt();
 
-		var now = DateTools.delta( Date.now(), DateTools.hours(1));
+		var now = Date.now().delta( DateTools.hours(1));
 		var froms = new Array<Date>();
 		var tos = new Array<Date>();
 		for(i in 0...3) {
-			froms[i] = DateTools.delta(now, -DateTools.days(7+(i*7)));
-			tos[i] = DateTools.delta(froms[i], DateTools.hours(12));
+			froms[i] = now.delta(-DateTools.days(7+(i*7)));
+			tos[i] = froms[i].delta(DateTools.hours(12));
 		}
 
 		var query = 'SELECT TotalConsumption.time AS "time", 

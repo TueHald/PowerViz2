@@ -22,6 +22,7 @@
 ///<reference path="helpers/DateHelper.ts" />
 ///<reference path="helpers/DataObtainer.ts" />
 ///<reference path="helpers/DataFormat.ts" />
+///<reference path="helpers/ClientConfig.ts" />
 
 
  
