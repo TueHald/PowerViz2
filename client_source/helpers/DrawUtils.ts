@@ -208,7 +208,7 @@ module PowerViz {
             IconContainer.style.bottom =""+(ViewUtils.getTotalHeight()-ver_lineContainer.getBoundingClientRect().top).toString()+"px";
             IconContainer.style.position = "absolute";
             IconContainer.style.left = "50%";
-            IconContainer.style.marginLeft = "-"+((hor_lineContainer.offsetWidth/2)+60).toString()+"px";
+            IconContainer.style.marginLeft = "-"+((hor_lineContainer.offsetWidth/2)+80).toString()+"px";
 
             contentframe.appendChild(IconContainer);
 
@@ -484,7 +484,7 @@ module PowerViz {
                     temp_timebox.style.bottom = "0%";
                     temp_timebox.className = "time-element";
 
-                    temp_timebox.innerHTML = timeLineArray[j].toString();
+                    temp_timebox.innerHTML = "<h3>"+timeLineArray[j].toString()+"<\h3>";
 
                     hor_linecontainer.appendChild(temp_timebox);
 
@@ -730,21 +730,28 @@ module PowerViz {
         //places icons on y axis
         static placeIcons(viewName:string, y1:number, y2:number){
 
+
+            console.log("y1: "+ y1.toString());
+
+            console.log("y2: "+ y2.toString());
+
             //get the contentframe
-            var contentframe = document.getElementById(viewName +'_verticallinecontainer');
+            var container = document.getElementById(viewName    +'_graphcanvas');
 
-            var bottommargin = (ViewUtils.getTotalHeight() - document.getElementById("top-bar").offsetHeight) - document.getElementById(viewName + "_graphcanvas").offsetHeight;
+            var y_height = container.offsetHeight/100;
 
-            console.log("margin:"+bottommargin.toString());
+            var y = y1*y_height;
 
             var icon = document.getElementById(viewName +'_icon_icon2');
 
-            icon.style.bottom = ((bottommargin+y2)-(contentframe.offsetHeight/2)).toString() + "px";
+            icon.style.top = ((container.offsetHeight-30) - y).toString() + "px";
 
 
             var icon2 =document.getElementById(viewName +'_icon_icon1');
 
-            icon2.style.bottom = ((bottommargin+y1)-(contentframe.offsetHeight/2)).toString() + "px";
+            y = y2*y_height;
+
+            icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
 
 
         }
@@ -886,11 +893,15 @@ module PowerViz {
             frame.style.width = width + "%";
             frame.style.height = height + "%";
             frame.style.position = "absolute";
+            frame.style.left = "50%";
+
 
 
             var div = document.getElementById(id);
 
             div.appendChild(frame);
+
+            frame.style.marginLeft = "-"+(frame.offsetWidth/2).toString()+"px";
 
             //create a container for the vertical line
             var linecontainer = document.createElement('div');
@@ -925,19 +936,21 @@ module PowerViz {
             //create a container for the vertical line
             var hor_linecontainer = document.createElement('div');
             hor_linecontainer.id = id +'_horizontallinecontainer';
-            hor_linecontainer.style.width = DrawUtils._framewidt.toString() +"px";
+            hor_linecontainer.style.width = "100%";
             hor_linecontainer.style.height = "70px"
             hor_linecontainer.style.position = "absolute";
             hor_linecontainer.style.left = "50%";
             hor_linecontainer.style.bottom = "8%";
-            hor_linecontainer.style.marginLeft = "-"+(DrawUtils._framewidt/2).toString()+"px";
             hor_linecontainer.style.display = "block";
+
 
 
 
             contentframe = document.getElementById(id +'_contentframe');
 
             contentframe.appendChild(hor_linecontainer);
+
+            hor_linecontainer.style.marginLeft = "-"+(hor_linecontainer.offsetWidth/2).toString()+"px";
 
             //IMPORT HORIZONTAL LINE SVG FILE
             d3.xml("Images/horizontal_line.svg", "image/svg+xml", function(xml) {
@@ -954,7 +967,7 @@ module PowerViz {
                 //else it will throw an exception
                 var child = <any>parentElement.lastChild;
 
-                child.style.width = "100%";
+                child.style.width = hor_linecontainer.offsetWidth.toString() + "px";
                 child.style.position = "absolute";
                 //child.style.marginLeft = "-"+(child.offsetWidth/2).toString()+"px";
 
@@ -1016,17 +1029,13 @@ module PowerViz {
                    temp_timebox.style.bottom = "0%";
                    temp_timebox.className = "time-element";
 
-                   temp_timebox.innerHTML = timeLineArray[j].toString();
+                   temp_timebox.innerHTML = "<h3>"+timeLineArray[j].toString()+"<\h3>";
 
                    hor_linecontainer.appendChild(temp_timebox);
 
                }
 
-
-
                 v(countstring);
-
-
 
             }
 
@@ -1034,25 +1043,12 @@ module PowerViz {
 
             var time_list = [];
 
-
-
-
-
-
-
             function v (countstring){
-
-
-
 
                 //IMPORT VERTICAL LINE SVG FILE
                 d3.xml(DrawUtils.choose(), "image/svg+xml", function(xml) {
 
-
                     var importedNode = document.importNode(xml.documentElement, true);
-
-
-
 
                     var svg = d3.select(countstring).node().appendChild(importedNode);
 
@@ -1060,10 +1056,6 @@ module PowerViz {
 
 
                 });(countstring)
-
-
-
-
 
 
             }

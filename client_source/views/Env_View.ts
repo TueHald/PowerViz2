@@ -17,7 +17,7 @@ module PowerViz {
             //Set the size of the div:
             ViewUtils.setElementToViewHeight(this._id);
 
-            DrawUtils.drawContentFrame(this._name,"100","100");
+            DrawUtils.drawContentFrame(this._name,"85","100");
 
             DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2);
 
@@ -91,7 +91,7 @@ module PowerViz {
 
             if(yCoord1 != 0 && yCoord2 != 0){//move icons
 
-                DrawUtils.placeIcons(this._name,yCoord1,yCoord2);
+                DrawUtils.placeIcons(this._name,lineData1[0].y,lineData2[0].y);
 
             }
 
