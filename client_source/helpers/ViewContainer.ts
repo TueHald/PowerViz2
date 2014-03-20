@@ -86,7 +86,7 @@ module PowerViz {
             this.setActiveView(element.id);
 
             if(ClientConfig.getInteractionLogging()==true) {
-            	var url:string = "server/query/?query=sendLogData&houseId=" + ClientConfig.getHouseId() + "&screen=" + element.id;
+            	var url:string = "../server/query/?query=sendLogData&houseId=" + ClientConfig.getHouseId() + "&screen=" + element.id;
             	var obtainer = new DataObtainer(url);
             	obtainer.obtain();
             }

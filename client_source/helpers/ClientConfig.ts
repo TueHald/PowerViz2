@@ -13,11 +13,11 @@ module PowerViz {
 			var params:any = parseURL(document.URL).params;
 			console.log(params);
 			if(params.houseId!=null && params.houseId!=undefined) {
-				this._houseId = params.houseId;
+				this._houseId = parseInt(params.houseId);
 			}
 
 			if(params.logInteractions!=null && params.logInteractions!=undefined) {
-				this._logInteractions = params.logInteractions;
+				this._logInteractions = params.logInteractions=="true" ? true : false;
 			}
 			console.log("" + this._houseId + " - " + this._logInteractions);
 		}
