@@ -7,6 +7,8 @@ module PowerViz {
 
         _name:string = "priceView";
         _id:string = "#priceView";
+        _iconPath1:string = "Images/icon_kr.svg";
+        _iconPath2:string = "Images/icon_house.svg";
         _controller:PriceController;
 
         //Required by View interface.
@@ -18,7 +20,7 @@ module PowerViz {
 
             DrawUtils.drawContentFrame(this._name,"100%","100%");
 
-            DrawUtils.createGraphCanvas(this._name);
+            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2);
 
             //create some data
             var lineData = [ { "x": 0,   "y": 0},  { "x": 1,  "y": 0},
@@ -84,8 +86,14 @@ module PowerViz {
 
 
 
-            DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","green");
+            var yCoord1 = DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","green");
+
+            if(yCoord1 != 0 && yCoord2 != 0){//move icons
+
+                DrawUtils.placeIcons(this._name,yCoord1,yCoord2);
+
+            }
 
         }
 

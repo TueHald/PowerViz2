@@ -7,6 +7,8 @@ module PowerViz {
 
         _name:string = "belastningView";
         _id:string = "#belastningView";
+        _iconPath1:string = "Images/icon_dk.svg";
+        _iconPath2:string = "Images/icon_house.svg";
         _controller:FlexController;
 
         //Required by View interface.
@@ -17,7 +19,7 @@ module PowerViz {
             //$(this._id).css("background-color", "yellow");
             DrawUtils.drawContentFrame(this._name,"100%","100%");
 
-            DrawUtils.createGraphCanvas(this._name);
+            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2);
 
 
             /////////DUMMY DATA!!!!///////////
@@ -89,8 +91,22 @@ module PowerViz {
 
 
 
-            DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","green");
+            var yCoord1 = DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","green");
+
+
+            console.log(yCoord1.toString());
+
+            console.log(yCoord2.toString());
+
+            if(yCoord1 != 0 && yCoord2 != 0){//move icons
+                
+                DrawUtils.placeIcons(this._name,yCoord1,yCoord2);
+
+            }
+
+
+
 
         }
 

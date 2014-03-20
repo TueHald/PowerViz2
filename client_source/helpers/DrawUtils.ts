@@ -169,7 +169,7 @@ module PowerViz {
 
         //creates a canvas which the graphs can be drawn
         //view is the calling views name
-        static createGraphCanvas(view:string){
+        static createGraphCanvas(view:string,iconPath1:string, iconPath2:string){
 
 
             //create a container for the vertical line
@@ -184,19 +184,138 @@ module PowerViz {
 
 
             graphCanvas.style.width = hor_lineContainer.offsetWidth.toString()+"px";
-            graphCanvas.style.height = "547px";
+            graphCanvas.style.height = "547px";//bug, cannot get the height so we set it manually.. stupid js
 
 
             graphCanvas.style.position = "absolute";
             graphCanvas.style.left = "50%";
 
 
-            //get the contentframe
+            //get the contentframe and position it
             var contentframe = document.getElementById(view +'_contentframe');
             contentframe.appendChild(graphCanvas);
 
             graphCanvas.style.bottom =  ""+(ViewUtils.getTotalHeight()-ver_lineContainer.getBoundingClientRect().top).toString()+"px";
             graphCanvas.style.marginLeft = "-"+(hor_lineContainer.offsetWidth/2).toString()+"px";
+
+
+            //create a container for the icons
+            var IconContainer = document.createElement('div');
+            IconContainer.id = view +'_Iconcontainer';
+
+            IconContainer.style.width = "60px";
+            IconContainer.style.height = "547px";
+            IconContainer.style.bottom =""+(ViewUtils.getTotalHeight()-ver_lineContainer.getBoundingClientRect().top).toString()+"px";
+            IconContainer.style.position = "absolute";
+            IconContainer.style.left = "50%";
+            IconContainer.style.marginLeft = "-"+((hor_lineContainer.offsetWidth/2)+60).toString()+"px";
+
+            contentframe.appendChild(IconContainer);
+
+
+
+            //append icons
+            DrawUtils.appendIcons(view,iconPath1,iconPath2);
+
+
+
+        }
+        //appends icons to the contentframe
+        static appendIcons(viewName:string,iconPath1:string, iconPath2:string){
+
+
+            //get canvas
+            var graphCanvas = document.getElementById(viewName +'_Iconcontainer');
+
+
+            //place 1st icon
+            var iconContainer1 = document.createElement('div');
+            iconContainer1.id = viewName +'_icon_icon1';
+            iconContainer1.style.width = "60px";
+            iconContainer1.style.height = "50px";
+            iconContainer1.style.position = "absolute";
+            iconContainer1.style.bottom = "15%";
+            iconContainer1.style.marginLeft = "0%";
+            iconContainer1.style.zIndex = "100";
+
+            //append icon to the container
+            graphCanvas.appendChild(iconContainer1);
+
+
+
+            //IMPORT VERTICAL LINE SVG FILE
+            d3.xml(iconPath1, "image/svg+xml", function(xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+
+                var svg = d3.select("#"+viewName +'_icon_icon1').node().appendChild(importedNode);
+
+                //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+
+
+                var element = document.getElementById(viewName + "_icon_icon1");
+
+                //the <any> tag is a cast and should be used for the typescript compiler
+                //else it will throw an exception
+                //var child = <any>element.firstChild;
+
+                //console.log(child.offsetHeight.toString());
+
+                //child.className = "foo";
+                //child.style.width = "10px";
+
+
+
+                d3.select("#"+viewName +'_icon_icon1').selectAll("svg")
+                    .attr("viewBox", "0 0 150 150")
+                    .attr("width", "80")
+                    .attr("height", "70")
+                    .attr("preserveAspectRatio", "xMidYMid meet");
+
+                //child.setAttribute = ("viewBox", "0,0,50,50");
+                //child.style.position = "absolute";
+                //child.viewBox = "0 0 50 50";
+
+
+            });
+
+
+
+
+            //place 2nd icon
+            var iconContainer2 = document.createElement('div');
+            iconContainer2.id = viewName +'_icon_icon2';
+            iconContainer2.style.width = "60px";
+            iconContainer2.style.height = "50px";
+            iconContainer2.style.position = "absolute";
+            iconContainer2.style.bottom = "40%";
+            iconContainer2.style.marginLeft = "0%";
+            iconContainer2.style.zIndex = "100";
+
+            //append icon to the container
+            graphCanvas.appendChild(iconContainer2);
+
+
+
+
+
+            //IMPORT VERTICAL LINE SVG FILE
+            d3.xml(iconPath2, "image/svg+xml", function(xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+
+                var svg = d3.select("#"+viewName +'_icon_icon2').node().appendChild(importedNode);
+
+                //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+
+
+                d3.select("#"+viewName +'_icon_icon2').selectAll("svg")
+                    .attr("viewBox", "0 0 150 150")
+                    .attr("width", "80")
+                    .attr("height", "70")
+                    .attr("preserveAspectRatio", "xMidYMid meet");
+
+            });
+
+
 
         }
         //draws a square in the frame
@@ -574,7 +693,7 @@ module PowerViz {
 
         //function to draw a graph, doesnt actually draw anything but splits data in two
         //takes a name for the svgelement and a id string that defines an element to insert svg into.
-        static drawGraph(CoordinateSet, id:string, svgname:string, color:string){
+        static drawGraph(CoordinateSet, id:string, svgname:string, color:string):number{
 
 
 
@@ -583,12 +702,13 @@ module PowerViz {
 
 
             //draw normal line
-            DrawUtils.redrawGraph(newCoordinateset1,id, svgname+"1",color,false);
+           var ycoord = DrawUtils.redrawGraph(newCoordinateset1,id, svgname+"1",color,false);
 
             //draw dotted line
             DrawUtils.redrawGraph(newCoordinateset2,id, svgname+"2",color,true);
 
 
+            return ycoord;
 
         }
         //function that calculates vector
@@ -607,11 +727,26 @@ module PowerViz {
 
     }
 
+        //places icons on y axis
+        static placeIcons(viewName:string, y1:number, y2:number){
+
+            var icon = document.getElementById(viewName +'_icon_icon1');
+
+            icon.style.bottom = y1.toString() + "px";
+
+
+            var icon2 =document.getElementById(viewName +'_icon_icon2');
+
+            icon2.style.bottom = y2.toString() + "px";
+
+
+        }
+
 
 
         //function to draw a graph
         //takes a name for the svgelement and a id string that defines an element to insert svg into.
-        static redrawGraph(CoordinateSet, id:string, svgname:string, color:string, dotted:boolean){
+        static redrawGraph(CoordinateSet, id:string, svgname:string, color:string, dotted:boolean):number{
 
 
 
@@ -626,13 +761,14 @@ module PowerViz {
 
             if(CoordinateSet.length < 48){
 
-            //write message to user
+                //write message to user
+                container.className = "text-element"; //cartoonish font
                 container.innerHTML = "Graf ikke tilgængelig på nuværende tidspunkt!";
 
 
 
 
-             }
+            }
             else if(CoordinateSet.length >= 48){
             //ensure that the array is exactly 96 spaces long
             var newCoordinateset = CoordinateSet.slice(0,50);
@@ -669,11 +805,11 @@ module PowerViz {
             //change all y coordinates from relative height to actual height
             for(var t = 0; t<pathdata.length;t++){
 
-
-
                 pathdata[t].y = (container.offsetHeight-10) - pathdata[t].y;
 
             }
+
+
 
 
             //function that is used for getting x and y coordinates
@@ -694,13 +830,11 @@ module PowerViz {
                     .attr("height", container.offsetHeight.toString() + "px")
                     //.style("top", "00%")
                     .style("position","absolute");
-
             }
 
 
             //remove path
             svgContainer.select("path").remove();
-
 
             //The line SVG Path we draw
             var lineGraph = svgContainer.append("path")
@@ -716,9 +850,15 @@ module PowerViz {
                 lineGraph.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
             }
 
+                if(!dotted){
 
-             }
+                    return pathdata[0].y;
+                }
 
+
+           }
+
+            return 0;
 
         }
 
