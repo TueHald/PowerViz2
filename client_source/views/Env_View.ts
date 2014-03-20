@@ -17,7 +17,7 @@ module PowerViz {
             //Set the size of the div:
             ViewUtils.setElementToViewHeight(this._id);
 
-            DrawUtils.drawContentFrame(this._name,"100%","100%");
+            DrawUtils.drawContentFrame(this._name,"100","100");
 
             DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2);
 

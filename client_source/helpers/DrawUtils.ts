@@ -730,14 +730,21 @@ module PowerViz {
         //places icons on y axis
         static placeIcons(viewName:string, y1:number, y2:number){
 
-            var icon = document.getElementById(viewName +'_icon_icon1');
+            //get the contentframe
+            var contentframe = document.getElementById(viewName +'_verticallinecontainer');
 
-            icon.style.bottom = y1.toString() + "px";
+            var bottommargin = (ViewUtils.getTotalHeight() - document.getElementById("top-bar").offsetHeight) - document.getElementById(viewName + "_graphcanvas").offsetHeight;
+
+            console.log("margin:"+bottommargin.toString());
+
+            var icon = document.getElementById(viewName +'_icon_icon2');
+
+            icon.style.bottom = ((bottommargin+y2)-(contentframe.offsetHeight/2)).toString() + "px";
 
 
-            var icon2 =document.getElementById(viewName +'_icon_icon2');
+            var icon2 =document.getElementById(viewName +'_icon_icon1');
 
-            icon2.style.bottom = y2.toString() + "px";
+            icon2.style.bottom = ((bottommargin+y1)-(contentframe.offsetHeight/2)).toString() + "px";
 
 
         }
@@ -876,8 +883,8 @@ module PowerViz {
             //create the contentframe
             var frame = document.createElement('div');
             frame.id = id +'_contentframe';
-            frame.style.width = width;
-            frame.style.height = height;
+            frame.style.width = width + "%";
+            frame.style.height = height + "%";
             frame.style.position = "absolute";
 
 
