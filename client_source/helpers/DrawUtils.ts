@@ -820,7 +820,7 @@ module PowerViz {
             //change all y coordinates from relative height to actual height
             for(var t = 0; t<pathdata.length;t++){
 
-                pathdata[t].y = (container.offsetHeight-10) - pathdata[t].y;
+                pathdata[t].y = (container.offsetHeight-20) - pathdata[t].y;
 
             }
 
