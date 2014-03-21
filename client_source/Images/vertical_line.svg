@@ -7,10 +7,34 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    version="1.1"
    width="9.0136385"
    height="543.61707"
-   id="svg5181">
+   id="svg5181"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="vertical_line.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1280"
+     inkscape:window-height="748"
+     id="namedview3023"
+     showgrid="false"
+     inkscape:zoom="1.4230142"
+     inkscape:cx="32.2819"
+     inkscape:cy="22.16189"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
   <defs
      id="defs5183" />
   <metadata
@@ -21,7 +45,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -29,8 +53,10 @@
      transform="translate(-304.06461,-223.41079)"
      id="layer1">
     <path
-       d="m 311.40228,761.21615 c -1.4388,-9.48055 -3.7607,-49.19972 -5.3196,-91 -1.6817,-45.09331 -2.7948,-396.62677 -1.3552,-427.99999 0.8008,-17.45232 1.8268,-23.1011 2.8154,-15.5 0.9094,6.99223 2.9141,294.97006 2.113,303.51994 -0.8322,8.88045 1.0352,148.12771 2.6684,198.98005 1.2097,37.66521 1.0068,44.70864 -0.922,32 z"
+       d="m 305.65073,761.71306 c -2.43262,-9.48055 -1.74833,-49.19972 -1.56805,-91.49691 0.19233,-45.12425 -0.7948,-396.62677 0.6448,-427.99999 0.8008,-17.45232 1.8268,-23.1011 2.8154,-15.5 0.9094,6.99223 2.9141,294.97006 2.113,303.51994 -0.8322,8.88045 -1.72253,147.38235 -1.3316,198.98005 0.28551,37.68355 0.52121,44.94775 -2.67355,32.49691 z"
        id="path4962"
-       style="fill:#333333" />
+       style="fill:#333333"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="sssscss" />
   </g>
 </svg>

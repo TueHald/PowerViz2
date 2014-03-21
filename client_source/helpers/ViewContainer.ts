@@ -31,6 +31,9 @@ module PowerViz {
 
 		_swipeCounter:number=0; //Counts seconds before automatically moving to the next view.
 
+		_reloadTime:number = 60*60*1; //Seconds between automatic refresh. For refreshing the entire "system".
+		_reloadCounter:number=0; //Counts seconds since last reload.
+
 
 		//Should be called once at app start.
 		constructor() {
@@ -65,6 +68,7 @@ module PowerViz {
 			this._inactiveCounter = 0;
 			this._swipeCounter = 0;
 			this._autoswipeMode = false;
+			this._reloadCounter = 0;
 		}
 
 		//Invoked once a second.
@@ -75,17 +79,24 @@ module PowerViz {
 				this._swipeCounter += 1;
 				this._autoswipeMode = true;
 			}
+
 			if(this._swipeCounter >= this._autoswipeTime) {
 				//this._slider.next();
 				this._swiper.next();
 				this._swipeCounter = 0;
+			}
+
+			this._reloadCounter+=1;
+			if(this._reloadCounter >= this._reloadTime) {
+				window.location.reload();
+				this._reloadCounter=0;
 			}
 		}
 
 		onSwipeBegin=(index:number, element:any)=> { //Invoked when the swiper starts moving.
             this.setActiveView(element.id);
 
-            if(ClientConfig.getInteractionLogging()==true) {
+            if(ClientConfig.getInteractionLogging()==true && this._autoswipeMode==false) {
             	var url:string = "../server/query/?query=sendLogData&houseId=" + ClientConfig.getHouseId() + "&screen=" + element.id;
             	var obtainer = new DataObtainer(url);
             	obtainer.obtain();
@@ -157,7 +168,6 @@ module PowerViz {
 				this._currentView.enable();
 			}
 		}
-
 
 	}
 
