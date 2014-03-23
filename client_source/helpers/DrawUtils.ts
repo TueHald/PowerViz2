@@ -162,7 +162,7 @@ module PowerViz {
 
         //creates a canvas which the graphs can be drawn
         //view is the calling views name
-        static createGraphCanvas(view:string,iconPath1:string, iconPath2:string){
+        static createGraphCanvas(view:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string){
 
 
             //create a container for the vertical line
@@ -202,30 +202,29 @@ module PowerViz {
             contentframe.appendChild(IconContainer);
 
             //append icons
-            DrawUtils.appendIcons(view,iconPath1,iconPath2);
+            DrawUtils.appendIcons(view,iconPath1,iconPath2,iconName1,iconName2);
 
 
         }
         //appends icons to the contentframe
-        static appendIcons(viewName:string,iconPath1:string, iconPath2:string){
+        static appendIcons(viewName:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string){
 
 
             //get canvas
             var graphCanvas = document.getElementById(viewName +'_Iconcontainer');
-
-
             //place 1st icon
             var iconContainer1 = document.createElement('div');
             iconContainer1.id = viewName +'_icon_icon1';
-            iconContainer1.style.width = "60px";
-            iconContainer1.style.height = "50px";
+            iconContainer1.style.width = "80px";
+            iconContainer1.style.height = "105px";
             iconContainer1.style.position = "absolute";
             iconContainer1.style.bottom = "15%";
             iconContainer1.style.marginLeft = "0%";
             iconContainer1.style.zIndex = "100";
-
             //append icon to the container
             graphCanvas.appendChild(iconContainer1);
+
+
 
 
 
@@ -264,24 +263,28 @@ module PowerViz {
 
             });
 
-
-
+            //make textbox under svg
+            var textcontainer1 = document.createElement('div');
+            textcontainer1.id = viewName +'_icon_text1';
+            textcontainer1.className = "text-element";
+            textcontainer1.style.position = "absolute";
+            textcontainer1.style.top = "80px";
+            textcontainer1.style.marginLeft = "0%";
+            textcontainer1.style.zIndex = "100";
+            textcontainer1.innerHTML = "<center>"+iconName1+"<\center>";
+            iconContainer1.appendChild(textcontainer1);
 
             //place 2nd icon
             var iconContainer2 = document.createElement('div');
             iconContainer2.id = viewName +'_icon_icon2';
-            iconContainer2.style.width = "60px";
-            iconContainer2.style.height = "50px";
+            iconContainer2.style.width = "80px";
+            iconContainer2.style.height = "95px";
             iconContainer2.style.position = "absolute";
             iconContainer2.style.bottom = "40%";
             iconContainer2.style.marginLeft = "0%";
             iconContainer2.style.zIndex = "100";
-
             //append icon to the container
             graphCanvas.appendChild(iconContainer2);
-
-
-
 
 
             //IMPORT VERTICAL LINE SVG FILE
@@ -300,6 +303,17 @@ module PowerViz {
                     .attr("preserveAspectRatio", "xMidYMid meet");
 
             });
+
+            var textcontainer2 = document.createElement('div');
+            textcontainer2.id = viewName +'_icon_text2';
+            textcontainer2.className = "text-element";
+            textcontainer2.style.position = "absolute";
+            textcontainer2.style.bottom = "0%";
+            textcontainer2.style.marginLeft = "0%";
+            textcontainer2.style.zIndex = "100";
+            textcontainer2.innerHTML = "<center>"+iconName2+"<\center>";
+
+            iconContainer2.appendChild(textcontainer2);
 
 
 

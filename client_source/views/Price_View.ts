@@ -20,7 +20,7 @@ module PowerViz {
 
             DrawUtils.drawContentFrame(this._name,"85","100");
 
-            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2);
+            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Elpris", "Mit forbrug");
 
             //create some data
             var lineData = [ { "x": 0,   "y": 0},  { "x": 1,  "y": 0},
