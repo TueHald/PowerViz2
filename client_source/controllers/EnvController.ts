@@ -26,8 +26,6 @@ module PowerViz {
 		}
 
 		public onTime=()=> {
-			//Get data from the server and send it to the view.
-			//Simple as that. Now, go implement it. 
 
 			this._consumptionComponent.onDataObtained = this.onConsumptionDataObtained;
 			this._consumptionComponent.requestData();
@@ -74,7 +72,6 @@ module PowerViz {
 		//This is very much a work in progress. 
 		private sendDataToView=()=> {
 			if(this._consumptionComponent.allObtained==true && this._windDataObtained==true) {
-				//Handle the data and make it into some useful form. 
 
 				var windData:any = jQuery.parseJSON(this._windData);
 
@@ -102,3 +99,4 @@ module PowerViz {
 	}
 
 }
+

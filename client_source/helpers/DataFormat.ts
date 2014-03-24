@@ -8,7 +8,7 @@ module PowerViz {
 		public static formConsumptionAndPrognosisData=(consumptionData:any, prognosisData:any) : any => {
 
 			var consDataArray:any = [];
-			var max:number = 1000;
+			var max:number = consumptionData.maxLoad!=null ? consumptionData.maxLoad : 1000;
 
 			//If there is no data, then fill the first element with empty data.
 			if(consumptionData.consumption.length==0) 

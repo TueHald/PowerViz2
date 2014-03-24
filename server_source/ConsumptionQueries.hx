@@ -19,6 +19,7 @@ typedef ConsumptionEntry = {
 typedef ConsumptionDataset = {
 	var houseId:Int; 
 	var granularity:String;
+	var maxLoad:Int;
 	var consumption:Array<ConsumptionEntry>;
 }
 
@@ -55,6 +56,8 @@ class ConsumptionQueries {
 			if(["", "1H", "1D", "1W", "1M"].has(granularity)==false)
 				throw 'Error handling query. Invalid granularity ${granularity}';
 
+			var max:Int = getLoadMax(houseId);
+
 			//Connect and query:
 			var cnx = DbConnect.connect();
 
@@ -66,7 +69,7 @@ class ConsumptionQueries {
 				throw 'Error getting total consumtion data with granularity: ${granularity}.';
 
 			//Format data:
-			var data:ConsumptionDataset = {houseId : houseId, granularity : granularity, consumption : new Array<ConsumptionEntry>()};
+			var data:ConsumptionDataset = {houseId : houseId, granularity : granularity, maxLoad:max, consumption : new Array<ConsumptionEntry>()};
 			var entry:ConsumptionEntry;
 			var interval:{from:Date, to:Date} = null;
 			for(row in result) {
@@ -91,6 +94,17 @@ class ConsumptionQueries {
 		var to:String = args.get("to");
 
 		return {error : "getOutletConsumption not yet implemented."}; 
+	}
+
+	public static function getLoadMax(houseId:Int) : Int {
+		var cnx = DbConnect.connect();
+		var query = 'SELECT loadMax FROM House WHERE houseId = ${houseId};';
+		var result = cnx.request(query);
+		var r:Int=0;
+		for(row in result) {
+			r = row.loadMax;
+		}
+		return r;
 	}
 
 
@@ -170,7 +184,7 @@ class ConsumptionQueries {
 								load : res.load/3});
 			}
 
-			var rtn:ConsumptionDataset = {houseId:1, granularity:"", consumption:result};
+			var rtn:ConsumptionDataset = {houseId:1, granularity:"", maxLoad:0,  consumption:result};
 			return rtn;
 
 		}
@@ -184,3 +198,4 @@ class ConsumptionQueries {
 
 
 }
+
