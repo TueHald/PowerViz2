@@ -49,7 +49,7 @@ module PowerViz {
 
 		private formPriceData=(data:any) : any => {
 
-			var max = 0.3;
+			var max = 0.5;
 			
 			var result:any = [];
 			for(var i=0; i<data.slots.length; i++) {
