@@ -62,7 +62,10 @@ module PowerViz {
 
 			var windArray:any = [];
 			for(var i=0; i<96; i++) {
-				windArray[i] = {"x":i, "y":(windData.forecast[i].windSpeed/28)*100};
+				windArray[i] = {"x":i, "y":(windData.forecast[i].windSpeed/14)*100};
+				if(windData.forecast[i].windSpeed>25) {
+					windArray[i] = {"x":i, "y":0};
+				}
 			}
 
 			return windArray;
