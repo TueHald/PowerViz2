@@ -10,7 +10,7 @@ module PowerViz {
         _id:string = "#env_TopView";
         //reference to the view, essentially the same as the view name
         _refToView:string = "envView";
-        _textFieldText:string = "Miljø";
+        _textFieldText:string = "Vind";
         _controller:TestTopController;
 
 
