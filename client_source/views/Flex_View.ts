@@ -19,7 +19,7 @@ module PowerViz {
             //$(this._id).css("background-color", "yellow");
             DrawUtils.drawContentFrame(this._name,"85","100");
 
-            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Gennemsnits forbrug i DK", "Mit forbrug");
+            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Danmarks forbrug", "Mit forbrug");
 
 
             /////////DUMMY DATA!!!!///////////

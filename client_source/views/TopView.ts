@@ -24,8 +24,6 @@ module PowerViz {
 
             var topelement = document.getElementById(this._name +"_container");
             topelement.className = "bar-element no-select";
-
-            topelement.style.verticalAlign = "middle";
             topelement.style.marginBottom = "auto";
             topelement.style.marginTop = "auto";
             topelement.style.zIndex = "60";
@@ -33,21 +31,26 @@ module PowerViz {
             div.id = this._refToView;
 
 
-            topelement.onclick = function() { ViewContainer.instance.setActiveView(div.id); ViewContainer.instance.moveTo(div.id); };
+            topelement.onclick =
+                function() { ViewContainer.instance.setActiveView(div.id); ViewContainer.instance.moveTo(div.id); };
 
 
             var textfield = document.createElement("div");
             textfield.id = this._name + "_textfield";
             textfield.className = "text-bar-element";
-            textfield.innerHTML = "<h1>"+this._textFieldText +"</h1>";
+            textfield.innerHTML = this._textFieldText;
+            textfield.style.height = "100%";
+            textfield.style.position = "relative"
+            textfield.style.fontSize = "250%";
+            textfield.style.marginLeft = "auto";
+            textfield.style.marginRight = "auto";
+            textfield.style.bottom = "-20px";//hack så det kommer til at stå ordentligt.. magter ikke
             textfield.style.textAlign = "center";
             textfield.style.zIndex = "100";
 
 
             document.getElementById(this._name +"_container").appendChild(textfield);
 
-
-			console.log("WAAAAAAT:"+ this._refToView.toString());
 
 		}
 

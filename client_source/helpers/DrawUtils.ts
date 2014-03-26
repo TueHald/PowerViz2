@@ -20,7 +20,7 @@ module PowerViz {
         //Distance from bottom - all elements
         static _distancefromBottom = "12%";
         //the interval between time elements. eg. every 4 hours
-        static _timeDistance = 4;
+        static _timeDistance = 3;
 
         // estimate the movement of the arm
         // x0: start
@@ -272,6 +272,7 @@ module PowerViz {
             textcontainer1.style.marginLeft = "0%";
             textcontainer1.style.zIndex = "100";
             textcontainer1.innerHTML = "<center>"+iconName1+"<\center>";
+            textcontainer1.style.fontSize = "1.2em";
             iconContainer1.appendChild(textcontainer1);
 
             //place 2nd icon
@@ -311,6 +312,7 @@ module PowerViz {
             textcontainer2.style.bottom = "0%";
             textcontainer2.style.marginLeft = "0%";
             textcontainer2.style.zIndex = "100";
+            textcontainer2.style.fontSize = "1.2em";
             textcontainer2.innerHTML = "<center>"+iconName2+"<\center>";
 
             iconContainer2.appendChild(textcontainer2);
@@ -472,18 +474,18 @@ module PowerViz {
 
 
 
-               if(timeLineArray[j]%timeDistance == 0){
+               if(timeLineArray[j]%DrawUtils._timeDistance == 0){
 
                     var temp_timebox = document.createElement('div');
                     temp_timebox.id = id +'_horizontalTimecontainer';
                     temp_timebox.style.width = "5px";
                     temp_timebox.style.height = "20px";
                     temp_timebox.style.position = "absolute";
-                    temp_timebox.style.left = len_array[j].toString()+"px";
-                    temp_timebox.style.bottom = "0%";
+                    temp_timebox.style.left = (len_array[j]-15).toString()+"px";
+                    temp_timebox.style.top = "40%";
                     temp_timebox.className = "time-element";
 
-                    temp_timebox.innerHTML = "<h3>"+timeLineArray[j].toString()+"<\h3>";
+                    temp_timebox.innerHTML = "<h2>"+timeLineArray[j].toString()+":00"+"<\h2>";
 
                     hor_linecontainer.appendChild(temp_timebox);
 
@@ -740,7 +742,6 @@ module PowerViz {
             //if they are placed in the same area we move it!
             if(y2 < y1-10 || y2 > y1-10 ){
 
-                console.log("second clause");
 
 
                 if(y2 <= y1){
@@ -748,20 +749,19 @@ module PowerViz {
 
                     y = y2 *y_height - 50;
 
-                    icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+                    icon2.style.top = ((container.offsetHeight-50) - y).toString() + "px";
 
                 }
                 else if(y2 > y1){
 
                     y = y2 *y_height + 50;
 
-                    icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+                    icon2.style.top = ((container.offsetHeight-80) - y).toString() + "px";
 
                 }
             }
             else{
 
-                console.log("first clause");
 
                 y = y2*y_height;
 
@@ -802,7 +802,6 @@ module PowerViz {
             //ensure that the array is exactly 96 spaces long
             var newCoordinateset = CoordinateSet.slice(0,50);
 
-                console.log("length"+newCoordinateset.length.toString());
 
 
             for(var i=0;i<newCoordinateset.length-1;i++){
@@ -1039,11 +1038,11 @@ module PowerViz {
                    temp_timebox.style.width = "5px";
                    temp_timebox.style.height = "20px";
                    temp_timebox.style.position = "absolute";
-                   temp_timebox.style.left = len_array[j].toString()+"px";
-                   temp_timebox.style.bottom = "0%";
+                   temp_timebox.style.left = (len_array[j]-15).toString()+"px";
+                   temp_timebox.style.top = "40%";
                    temp_timebox.className = "time-element";
 
-                   temp_timebox.innerHTML = "<h3>"+timeLineArray[j].toString()+"<\h3>";
+                   temp_timebox.innerHTML = "<h2>"+timeLineArray[j].toString()+":00"+"<\h2>";
 
                    hor_linecontainer.appendChild(temp_timebox);
 
