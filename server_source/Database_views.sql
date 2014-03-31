@@ -1,13 +1,15 @@
 /*SQL-søgninger på databasen som returnerer data på andre måder end bare det helt banale:*/
 
 /*Samlet forbrug for hele husstanden, målt hvert kvarter:*/
-CREATE VIEW TotalConsumption AS
+CREATE OR REPLACE VIEW TotalConsumption AS
 SELECT 
 	LoadHistory.houseId AS "houseId", 
 	LoadHistory.time AS "time", 
 	SUM(LoadHistory.load) AS "load"
 FROM LoadHistory
-GROUP BY LoadHistory.houseId, LoadHistory.time;
+GROUP BY LoadHistory.houseId, LoadHistory.time;	
+
+
 
 /*Samlet forbrug for hele husstanden, målt hver time, men returneret som watt-kvarter (/4 for at få WH)Æ:*/
 CREATE VIEW TotalConsumption1H AS

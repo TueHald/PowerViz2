@@ -32,7 +32,9 @@ class Query {
 				return ConsumptionQueries.getTotalConsumption(args);
 
 			case "getConsumptionPrognosis":
-				return ConsumptionQueries.getConsumptionPrognosis(args);
+				//return ConsumptionQueries.getConsumptionPrognosisAverage(args);
+				return ConsumptionQueries.getConsumptionPrognosisMedian(args);
+
 
 			case "getWind":
 				return getWind(args);

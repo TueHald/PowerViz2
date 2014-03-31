@@ -145,8 +145,8 @@ CREATE TABLE IF NOT EXISTS `PowerSource` (
 
 
 -----------------------------------------------------
--- Weather Data:
 
+-- Weather Data:
 CREATE TABLE IF NOT EXISTS WeatherData (
 	cityId int(11) NOT NULL COMMENT 'City ID from OpenWeatherMap.org',
 	fromTime datetime NOT NULL COMMENT 'Start time of the weather/forecast information.',

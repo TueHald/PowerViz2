@@ -1,6 +1,7 @@
 package ;
 
 import haxe.ds.StringMap;
+import sys.db.ResultSet;
 
 using Std;
 using DateTools;
@@ -146,45 +147,33 @@ class ConsumptionQueries {
 		return d.delta(-DateTools.days(weekday));
 	}
 
-	public static function getConsumptionPrognosis(args:StringMap<String>) : Dynamic {
+	public static function getConsumptionPrognosisAverage(args:StringMap<String>) : Dynamic {
 
 		var houseId:Int = args.get("houseId").parseInt();
-
-		var now = Date.now().delta( DateTools.hours(1));
-		var froms = new Array<Date>();
-		var tos = new Array<Date>();
-		for(i in 0...3) {
-			froms[i] = now.delta(-DateTools.days(7+(i*7)));
-			tos[i] = froms[i].delta(DateTools.hours(12));
-		}
-
-		var query = 'SELECT TotalConsumption.time AS "time", 
-						SUM(TotalConsumption.load) as "load" 
-						FROM TotalConsumption WHERE 
-						houseId = ${houseId} AND (
-						(time >= "${froms[0].toString()}" AND time < "${tos[0].toString()}") OR 
-						(time >= "${froms[1].toString()}" AND time < "${tos[1].toString()}") OR
-						(time >= "${froms[2].toString()}" AND time < "${tos[2].toString()}") )
-						GROUP BY TotalConsumption.houseId, HOUR(time), MINUTE(time)
-						ORDER BY YEAR(time), MONTH(TIME), DAY(time), HOUR(time), MINUTE(time) ASC;'; 
 
 		try {
 
 			var cnx = DbConnect.connect();
-			var reqresult = cnx.request(query);
+			var reqresult = getConsumptionWeeksBack(args, 5);
 
-			var result = new Array<ConsumptionEntry>();
+			var result = new StringMap<Array<ConsumptionEntry>>();
 			var from:Date;
 			var to:Date;
+			var key:String;
 			for(res in reqresult) {
 				from = res.time;
-				to = DateTools.delta(from, DateTools.minutes(15));
-				result.push({	from : from.toString(), 
-								to : to.toString(),
-								load : res.load/3});
+				to = from.delta(DateTools.minutes(15));
+
+				key = ""+res.time.getHours() + ":" + res.time.getMinutes() + ":" + res.time.getSeconds(); 
+				if(result.get(key)==null) {
+					result.set(key, new Array<ConsumptionEntry>()); }
+				result.get(key).push({ from : from.toString(), to : to.toString(), load : res.load });
+				
 			}
 
-			var rtn:ConsumptionDataset = {houseId:1, granularity:"", maxLoad:0,  consumption:result};
+			var averages = calculateAverages(result);
+
+			var rtn:ConsumptionDataset = {houseId:houseId, granularity:"", maxLoad:0,  consumption:averages};
 			return rtn;
 
 		}
@@ -194,6 +183,134 @@ class ConsumptionQueries {
 
 		return {error:"Unexpected function end"};
 		
+	}
+
+	public static function getConsumptionPrognosisMedian(args:StringMap<String>) : Dynamic {
+
+		var houseId:Int = args.get("houseId").parseInt();
+
+		try {
+
+			var reqresult:ResultSet = getConsumptionWeeksBack(args, 5);
+
+			var result = new StringMap<Array<ConsumptionEntry>>();
+			var from:Date;
+			var to:Date;
+			var key:String;
+			for(res in reqresult) {
+				from = res.time;
+				to = from.delta(DateTools.minutes(15));
+
+				key = ""+res.time.getHours() + ":" + res.time.getMinutes() + ":" + res.time.getSeconds(); 
+				if(result.get(key)==null) {
+					result.set(key, new Array<ConsumptionEntry>()); }
+				result.get(key).push({ from : from.toString(), to : to.toString(), load : res.load });
+				
+			}
+
+			var medians = calculateMedians(result);
+
+			return {houseId:houseId, granularity:"", maxLoad:0,  consumption:medians};
+
+		}
+		catch(err:String) {
+			return {error:'${err}'};
+		}
+
+		return {error:"Unexpected function end"};
+
+	}
+
+	//Returns the consumption from three previous weeks in the 12 hour window.
+	//Returns a query result. 
+	private static function getConsumptionWeeksBack(args:StringMap<String>, numWeeks:Int) : ResultSet {
+
+		var houseId:Int = args.get("houseId").parseInt();
+
+		var numElements = numWeeks;
+
+		var now = Date.now().delta( DateTools.hours(1));
+		var froms = new Array<Date>();
+		var tos = new Array<Date>();
+		for(i in 0...numElements) {
+			froms[i] = now.delta(-DateTools.days(7+(i*7)));
+			tos[i] = froms[i].delta(DateTools.hours(12));
+		}
+/*
+		var query = 'SELECT TotalConsumption.time AS "time", 
+						TotalConsumption.load as "load" 
+						FROM TotalConsumption WHERE 
+						houseId = ${houseId} AND (
+						(time >= "${froms[0].toString()}" AND time < "${tos[0].toString()}") OR 
+						(time >= "${froms[1].toString()}" AND time < "${tos[1].toString()}") OR
+						(time >= "${froms[2].toString()}" AND time < "${tos[2].toString()}") OR 
+						(time >= "${froms[3].toString()}" AND time < "${tos[3].toString()}") OR 
+						(time >= "${froms[4].toString()}" AND time < "${tos[4].toString()}") )
+						ORDER BY YEAR(time), MONTH(TIME), DAY(time), HOUR(time), MINUTE(time) ASC;'; */
+
+		var query = 'SELECT TotalConsumption.time AS "time", 
+						TotalConsumption.load as "load" 
+						FROM TotalConsumption WHERE 
+						houseId = ${houseId} AND (';
+
+		for(j in 0...numElements) {
+			query += '(time >= "${froms[j].toString()}" AND time < "${tos[j].toString()}")';
+			if(j!=(numElements-1))
+				query += "OR";
+		}
+
+		query += ') ORDER BY YEAR(time), MONTH(TIME), DAY(time), HOUR(time), MINUTE(time) ASC;';
+
+		var cnx = DbConnect.connect();
+		var reqresult:ResultSet = cnx.request(query);
+		return reqresult;
+	}
+
+	private static function calculateMedians(map:StringMap<Array<ConsumptionEntry>>) : Array<ConsumptionEntry> {
+
+		var result = new Array<ConsumptionEntry>();
+
+		for(elm in map) {
+			result.push(calculateMedian(elm));
+		}
+
+		return result;
+
+	}
+
+	private static function calculateAverages(map:StringMap<Array<ConsumptionEntry>>) : Array<ConsumptionEntry> {
+		var result = new Array<ConsumptionEntry>();
+		for(elm in map) {
+			result.push(calculateAverage(elm));
+		}
+		return result;
+	}
+
+	private static function calculateMedian(array:Array<ConsumptionEntry>) : ConsumptionEntry {
+
+		haxe.ds.ArraySort.sort(array, function(x:ConsumptionEntry, y:ConsumptionEntry){
+
+			if(x.load == y.load)
+				return 0;
+			if(x.load < y.load)
+				return -1;
+
+			return 1;
+
+			});
+
+		return array[Math.floor(array.length/2)];
+
+	}
+
+
+	private static function calculateAverage(array:Array<ConsumptionEntry>) : ConsumptionEntry {
+
+		var total:Float = 0;
+		for(elm in array) {
+			total += elm.load;
+		}
+		return {from:array[0].from, to:array[0].to, load:total / array.length};
 	}
 
 
