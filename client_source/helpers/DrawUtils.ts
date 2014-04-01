@@ -93,21 +93,14 @@ module PowerViz {
         var currentdate = new Date();
         var dateArray = [];
 
-
-
-
-
-
         var hour = currentdate.getHours() + 1;
-
-
 
         if(currentdate.getMinutes() <= 15){
 
             hour = currentdate.getHours();
         }
 
-        for(i=12;i>0;i--){
+        for(i=12;i>0;i--){//get date 12 hours back in time
 
             if(hour == 0){
                 hour = 23;
@@ -121,7 +114,7 @@ module PowerViz {
 
 
         dateArray.push(hour);
-        for(var i = 0; i<22;i++){
+        for(var i = 0; i<23;i++){//calc the next 24 hours
 
             if(hour == 23)
             {hour = -1;}
@@ -692,7 +685,7 @@ module PowerViz {
 
 
             var newCoordinateset1 = CoordinateSet.slice(0,49);
-            var newCoordinateset2 = CoordinateSet.slice(47,96);
+            var newCoordinateset2 = CoordinateSet.slice(48,96);
 
 
             //draw normal line
@@ -765,7 +758,18 @@ module PowerViz {
 
                 y = y2*y_height;
 
-                icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+                icon2.style.top = ((container.offsetHeight+30) - y).toString() + "px";
+
+            }
+
+
+
+            if(y2 > 70){
+
+
+                y = y2*y_height;
+
+                icon2.style.top = ((container.offsetHeight-20) - y).toString() + "px";
 
             }
 
@@ -798,16 +802,17 @@ module PowerViz {
 
 
             }
-            else if(CoordinateSet.length >= 49){
+            else if(CoordinateSet.length >= 48){
             //ensure that the array is exactly 96 spaces long
-            var newCoordinateset = CoordinateSet.slice(0,50);
+            var newCoordinateset = CoordinateSet;
 
 
 
             for(var i=0;i<newCoordinateset.length-1;i++){
 
-                var tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
-                    (newCoordinateset[i+1].y*y_height),4);
+                var  tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
+                        (newCoordinateset[i+1].y*y_height),4);
+
 
                 pathdata = pathdata.concat(tempdata);
 
@@ -823,11 +828,18 @@ module PowerViz {
             //change x coordinate to half
             for(var t = 0; t<pathdata.length;t++){
 
+
                 pathdata[t].x = temp_x_len + (t*x_len);
 
             }
 
-            }
+               pathdata[pathdata.length-1].x = (pathdata[pathdata.length-1].x)-(0.5*x_len);
+
+            }else{
+               pathdata[pathdata.length-1].x = (pathdata[pathdata.length-1].x)+(0.5*x_len);
+
+           }
+
 
 
             //change all y coordinates from relative height to actual height
