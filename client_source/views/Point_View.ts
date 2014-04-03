@@ -84,6 +84,33 @@ module PowerViz {
 
             frame.style.marginLeft = "-"+(frame.offsetWidth/2).toString()+"px";
 
+            //create a container for the vertical line
+            var boxcontainer = document.createElement('div');
+            boxcontainer.id = id +'_boxcontainer';
+            boxcontainer.style.width = frame.offsetWidth.toString()+"px";
+            boxcontainer.style.height = "100px"
+            boxcontainer.style.position = "absolute";
+            boxcontainer.style.top = "20%";
+            boxcontainer.style.left = "50%";
+            boxcontainer.style.zIndex = "100";
+            boxcontainer.style.marginLeft = "-"+(frame.offsetWidth/2).toString()+"px";
+
+            //get the contentframe
+            var contentframe = document.getElementById(id +'_contentframe');
+            contentframe.appendChild(boxcontainer);
+
+
+            //IMPORT VERTICAL LINE SVG FILE
+            //d3.xml("Images/vertical_line.svg", "image/svg+xml", function(xml) {
+            //    var importedNode = document.importNode(xml.documentElement, true);
+
+            //    var svg = d3.select("#"+id +'_verticallinecontainer').node().appendChild(importedNode);
+
+                //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+
+
+           // });
+
         }
 
 
