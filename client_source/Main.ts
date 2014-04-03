@@ -48,12 +48,18 @@ module PowerViz {
             var priceView = new Price_View();
             ViewContainer.instance.registerView("priceView", priceView);
             priceView.setup();
-            var envView = new Env_View();
-            ViewContainer.instance.registerView("envView", envView);
-            envView.setup();
+
             var flexView = new Flex_View();
             ViewContainer.instance.registerView("belastningView", flexView);
             flexView.setup();
+
+            var envView = new Env_View();
+            ViewContainer.instance.registerView("envView", envView);
+            envView.setup();
+
+            var pointView = new Point_View();
+            ViewContainer.instance.registerView("pointView", pointView);
+            pointView.setup();
 
             var envController = new EnvController();
             envController.connectView(envView);
@@ -63,6 +69,8 @@ module PowerViz {
 
             var flexController = new FlexController();
             flexController.connectView(flexView);
+            var pointController = new PointController();
+            pointController.connectView(pointView);
 
             //ViewContainer.instance.registerView("TestView", testView);
 
@@ -78,10 +86,14 @@ module PowerViz {
             var envTopView = new Env_TopView();
             envTopView._refToView = "envView";
             envTopView.setup();
+            var pointTopView = new Point_TopView();
+            pointTopView._refToView = "pointView";
+            pointTopView.setup();
 
 			TopViewContainer.instance.addItem(priceTopView);
             TopViewContainer.instance.addItem(flexTopView);
             TopViewContainer.instance.addItem(envTopView);
+            TopViewContainer.instance.addItem(pointTopView);
             //flexTopView.enable();
 
             TopViewContainer.instance.setupViews();
@@ -91,15 +103,15 @@ module PowerViz {
 
 			//Now that all views are created, set them up. 
 			//ViewContainer.instance.setupViews();
-			ViewContainer.instance.setActiveView("belastningView");
+			ViewContainer.instance.setActiveView("priceView");
 
-            //////MICHAELS PLAYGROUND!!!!/////////////
 
-            testLine();
 
-            ///////////////////////////////////
+			ViewUtils.hideLoader();
 
-			ViewUtils.hideLoader(); 
+
+            var screendim = new ScreenDimming();
+
 		}
 
 
@@ -114,40 +126,6 @@ module PowerViz {
 
 	}
 
-    function testLine() {
-
-        //create some data
-        var lineData = [ { "x": 1,   "y": 5},  { "x": 150,  "y": 60},
-                            { "x": 240,  "y": 20}, { "x": 280,  "y": 40},
-                           { "x": 490,  "y": 5},  { "x": 1400, "y": 60}];
-
-        //create some data 2
-        var lineData2 = [ { "x": 1,   "y": 24},  { "x": 75,  "y": 50},
-            { "x": 120,  "y": 45}, { "x": 290,  "y": 250},
-            { "x": 560,  "y": 0},  { "x": 1400, "y": 300}];
-
-        //var el = d3.select("belastningView").append("svg")
-        //    .style("top", "50%")
-        //    .style("position","absolute");
-
-
-        //Draw the Rectangle
-        //var el = d3.select("belastningView").selectAll('div').append("svg")
-
-
-
-
-
-
-
-        //Draw the data
-        //DrawUtils.drawGraph(lineData,"body", "test1","blue");
-        //DrawUtils.drawGraph(lineData2,"body", "test2","red");
-
-
-
-
-    }
 
 
 
