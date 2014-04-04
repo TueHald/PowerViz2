@@ -202,6 +202,63 @@ module PowerViz {
 
 
         }
+
+        static drawLegend(viewName:string, legendpath:string){
+
+
+            //get canvas
+            var graphCanvas = document.getElementById(viewName +'_Iconcontainer');
+            //place 1st icon
+            var iconContainer1 = document.createElement('div');
+            iconContainer1.id = viewName +'_icon_legend';
+            iconContainer1.style.width = "60px";
+            iconContainer1.style.height = "547px";
+            iconContainer1.style.position = "absolute";
+            iconContainer1.style.top = "-500px";
+            iconContainer1.style.marginLeft = "0%";
+            iconContainer1.style.zIndex = "100";
+            //append icon to the container
+            graphCanvas.appendChild(iconContainer1);
+
+
+
+
+
+            //IMPORT VERTICAL LINE SVG FILE
+            d3.xml(legendpath, "image/svg+xml", function(xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+
+                var svg = d3.select("#"+viewName +'_icon_legend').node().appendChild(importedNode);
+
+                //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+
+
+                var element = document.getElementById(viewName + "_icon_legend");
+
+                //the <any> tag is a cast and should be used for the typescript compiler
+                //else it will throw an exception
+                //var child = <any>element.firstChild;
+
+                //console.log(child.offsetHeight.toString());
+
+                //child.className = "foo";
+                //child.style.width = "10px";
+
+
+
+                d3.select("#"+viewName +'_icon_legend').selectAll("svg")
+                    .attr("viewBox", "0 0 150 150")
+                    .attr("width", "80px")
+                    .attr("height", "1000px")
+                    .attr("preserveAspectRatio", "xMidYMid meet");
+
+
+
+            });
+
+
+        }
+
         //appends icons to the contentframe
         static appendIcons(viewName:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string){
 

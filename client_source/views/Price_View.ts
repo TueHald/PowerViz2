@@ -87,7 +87,7 @@ module PowerViz {
 
 
             var yCoord1 = DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","green");
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","brown");
 
             if(yCoord1 != 0 && yCoord2 != 0){//move icons
 

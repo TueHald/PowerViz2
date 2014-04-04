@@ -22,6 +22,8 @@ module PowerViz {
             DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Gennemsnitlig husstands forbrug", "Mit forbrug",false);
 
 
+            DrawUtils.drawLegend(this._name,"Images/overview_Legends.svg");
+
             /////////DUMMY DATA!!!!///////////
 
             //create some data
@@ -134,7 +136,7 @@ module PowerViz {
             var lineData2 = flexArray;
 
 
-            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","orange");
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","Darkorange");
 
 
 

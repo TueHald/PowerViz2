@@ -19,7 +19,7 @@ module PowerViz {
             //$(this._id).css("background-color", "yellow");
             DrawUtils.drawContentFrame(this._name,"85","100");
 
-            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Gennemsnitlig husstands forbrug", "Mit forbrug",true);
+            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Lignende husstand", "Mit forbrug",true);
 
 
             /////////DUMMY DATA!!!!///////////
@@ -92,7 +92,7 @@ module PowerViz {
 
 
             var yCoord1 = DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","green");
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","Darkorange");
 
 
             console.log(yCoord1.toString());
