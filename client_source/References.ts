@@ -40,6 +40,8 @@
 ///<reference path="views/Price_View.ts" />
 ///<reference path="views/Point_View.ts" />
 ///<reference path="views/Point_TopView.ts" />
+///<reference path="views/Over_View.ts" />
+///<reference path="views/Over_TopView.ts" />
 
 
 
@@ -55,6 +57,7 @@
 ///<reference path="controllers/ConsumptionComponent.ts" />
 ///<reference path="controllers/PriceController.ts" />
 ///<reference path="controllers/PointController.ts" />
+///<reference path="controllers/OverViewController.ts" />
 
 
 //Model parts:

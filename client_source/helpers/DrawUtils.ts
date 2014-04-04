@@ -155,7 +155,7 @@ module PowerViz {
 
         //creates a canvas which the graphs can be drawn
         //view is the calling views name
-        static createGraphCanvas(view:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string){
+        static createGraphCanvas(view:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string, appendIcons:boolean){
 
 
             //create a container for the vertical line
@@ -194,8 +194,11 @@ module PowerViz {
 
             contentframe.appendChild(IconContainer);
 
+
+            if(appendIcons){
             //append icons
             DrawUtils.appendIcons(view,iconPath1,iconPath2,iconName1,iconName2);
+            }
 
 
         }

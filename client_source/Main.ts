@@ -45,6 +45,9 @@ module PowerViz {
 			//testController.connectView(testView);
 			//ViewContainer.instance.registerView("TestView", testView);
 
+
+
+            //////////////////////ADD VIEWS/////////////////////////////////
             var priceView = new Price_View();
             ViewContainer.instance.registerView("priceView", priceView);
             priceView.setup();
@@ -61,6 +64,13 @@ module PowerViz {
             ViewContainer.instance.registerView("pointView", pointView);
             pointView.setup();
 
+            var overView = new Over_View();
+            ViewContainer.instance.registerView("overView", overView);
+            overView.setup();
+
+
+
+            //////////////////////ADD CONTROLLERS/////////////////////////////////
             var envController = new EnvController();
             envController.connectView(envView);
 
@@ -69,31 +79,45 @@ module PowerViz {
 
             var flexController = new FlexController();
             flexController.connectView(flexView);
+
             var pointController = new PointController();
             pointController.connectView(pointView);
+
+            var overController = new OverViewController();
+            overController.connectView(overView);
 
             //ViewContainer.instance.registerView("TestView", testView);
 
 
-			//test topview
-
+            //////////////////////ADD TOPVIEWS/////////////////////////////////
 			var priceTopView = new Price_TopView();
             priceTopView._refToView = "priceView";
             priceTopView.setup();
+
             var flexTopView = new Flex_TopView();
             flexTopView._refToView = "belastningView";
             flexTopView.setup();
+
             var envTopView = new Env_TopView();
             envTopView._refToView = "envView";
             envTopView.setup();
+
             var pointTopView = new Point_TopView();
             pointTopView._refToView = "pointView";
             pointTopView.setup();
 
+            var overTopView = new Over_TopView();
+            overTopView._refToView = "overView";
+            overTopView.setup();
+
+
+
+            //////////////////////ADD TOPVIEWS TO CONTAINER/////////////////////////////////
 			TopViewContainer.instance.addItem(priceTopView);
             TopViewContainer.instance.addItem(flexTopView);
             TopViewContainer.instance.addItem(envTopView);
             TopViewContainer.instance.addItem(pointTopView);
+            TopViewContainer.instance.addItem(overTopView);
             //flexTopView.enable();
 
             TopViewContainer.instance.setupViews();
