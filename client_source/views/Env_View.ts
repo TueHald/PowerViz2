@@ -19,7 +19,7 @@ module PowerViz {
 
             DrawUtils.drawContentFrame(this._name,"85","100");
 
-            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Energi fra vind", "Mit forbrug");
+            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Energi fra vind", "Mit forbrug",true);
 
 
             //create some data

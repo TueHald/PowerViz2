@@ -25,6 +25,8 @@ module PowerViz {
 			this._view.controller = this;
 		}
 
+
+
 		public onTime=()=> {
 
 			this._consumptionComponent.onDataObtained = this.onConsumptionDataObtained;

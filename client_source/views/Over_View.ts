@@ -3,13 +3,13 @@
 
 module PowerViz {
 
-    export class Flex_View implements View {
+    export class Over_View implements View {
 
-        _name:string = "belastningView";
-        _id:string = "#belastningView";
+        _name:string = "overView";
+        _id:string = "#overView";
         _iconPath1:string = "Images/icon_dk.svg";
         _iconPath2:string = "Images/icon_house.svg";
-        _controller:FlexController;
+        _controller:OverViewController;
 
         //Required by View interface.
         setup=()=> {
@@ -19,8 +19,10 @@ module PowerViz {
             //$(this._id).css("background-color", "yellow");
             DrawUtils.drawContentFrame(this._name,"85","100");
 
-            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Lignende husstand", "Mit forbrug",true);
+            DrawUtils.createGraphCanvas(this._name, this._iconPath1,this._iconPath2, "Gennemsnitlig husstands forbrug", "Mit forbrug",false);
 
+
+            DrawUtils.drawLegend(this._name,"Images/overview_Legends.svg");
 
             /////////DUMMY DATA!!!!///////////
 
@@ -52,7 +54,7 @@ module PowerViz {
 
         //Not required, but makes linking the controller to the view sligtly easier.
         //Should only be used by the controller.
-        set controller(c:FlexController) {
+        set controller(c:OverViewController) {
             this._controller = c;
         }
 
@@ -91,8 +93,25 @@ module PowerViz {
 
 
 
+
+
+        }
+
+        updateWind=(houseArray:any,envArray:any)=>{
+
+
+            DrawUtils.redrawContentFrame(this._name);
+
+
+            //create some data 2
+            var lineData1 = houseArray;
+            var lineData2 = envArray;
+
+
+
+
             var yCoord1 = DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
-            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","Darkorange");
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"envConsump","green");
 
 
             console.log(yCoord1.toString());
@@ -100,10 +119,42 @@ module PowerViz {
             console.log(yCoord2.toString());
 
             if(yCoord1 != 0 && yCoord2 != 0){//move icons
-                
-                DrawUtils.placeIcons(this._name,lineData1[0].y,lineData2[0].y);
+
 
             }
+
+        }
+
+        updateFlex=(houseArray:any,flexArray:any)=>{
+
+
+            DrawUtils.redrawContentFrame(this._name);
+
+
+            //create some data 2
+
+            var lineData2 = flexArray;
+
+
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"flexConsump","Darkorange");
+
+
+
+
+        }
+
+        updatePrice=(houseArray:any,priceArray:any)=>{
+
+
+            DrawUtils.redrawContentFrame(this._name);
+
+
+            //create some data 2
+
+            var lineData2 = priceArray;
+
+
+            var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","brown");
 
 
 
@@ -126,4 +177,6 @@ module PowerViz {
 
     }
 
-}
+}/**
+ * Created by floop on 03/04/14.
+ */

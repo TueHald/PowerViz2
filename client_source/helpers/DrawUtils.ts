@@ -93,21 +93,14 @@ module PowerViz {
         var currentdate = new Date();
         var dateArray = [];
 
-
-
-
-
-
         var hour = currentdate.getHours() + 1;
-
-
 
         if(currentdate.getMinutes() <= 15){
 
             hour = currentdate.getHours();
         }
 
-        for(i=12;i>0;i--){
+        for(i=12;i>0;i--){//get date 12 hours back in time
 
             if(hour == 0){
                 hour = 23;
@@ -121,7 +114,7 @@ module PowerViz {
 
 
         dateArray.push(hour);
-        for(var i = 0; i<22;i++){
+        for(var i = 0; i<23;i++){//calc the next 24 hours
 
             if(hour == 23)
             {hour = -1;}
@@ -162,7 +155,7 @@ module PowerViz {
 
         //creates a canvas which the graphs can be drawn
         //view is the calling views name
-        static createGraphCanvas(view:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string){
+        static createGraphCanvas(view:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string, appendIcons:boolean){
 
 
             //create a container for the vertical line
@@ -201,11 +194,71 @@ module PowerViz {
 
             contentframe.appendChild(IconContainer);
 
+
+            if(appendIcons){
             //append icons
             DrawUtils.appendIcons(view,iconPath1,iconPath2,iconName1,iconName2);
+            }
 
 
         }
+
+        static drawLegend(viewName:string, legendpath:string){
+
+
+            //get canvas
+            var graphCanvas = document.getElementById(viewName +'_Iconcontainer');
+            //place 1st icon
+            var iconContainer1 = document.createElement('div');
+            iconContainer1.id = viewName +'_icon_legend';
+            iconContainer1.style.width = "60px";
+            iconContainer1.style.height = "547px";
+            iconContainer1.style.position = "absolute";
+            iconContainer1.style.top = "-500px";
+            iconContainer1.style.marginLeft = "0%";
+            iconContainer1.style.zIndex = "100";
+            //append icon to the container
+            graphCanvas.appendChild(iconContainer1);
+
+
+
+
+
+            //IMPORT VERTICAL LINE SVG FILE
+            d3.xml(legendpath, "image/svg+xml", function(xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+
+                var svg = d3.select("#"+viewName +'_icon_legend').node().appendChild(importedNode);
+
+                //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+
+
+                var element = document.getElementById(viewName + "_icon_legend");
+
+                //the <any> tag is a cast and should be used for the typescript compiler
+                //else it will throw an exception
+                //var child = <any>element.firstChild;
+
+                //console.log(child.offsetHeight.toString());
+
+                //child.className = "foo";
+                //child.style.width = "10px";
+
+
+
+                d3.select("#"+viewName +'_icon_legend').selectAll("svg")
+                    .attr("viewBox", "0 0 150 150")
+                    .attr("width", "80px")
+                    .attr("height", "1000px")
+                    .attr("preserveAspectRatio", "xMidYMid meet");
+
+
+
+            });
+
+
+        }
+
         //appends icons to the contentframe
         static appendIcons(viewName:string,iconPath1:string, iconPath2:string, iconName1:string, iconName2:string){
 
@@ -692,7 +745,7 @@ module PowerViz {
 
 
             var newCoordinateset1 = CoordinateSet.slice(0,49);
-            var newCoordinateset2 = CoordinateSet.slice(47,96);
+            var newCoordinateset2 = CoordinateSet.slice(48,96);
 
 
             //draw normal line
@@ -765,7 +818,18 @@ module PowerViz {
 
                 y = y2*y_height;
 
-                icon2.style.top = ((container.offsetHeight-30) - y).toString() + "px";
+                icon2.style.top = ((container.offsetHeight+30) - y).toString() + "px";
+
+            }
+
+
+
+            if(y2 > 70){
+
+
+                y = y2*y_height;
+
+                icon2.style.top = ((container.offsetHeight-20) - y).toString() + "px";
 
             }
 
@@ -798,16 +862,17 @@ module PowerViz {
 
 
             }
-            else if(CoordinateSet.length >= 49){
+            else if(CoordinateSet.length >= 48){
             //ensure that the array is exactly 96 spaces long
-            var newCoordinateset = CoordinateSet.slice(0,50);
+            var newCoordinateset = CoordinateSet;
 
 
 
             for(var i=0;i<newCoordinateset.length-1;i++){
 
-                var tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
-                    (newCoordinateset[i+1].y*y_height),4);
+                var  tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
+                        (newCoordinateset[i+1].y*y_height),4);
+
 
                 pathdata = pathdata.concat(tempdata);
 
@@ -823,11 +888,18 @@ module PowerViz {
             //change x coordinate to half
             for(var t = 0; t<pathdata.length;t++){
 
+
                 pathdata[t].x = temp_x_len + (t*x_len);
 
             }
 
-            }
+               pathdata[pathdata.length-1].x = (pathdata[pathdata.length-1].x)-(0.5*x_len);
+
+            }else{
+               pathdata[pathdata.length-1].x = (pathdata[pathdata.length-1].x)+(0.5*x_len);
+
+           }
+
 
 
             //change all y coordinates from relative height to actual height

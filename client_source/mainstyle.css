@@ -1,7 +1,7 @@
 /*Style Sheet for PowerViz2 main application page (main.html)*/
 
 body {
-	background-color:white;
+	background-color:black;
 }
 
 @font-face {
@@ -15,13 +15,20 @@ body {
     font-style: normal;
 
 }
-
+/*background for the paper - is black so it will darken when we set opacity*/
 .paper {
 	z-index: 0;
 	position:fixed;
 	left:0px;
 	top:0px;
+    display: inline-block;
 }
+
+.paper img {
+    display: block;
+
+}
+
 
 .time-element{
 
@@ -127,4 +134,7 @@ Usefull for avoiding the accidental selection of text on screen.*/
 	-ms-user-select: none;
 	user-select: none;
 }
+
+
+
 
