@@ -196,3 +196,13 @@ CREATE TABLE IF NOT EXISTS DisplayLog2 (
   data2 varchar(64) NOT NULL COMMENT 'Additional data 2',
   PRIMARY KEY(houseId, time)
 ) ENGINE = InnoDB;
+
+--CommonConsumption - used for showing the calculated average private household consumption.
+CREATE TABLE IF NOT EXISTS CommonConsumption (
+  weekDay int(11) NOT NULL,
+  `time` datetime NOT NULL,
+  `load` float NOT NULL,
+  PRIMARY KEY (weekDay,`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+

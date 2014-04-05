@@ -79,6 +79,8 @@ class ConsumptionQueries {
 				data.consumption.push(entry);
 			}
 
+			data.consumption = fillInBlanks(data.consumption, Helpers.JsDateToDate(from), Helpers.JsDateToDate(to));
+
 			return data;
 		}
 		catch(err:String) {
@@ -230,13 +232,15 @@ class ConsumptionQueries {
 		var numElements = numWeeks;
 
 		var now = Date.now().delta( DateTools.hours(1));
+
 		var froms = new Array<Date>();
 		var tos = new Array<Date>();
 		for(i in 0...numElements) {
 			froms[i] = now.delta(-DateTools.days(7+(i*7)));
 			tos[i] = froms[i].delta(DateTools.hours(12));
 		}
-/*
+		
+		/*
 		var query = 'SELECT TotalConsumption.time AS "time", 
 						TotalConsumption.load as "load" 
 						FROM TotalConsumption WHERE 
@@ -311,6 +315,35 @@ class ConsumptionQueries {
 			total += elm.load;
 		}
 		return {from:array[0].from, to:array[0].to, load:total / array.length};
+	}
+
+	private static function fillInBlanks(array:Array<ConsumptionEntry>, _from:Date, to:Date) : Array<ConsumptionEntry> {
+
+		var from = Helpers.getNearestPreviousQuarter(_from);
+
+		var loop:Date = from;
+		var result = new Array<ConsumptionEntry>();
+		while(loop.getTime() <= to.getTime()) {
+			result.push(findConsumptionAtTime(array, loop));
+			loop = loop.delta(DateTools.minutes(15));
+		}
+		return result;
+	}
+
+	//Returns the consumption entry that matches the given time. 
+	//If the consumption does not exists, it creates a new one.
+	private static function findConsumptionAtTime(array:Array<ConsumptionEntry>, time:Date) : ConsumptionEntry {
+
+		var tdate:Date; //Temp date.
+		for(e in array) {
+			tdate = Helpers.JsDateToDate(e.to);
+			if(tdate.getTime() == time.getTime()) {
+				return e;
+			}
+		}
+
+		return {from:Helpers.dateToJSFormat(time.delta(DateTools.minutes(-15))), 
+				to:Helpers.dateToJSFormat(time), load:0};
 	}
 
 

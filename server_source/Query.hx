@@ -8,6 +8,7 @@ import ConsumptionQueries;
 import PriceQueries;
 import NationalConsumptionQueries;
 import InteractionLog;
+import CommonConsumptionQueries;
 
 class Query {
 	
@@ -43,10 +44,17 @@ class Query {
 				return getPowerPrices(args);
 
 			case "getNationalConsumptionPrognosis":
-				return getNationalConsumptionPrognosis(args);
+				//return getNationalConsumptionPrognosis(args);
+				return CommonConsumptionQueries.getCommonConsumption();
 
 			case "sendLogData":
 				return InteractionLog.logInteraction(args);
+
+			case "calculateCommonConsumption":
+				return CommonConsumptionQueries.calculateCommonConsumption(args);
+
+			case "getCommonConsumption":
+				return CommonConsumptionQueries.getCommonConsumption();
 
 			default:
 				return {error:'Error handling query. Unidentified query ${args.get("query")}'};
