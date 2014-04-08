@@ -46,10 +46,6 @@ module PowerViz {
 
 
 
-            //Tell the view to set the headline:
-            //this._view.setHeadline("This is the new headline - " + this._counter); //Call a function on the view.
-            //Notice, when looking at the TestView code, that the View does not call functions inside the controller,
-            //besides the mandatory enable() and disable().
 
         }
 
