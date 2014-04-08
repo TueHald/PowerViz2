@@ -29,6 +29,15 @@ body {
 
 }
 
+/* backgrounds */
+.multibackground {
+    /* size matters */
+    -webkit-background-size: 160% 130%;
+    -moz-background-size: 160% 130%;
+    -o-background-size: 160% 130%;
+    background-size: 160% 130%;
+}
+
 
 .time-element{
 

@@ -12,7 +12,7 @@ module PowerViz {
 
         //Required by the Controller interface.
         enable=()=> {
-            this._timer = setInterval(this.onTime, 2000); //Start the timer.
+            this._timer = setInterval(this.onTime, 15000); //Start the timer.
             this._counter = 0; //A counter, just for fun.
             this.onTime(); //Run the "updating" procedure once when the view is enabled.
         }
@@ -32,8 +32,11 @@ module PowerViz {
 
         //Internal timer function, runs every X seconds.
         private onTime=()=> {
-            console.log("time..." + this._counter);
-            this._counter += 1;
+
+            //should be called to update ball layout
+            this._view.updatePoints((Math.random()*1000),(Math.random()*1000),(Math.random()*1000));
+
+
 
             //Tell the view to set the headline:
             //this._view.setHeadline("This is the new headline - " + this._counter); //Call a function on the view.
