@@ -25,8 +25,8 @@ module PowerViz {
 		//Sets up the different views and connects them to the right controllers.
 		setupViews=()=> {
 
-			//Setup the swiper:
-			ViewContainer.instance.createSwiper();
+		//Setup the swiper:
+		ViewContainer.instance.createSwiper();
 
             ClientConfig.readFromUrl();
 

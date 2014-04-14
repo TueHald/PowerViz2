@@ -10,9 +10,13 @@ module PowerViz {
         private _timer:any;
         private _counter:number;
 
+        private _updateInterval = 15; //Number of minutes between updates. 
+
+        private _dataObtainer:DataObtainer; 
+
         //Required by the Controller interface.
         enable=()=> {
-            this._timer = setInterval(this.onTime, 15000); //Start the timer.
+            this._timer = setInterval(this.onTime, 60*1000*this._updateInterval); //Start the timer.
             this._counter = 0; //A counter, just for fun.
             this.onTime(); //Run the "updating" procedure once when the view is enabled.
         }
@@ -33,8 +37,12 @@ module PowerViz {
         //Internal timer function, runs every X seconds.
         private onTime=()=> {
 
+            this._dataObtainer = new DataObtainer("../server/query/?query=getFlexPoints&houseId=" + ClientConfig.getHouseId());
+            this._dataObtainer.onDataObtained = this.onDataObtained;
+            this._dataObtainer.obtain();
+
             //should be called to update ball layout
-            this._view.updatePoints((Math.random()*1000),(Math.random()*1000),(Math.random()*1000));
+            //this._view.updatePoints((Math.random()*1000),(Math.random()*1000),(Math.random()*1000));
 
 
 
@@ -43,6 +51,17 @@ module PowerViz {
             //Notice, when looking at the TestView code, that the View does not call functions inside the controller,
             //besides the mandatory enable() and disable().
 
+        }
+
+        private onDataObtained=(data:string)=> {
+            if(data!=""){
+                console.log(data);
+                var pointsJson:any = jQuery.parseJSON(data);
+                this._view.updatePoints(pointsJson.loadPoints, pointsJson.windPoints, pointsJson.pricePoints);
+            }
+            else {
+                this._view.updatePoints(0,0,0);
+            }
         }
 
     }

@@ -74,7 +74,7 @@ module PowerViz {
 				var priceJson = jQuery.parseJSON(this._priceData);
 				var priceArray = this.formPriceData(priceJson);
 
-				console.log(priceArray);
+				//console.log(priceArray);
 
 				if(this._view != null)
 					this._view.update(this._consumptionComponent.consumptionData, priceArray);
