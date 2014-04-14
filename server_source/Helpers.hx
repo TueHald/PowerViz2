@@ -19,6 +19,25 @@ class Helpers {
 		return Date.fromString('${ss[2]}-${ss[1]}-${ss[0]}');
 	}
 
+	//Normalizes the array, so that the largest element is scaled to 1,0
+	public static function normalize(array:Array<Float>) : Array<Float> {
+		var max:Float = 0;
+		var result = new Array<Float>();
+		for(a in array) {
+			if(a > max)
+				max = a;
+		}
+
+		if(max==0) {
+			max = 1;
+		}
+		
+		for(b in array) {
+			result.push(b / max);
+		}
+		return result;
+	}
+
 
 	//------------------------
 	//Week number functions:

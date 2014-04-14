@@ -15,13 +15,22 @@ typedef CommonConsumption = {
 
 class CommonConsumptionQueries {
 
-	public static function getCommonConsumption() : Dynamic {
+	public static function getCommonConsumption(?hoursBeforeNow:Int, ?hoursAfterNow:Int) : Dynamic {
 
 		var now = Date.now();
 		now = now.delta(DateTools.hours(2)); //Fucking sommertid!!!!!
 		
-		var yesterday = now.delta(DateTools.hours(-12));
-		var tomorrow = now.delta(DateTools.hours(12));
+		var yesterday:Date = null;
+		var tomorrow:Date = null;
+
+		if(hoursBeforeNow!=null && hoursAfterNow!=null) {
+			yesterday = now.delta(DateTools.hours(-hoursBeforeNow));
+			tomorrow = now.delta(DateTools.hours(hoursAfterNow));			
+		}
+		else {
+			yesterday = now.delta(DateTools.hours(-12));
+			tomorrow = now.delta(DateTools.hours(12));	
+		}
 
 		var dayYesterday = yesterday.getDay();
 		var dayTomorrow = tomorrow.getDay();
@@ -46,7 +55,6 @@ class CommonConsumptionQueries {
 				ORDER BY time ASC )
 			) AS today;' ;
 
-		//trace(query);
 
 		var result = {slots:new Array<{from:String, to:String, dk1:Float, dk2:Float }>()};
 
@@ -60,20 +68,42 @@ class CommonConsumptionQueries {
 
 	}
 
+	public static function getCommonConsumptionSimpleArray(?hoursBeforeNow:Int, ?hoursAfterNow:Int) : Array<Float> {
+
+		var data:{slots:Array<{from:String, to:String, dk1:Float, dk2:Float }>} = getCommonConsumption(hoursBeforeNow, hoursAfterNow);
+
+		var result = new Array<Float>();
+		for(entry in data.slots) {
+			result.push(entry.dk1 + entry.dk2);
+		}
+		result = Helpers.normalize(result);
+
+		return result;
+	}
+
 	//Calculates the common consumption and puts it into the CommonConsumption table.
 	public static function calculateCommonConsumption(args:StringMap<String>) : Dynamic {
 
 		var weeks = args.get("weeks").parseInt();
+		var filter = args.get("filter").parseInt();
+
+		if(weeks==null || weeks==0)
+			throw "Weeks argument should be > 3";
+
+		if(filter==null || filter%2 != 1)
+			throw "Filter argument should be an odd number > 1";
 
 		for(i in 0...7) {
 			getConsumptionOnWeekday([1,2,3], i, weeks);
 		}
 
+		filterCommonConsumption(filter);
+
 		return null;
 	}
 
-	//Returns the consumption on a specific weekday weeks back in time for a specific houseId.
-	//
+	//Calculates the consumption on a specific weekday weeks back in time for a specific houseId,
+	//then stores it in the CommonConsumption table. 
 	public static function getConsumptionOnWeekday(ids:Array<Int>, weekday:Int, weeks:Int) {
 
 		var first = Helpers.getLastWeekday(Date.now(), weekday);
@@ -97,8 +127,8 @@ class CommonConsumptionQueries {
 	}
 
 
-	//Returns the consumption from three previous weeks in the 12 hour window.
-	//Returns a query result. 
+	//Returns the consumption on weekday from numWeeks previous weeks.
+	//Returns a query ResultSet.
 	private static function requestConsumptionWeeksBack(houseIds:Array<Int>, weekday:Int, numWeeks:Int) : ResultSet {
 
 		var numElements = numWeeks;
@@ -119,7 +149,8 @@ class CommonConsumptionQueries {
 				intervalsString += " OR ";
 		}
 		intervalsString += ")";
-
+	
+		//trace(intervalsString);
 
 		var whereString = "(";
 		for(i in 0...ids.length) {
@@ -129,20 +160,75 @@ class CommonConsumptionQueries {
 		}
 		whereString += ")";
 
+		//trace(whereString);
+
 		var query = 'SELECT TotalConsumption.time AS "time", 
 						SUM(TotalConsumption.load)/COUNT(TotalConsumption.load) as "load" 
 						FROM TotalConsumption WHERE ${whereString}
 						GROUP BY HOUR(time), MINUTE(time)
 						ORDER BY DAY(time), HOUR(time), MINUTE(time) ASC;';
 
-
+		//trace(query);
 
 		var cnx = DbConnect.connect();
 		var reqresult:ResultSet = cnx.request(query);
 		return reqresult;
 	}
 
+	private static function filterCommonConsumption(filterWidth:Int) {
 
+		var query:String;
+		var qresult:ResultSet;
+		var oldArray:Array<CommonConsumption>;
+		var newArray:Array<CommonConsumption>;
+
+		query = 'SELECT * FROM CommonConsumption ORDER BY `weekDay`, `time` ASC;';
+
+		qresult = DbConnect.connect().request(query);
+
+		oldArray = new Array<CommonConsumption>();
+		for(row in qresult) {
+			oldArray.push({weekday:row.weekDay, time:row.time, load:row.load});
+		}
+
+		newArray = calcMovingAverage(oldArray, filterWidth);
+
+		for(elm in newArray) {
+			query = 'REPLACE INTO CommonConsumption (`weekDay`, `time`, `load`) 
+						VALUES (${elm.weekday}, "${elm.time.toString()}", ${elm.load});';
+			DbConnect.connect().request(query);
+		}	
+
+	}
+
+	//Does a moving average smoothing of the entered array. 
+	//Returns the result in a new array. 
+	//Filter width should be an odd number. 
+	private static function calcMovingAverage(array:Array<CommonConsumption>, filterWidth:Int) : Array<CommonConsumption> {
+
+		var result = new Array<CommonConsumption>();
+		var window = new List<CommonConsumption>();
+		for(cc in array) {
+			window.add(cc);
+			while(window.length > filterWidth) {
+				window.pop();
+			}
+			result.push(calcAverage(window));
+		}
+		return result;
+	}
+
+	//Calculates the average load of the list and returns it.
+	//The last element in the list will be used for weekday and time fields.
+	private static function calcAverage(list:List<CommonConsumption>) : CommonConsumption {
+		var last:CommonConsumption;
+		var load:Float=0;
+		for(cc in list) {
+			load += cc.load;
+			last = cc;
+		}
+		return {weekday:last.weekday, time:last.time, load:load/list.length};
+	}
 
 }
 

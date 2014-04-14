@@ -38,7 +38,7 @@ class NationalConsumptionQueries {
 
 			downloadIfNoRecentData(); //Check that data is recent. 
 
-			var now = Date.now().delta(DateTools.hours(1));
+			var now = Date.now().delta(DateTools.hours(2));
 			var from = now.delta(DateTools.hours(-12));
 			var to = now.delta(DateTools.hours(12));
 

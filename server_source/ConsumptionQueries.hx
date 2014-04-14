@@ -33,11 +33,12 @@ class ConsumptionQueries {
 		var houseId:Int = Std.parseInt(args.get("houseId"));
 		var from:String = args.get("from");
 		var to:String = args.get("to");
-		var timespan:Int = args.get("timespan").parseInt(); //Timespan in hours. 
+		var timespan:Int; // = args.get("timespan").parseInt(); //Timespan in hours. 
 
-		var now:Date = Date.now().delta(DateTools.hours(1)); 
+		var now:Date = Date.now().delta(DateTools.hours(2)); 
 
 		if(args.get("timespan") != null) {
+			timespan = args.get("timespan").parseInt();
 			if(timespan<0) {
 				to = now.toString();
 				from = now.delta(DateTools.hours(timespan)).toString(); //DateTools.delta(now, DateTools.hours(timespan)).toString();
@@ -88,6 +89,22 @@ class ConsumptionQueries {
 		}
 
 		return {error: "Unexpected end to getTotalConsumption()."};
+	}
+
+	public static function getTotalConsumptionSimpleArray(args:haxe.ds.StringMap<String>) : Array<Float> {
+
+		var data:ConsumptionDataset = getTotalConsumption(args);
+
+		var result = new Array<Float>();
+		var temp:Float = 0;
+		var max:Float = data.maxLoad;
+		for(entry in data.consumption) {
+			temp = entry.load / max;
+			result.push(temp > 1 ? 1.0 : temp);
+		}
+
+		return result;
+
 	}
 
 	public static function getOutletConsumption(args:StringMap<String>) : Dynamic {
@@ -231,7 +248,7 @@ class ConsumptionQueries {
 
 		var numElements = numWeeks;
 
-		var now = Date.now().delta( DateTools.hours(1));
+		var now = Date.now().delta( DateTools.hours(2));
 
 		var froms = new Array<Date>();
 		var tos = new Array<Date>();

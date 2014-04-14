@@ -47,7 +47,6 @@ class WeatherQueries {
 			to = DateTools.delta(now, DateTools.hours(timespanTo));
 		}
 
-
 		try {
 
 			//Check if there is recent weather data in the database:
@@ -83,10 +82,25 @@ class WeatherQueries {
 			return result;
 		}
 		catch(err:String) {
-			return {error : err};
+			return {error : 'Error getting wind data: $err'};
 		}
 
 		return null;
+
+	}
+
+	public static function getWindDataSimpleArray(args:haxe.ds.StringMap<String>) : Array<Float> {
+
+		var data:WeatherData = getWindData(args);
+		var result = new Array<Float>();
+
+		var temp:Float = 0;
+		for(entry in data.forecast) {
+			temp = entry.windSpeed / 14;
+			result.push(temp > 1.0 ? 1.0 : temp); //Limit to 1.0.
+		}
+
+		return result;
 
 	}
 

@@ -13,7 +13,7 @@ class InteractionLog {
 		try {
 
 			var houseId:Int = args.get("houseId").parseInt();
-			var time:Date = Date.now().delta(DateTools.hours(1));
+			var time:Date = Date.now().delta(DateTools.hours(2));
 			var screen:String = args.get("screen");
 			var data1:String = args.get("data1")!=null ? args.get("data1") : "";
 			var data2:String = args.get("data2")!=null ? args.get("data2") : "";

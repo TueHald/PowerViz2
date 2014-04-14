@@ -36,7 +36,6 @@ class Query {
 				//return ConsumptionQueries.getConsumptionPrognosisAverage(args);
 				return ConsumptionQueries.getConsumptionPrognosisMedian(args);
 
-
 			case "getWind":
 				return getWind(args);
 
@@ -55,6 +54,12 @@ class Query {
 
 			case "getCommonConsumption":
 				return CommonConsumptionQueries.getCommonConsumption();
+
+			case "getFlexPoints":
+				return PointQueries.getFlexPoints(args);
+
+			case "status":
+				return StatusQueries.getStatus();
 
 			default:
 				return {error:'Error handling query. Unidentified query ${args.get("query")}'};

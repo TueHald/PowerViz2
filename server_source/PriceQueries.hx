@@ -42,7 +42,7 @@ class PriceQueries {
 			to = Helpers.JsDateToDate(args.get("to"));
 		}
 		else {
-			var now = DateTools.delta(Date.now(), DateTools.hours(1));
+			var now = DateTools.delta(Date.now(), DateTools.hours(2));
 			from = DateTools.delta(now, DateTools.hours(-12));
 			to = DateTools.delta(now, DateTools.hours(12));
 		}
@@ -60,6 +60,16 @@ class PriceQueries {
 		}
 		result.slots = splitSlots(result.slots);
 		result.slots = fillEmptyDataFront(result.slots, from, to);
+		return result;
+	}
+
+	public static function getPriceDataSimpleArray(args:StringMap<String>) : Array<Float> {
+
+		var price:PowerPrice = getPriceData(args);
+		var result = new Array<Float>();
+		for(entry in price.slots) {
+			result.push(entry.dk1);
+		}
 		return result;
 	}
 
