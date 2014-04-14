@@ -40,7 +40,7 @@ module PowerViz{
 
             var date = new Date;
 
-            if( date.getHours()>= 21 && date.getHours() <= 6){
+            if( date.getHours()>= 21 || date.getHours() <= 6){
                 $( ".paper" ).css( "opacity", "0.3" );
                 console.log("timer running opacity 0,3")
 

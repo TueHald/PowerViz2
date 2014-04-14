@@ -214,7 +214,7 @@ module PowerViz {
             iconContainer1.style.width = "60px";
             iconContainer1.style.height = "547px";
             iconContainer1.style.position = "absolute";
-            iconContainer1.style.top = "-500px";
+            iconContainer1.style.top = "-350px";
             iconContainer1.style.marginLeft = "0%";
             iconContainer1.style.zIndex = "100";
             //append icon to the container
