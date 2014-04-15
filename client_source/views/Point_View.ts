@@ -315,6 +315,9 @@ module PowerViz {
 
              });
 
+
+            d3.tsv(
+
             //IMPORT PRICEBOX LINE SVG FILE
             d3.xml("Images/point_Box1.svg", "image/svg+xml", function(xml) {
                 var importedNode = document.importNode(xml.documentElement, true);
@@ -322,17 +325,6 @@ module PowerViz {
                 var svg = d3.select("#"+id +'_price_boxcontainer').node().appendChild(importedNode);
 
                 var element = document.getElementById(id + "_price_boxcontainer");
-
-                //the <any> tag is a cast and should be used for the typescript compiler
-                //else it will throw an exception
-                //var child = <any>element.firstChild;
-
-                //console.log(child.offsetHeight.toString());
-
-                //child.className = "foo";
-                //child.style.width = "10px";
-
-
 
                 d3.select("#"+id +'_price_boxcontainer').selectAll("svg")
                     .attr("viewBox", "0 0 1360 620")

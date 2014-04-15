@@ -60,9 +60,9 @@ module PowerViz {
             ViewContainer.instance.registerView("envView", envView);
             envView.setup();
 
-            var pointView = new Point_View();
+            /*var pointView = new Point_View();
             ViewContainer.instance.registerView("pointView", pointView);
-            pointView.setup();
+            pointView.setup();*/
 
             var overView = new Over_View();
             ViewContainer.instance.registerView("overView", overView);
@@ -80,8 +80,8 @@ module PowerViz {
             var flexController = new FlexController();
             flexController.connectView(flexView);
 
-            var pointController = new PointController();
-            pointController.connectView(pointView);
+            /*var pointController = new PointController();
+            pointController.connectView(pointView);*/
 
             var overController = new OverViewController();
             overController.connectView(overView);
@@ -102,9 +102,9 @@ module PowerViz {
             envTopView._refToView = "envView";
             envTopView.setup();
 
-            var pointTopView = new Point_TopView();
+            /*var pointTopView = new Point_TopView();
             pointTopView._refToView = "pointView";
-            pointTopView.setup();
+            pointTopView.setup();*/
 
             var overTopView = new Over_TopView();
             overTopView._refToView = "overView";
@@ -116,7 +116,7 @@ module PowerViz {
 			TopViewContainer.instance.addItem(priceTopView);
             TopViewContainer.instance.addItem(flexTopView);
             TopViewContainer.instance.addItem(envTopView);
-            TopViewContainer.instance.addItem(pointTopView);
+            /*TopViewContainer.instance.addItem(pointTopView);*/
             TopViewContainer.instance.addItem(overTopView);
             //flexTopView.enable();
 
