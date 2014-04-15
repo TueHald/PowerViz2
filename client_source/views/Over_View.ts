@@ -10,6 +10,7 @@ module PowerViz {
         _iconPath1:string = "Images/icon_dk.svg";
         _iconPath2:string = "Images/icon_house.svg";
         _controller:OverViewController;
+        _iconPlacementArray = []; //array that holds the first point of every graph
 
         //Required by View interface.
         setup=()=> {
@@ -113,11 +114,6 @@ module PowerViz {
             var yCoord1 = DrawUtils.drawGraph(lineData1,this._name, this._name+"houseConsump","blue");
             var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"envConsump","green");
 
-
-            console.log(yCoord1.toString());
-
-            console.log(yCoord2.toString());
-
             if(yCoord1 != 0 && yCoord2 != 0){//move icons
 
 
@@ -141,6 +137,7 @@ module PowerViz {
 
 
 
+
         }
 
         updatePrice=(houseArray:any,priceArray:any)=>{
@@ -156,6 +153,56 @@ module PowerViz {
 
             var yCoord2 = DrawUtils.drawGraph(lineData2,this._name, this._name+"priceConsump","brown");
 
+
+        }
+
+        updateIconPlacement(iconPlacementArray:any){
+
+
+
+            for(var i = 0;i<iconPlacementArray.length;i++){
+
+                console.log("Value:"+iconPlacementArray[i].x.toString());
+
+            }
+
+            for(var iconindex = 0;iconindex<4;iconindex++){
+
+                var min = iconPlacementArray[0].y;
+                var minIndex = 0;
+
+                for (var i = 0; i < iconPlacementArray.length; i++) {
+                    if (iconPlacementArray[i].y < min) {
+                        minIndex = i;
+                        min = iconPlacementArray[i].y;
+                    }
+                }
+
+                var icon = document.getElementById(this._name +'_icon_legend_icon'+(iconindex+1).toString());
+
+                if(iconPlacementArray[minIndex].x == 1){
+
+                    icon.style.backgroundImage = "url(Images/icon_windmill.svg)";
+
+                }else if(iconPlacementArray[minIndex].x == 2){
+                    icon.style.backgroundImage = "url(Images/icon_house.svg)";
+
+                }else if(iconPlacementArray[minIndex].x == 3){
+                    icon.style.backgroundImage = "url(Images/icon_kr.svg)";
+
+                }else if(iconPlacementArray[minIndex].x == 4){
+                    icon.style.backgroundImage = "url(Images/icon_dk.svg)";
+
+
+                }
+
+
+                if (minIndex != -1) {
+                    iconPlacementArray.splice(minIndex, 1);//remove element from array
+                }
+
+                console.log("min is:"+minIndex);
+            }
 
 
 

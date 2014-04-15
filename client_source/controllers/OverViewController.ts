@@ -23,6 +23,8 @@ module PowerViz {
         _priceDataObtainer:DataObtainer;
         _priceDataObtained:boolean = false;
 
+        _iconPlacementArray = []; //array that holds the first point of every graph
+
         constructor() {
             super();
             this._consumptionComponent = new ConsumptionComponent();
@@ -42,6 +44,7 @@ module PowerViz {
 
             this._consumptionComponent.onDataObtained = this.onConsumptionDataObtained;
             this._consumptionComponent.requestData();
+            this._iconPlacementArray = [];
             this.requestWindData();
             this.requestNationalData();
             this.requestPriceData();
@@ -106,6 +109,9 @@ module PowerViz {
                 this._consumptionComponent.allObtained = false;
 
                 this._view.updateWind(this._consumptionComponent.consumptionData, windArray);
+                this._iconPlacementArray.push({"x":1, "y":this._consumptionComponent.consumptionData[0].y});
+                this._iconPlacementArray.push({"x":2, "y":windArray[0].y});
+                this._view.updateIconPlacement(this._iconPlacementArray);//send icondata to view
 
             }
 
@@ -154,6 +160,7 @@ module PowerViz {
                 var progArray = this.formPrognosisArray(progJson);
 
                 this._view.updateFlex(this._consumptionComponent.consumptionData, progArray);
+                this._iconPlacementArray.push({"x":3, "y":progArray[0].y});
 
             }
 
@@ -211,6 +218,8 @@ module PowerViz {
 
                 this._priceDataObtained = false;
                 this._consumptionComponent.allObtained = false;
+
+                this._iconPlacementArray.push({"x":4, "y":priceArray[0].y});
             }
 
         }

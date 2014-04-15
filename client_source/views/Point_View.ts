@@ -316,7 +316,7 @@ module PowerViz {
              });
 
 
-            
+
 
             //IMPORT PRICEBOX LINE SVG FILE
             d3.xml("Images/point_Box1.svg", "image/svg+xml", function(xml) {
@@ -343,14 +343,6 @@ module PowerViz {
 
                 var element = document.getElementById(id + "_flex_boxcontainer");
 
-                //the <any> tag is a cast and should be used for the typescript compiler
-                //else it will throw an exception
-                //var child = <any>element.firstChild;
-
-                //console.log(child.offsetHeight.toString());
-
-                //child.className = "foo";
-                //child.style.width = "10px";
 
 
 
@@ -592,7 +584,7 @@ module PowerViz {
             }
 
 
-            ballArray = this.shuffleArray(ballArray);
+            //ballArray = this.shuffleArray(ballArray);
 
             for(var num = 0; num < 15; num++){//clear the balls
 
@@ -631,7 +623,7 @@ module PowerViz {
                 , randomIndex
                 ;
 
-        // While there remain elements to shuffle...
+        // While there remain elements to shuffle... OKAY, DONT SHUFFLE!
             while (0 !== currentIndex) {
 
             // Pick a remaining element...

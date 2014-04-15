@@ -41,7 +41,7 @@ module PowerViz {
             textfield.innerHTML = this._textFieldText;
             textfield.style.height = "100%";
             textfield.style.position = "relative"
-            textfield.style.fontSize = "250%";
+            textfield.style.fontSize = "200%";
             textfield.style.marginLeft = "auto";
             textfield.style.marginRight = "auto";
             textfield.style.bottom = "-20px";//hack så det kommer til at stå ordentligt.. magter ikke
