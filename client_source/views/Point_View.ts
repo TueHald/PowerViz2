@@ -316,7 +316,7 @@ module PowerViz {
              });
 
 
-            d3.tsv(
+            
 
             //IMPORT PRICEBOX LINE SVG FILE
             d3.xml("Images/point_Box1.svg", "image/svg+xml", function(xml) {
