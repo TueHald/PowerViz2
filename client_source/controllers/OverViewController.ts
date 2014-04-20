@@ -162,6 +162,8 @@ module PowerViz {
                 this._view.updateFlex(this._consumptionComponent.consumptionData, progArray);
                 this._iconPlacementArray.push({"x":3, "y":progArray[0].y});
 
+                //this._iconPlacementArray.push({"x":3, "y":7});
+
             }
 
         }
@@ -220,6 +222,8 @@ module PowerViz {
                 this._consumptionComponent.allObtained = false;
 
                 this._iconPlacementArray.push({"x":4, "y":priceArray[0].y});
+
+                //this._iconPlacementArray.push({"x":4, "y":8});
             }
 
         }

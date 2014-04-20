@@ -166,11 +166,13 @@ module PowerViz {
 
             }
 
+            var minIndex = 0;
+
             for(var iconindex = 0;iconindex<4;iconindex++){
 
                 var min = iconPlacementArray[0].y;
-                var minIndex = 0;
-
+                minIndex = 0;
+                console.log("1");
                 for (var i = 0; i < iconPlacementArray.length; i++) {
                     if (iconPlacementArray[i].y < min) {
                         minIndex = i;
@@ -180,28 +182,32 @@ module PowerViz {
 
                 var icon = document.getElementById(this._name +'_icon_legend_icon'+(iconindex+1).toString());
 
-                if(iconPlacementArray[minIndex].x == 1){
+                if(iconPlacementArray[minIndex].x == 4){
 
-                    icon.style.backgroundImage = "url(Images/icon_windmill.svg)";
-
-                }else if(iconPlacementArray[minIndex].x == 2){
                     icon.style.backgroundImage = "url(Images/icon_house.svg)";
 
                 }else if(iconPlacementArray[minIndex].x == 3){
-                    icon.style.backgroundImage = "url(Images/icon_kr.svg)";
+                    icon.style.backgroundImage = "url(Images/icon_windmill.svg)";
 
-                }else if(iconPlacementArray[minIndex].x == 4){
+                }else if(iconPlacementArray[minIndex].x == 2){
                     icon.style.backgroundImage = "url(Images/icon_dk.svg)";
+
+                }else if(iconPlacementArray[minIndex].x == 1){
+                    icon.style.backgroundImage = "url(Images/icon_kr.svg)";
 
 
                 }
 
+                console.log("2");
+                console.log("length = "+ iconPlacementArray.length.toString());
 
+                console.log("min is:"+minIndex+" number is" + iconPlacementArray[minIndex].x.toString());
+                console.log("3");
                 if (minIndex != -1) {
                     iconPlacementArray.splice(minIndex, 1);//remove element from array
                 }
 
-                console.log("min is:"+minIndex);
+
             }
 
 
