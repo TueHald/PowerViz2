@@ -70,6 +70,10 @@ module PowerViz {
             ViewContainer.instance.registerView("pointView", pointView);
             pointView.setup();
 
+            var clockView = new Clock_View();
+            ViewContainer.instance.registerView("clockView", clockView);
+            clockView.setup();
+
 
 
 
@@ -92,6 +96,8 @@ module PowerViz {
             var pointController = new PointController();
             pointController.connectView(pointView);
 
+            var clockController = new ClockController();
+            clockController.connectView(clockView);
 
             //ViewContainer.instance.registerView("TestView", testView);
 
@@ -117,6 +123,10 @@ module PowerViz {
             pointTopView._refToView = "pointView";
             pointTopView.setup();
 
+            var clockTopView = new Clock_TopView();
+            clockTopView._refToView = "clockView";
+            clockTopView.setup();
+
 
 
 
@@ -130,6 +140,7 @@ module PowerViz {
             TopViewContainer.instance.addItem(flexTopView);
             TopViewContainer.instance.addItem(envTopView);
             TopViewContainer.instance.addItem(pointTopView);
+            TopViewContainer.instance.addItem(clockTopView);
             //flexTopView.enable();
 
             TopViewContainer.instance.setupViews();
