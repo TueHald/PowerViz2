@@ -10,9 +10,11 @@ module PowerViz {
         private _timer:any;
         private _counter:number;
 
+        private _dataObtainer:DataObtainer;
+
         //Required by the Controller interface.
         enable=()=> {
-            this._timer = setInterval(this.onTime, 2000); //Start the timer.
+            this._timer = setInterval(this.onTime, 1000*60); //Start the timer.
             this._counter = 0; //A counter, just for fun.
             this.onTime(); //Run the "updating" procedure once when the view is enabled.
         }
@@ -32,11 +34,30 @@ module PowerViz {
 
         //Internal timer function, runs every X seconds.
         private onTime=()=> {
+            this._dataObtainer = new DataObtainer("../server/query/?query=getFlexWatch&houseId=" + ClientConfig.getHouseId());
+            this._dataObtainer.onDataObtained = this.clockDataObtained;
+            this._dataObtainer.obtain();
+        }
 
 
+        private clockDataObtained=(data:string)=> {
 
+            var now = new Date();
+
+            var hours = now.getHours();
+            if(hours>=12)
+                hours-=12; //Hours is always in the 0-11 interval. 
+
+            var bigArmAngle = hours * (360/12);
+            var smallArmAngle = now.getMinutes() * (360/60);
+
+            var json = jQuery.parseJSON(data);
+
+            
 
         }
+
+
 
     }
 
