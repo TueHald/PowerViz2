@@ -38,9 +38,9 @@ class FlexWatchQueries {
 		//Use the thresholds and ranges below for configuration:
 
 		//Thresholds:
-		var windThreshold = 5.0; //Everything above this number of meters per second is good. 
+		var windThreshold = 8.0; //Everything above this number of meters per second is good. 
 		var priceThreshold = 0.20; //Everything below this amount of øre pr kwh is good.
-		var loadThreshold = 100; //Everything below this load is good. 
+		var loadThreshold = 120; //Everything below this load is good. 
 
 		//Ranges:
 		var windRange = {min:3.0, max:14.0}; //Range of the wind data.
@@ -72,10 +72,20 @@ class FlexWatchQueries {
 		if(nowIndex>=48)
 			noon = 48;
 
+		rotateArray(preResult, nowIndex-noon); //Rotate the result, so that the index at timeIndex 0 or 48 is actually the first. 
 
-		rotateArray(preResult, nowIndex-noon); //Rotate the result, so that the index at timeIndex 0 or 48 is actually the first
+		var result = new Array<Int>();
+		for(p in preResult) {
+			result.push(switch(p){
+				case Wind: 1;
+				case Load: 2;
+				case Price: 3;
+				case None: 0;
+				default: 0;
+				});
+		}
 
-		return null;
+		return {flexQuarters:result};
 
 	}
 
@@ -130,6 +140,11 @@ class FlexWatchQueries {
 		var slots:Array<Dynamic> = v.slots;
 		for(value in slots) {
 			result.push(value.dk1/10);
+		}
+		if(result.length>3){
+			while(result.length<48) {
+				result.push(result[result.length-1]);
+			}
 		}
 
 		return result;
