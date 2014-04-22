@@ -311,7 +311,7 @@ module PowerViz {
 
                     field.css('background-image', 'url("Images/watchprice.svg")');
 
-                }else (slotArray[num] == 3){
+                }else{
 
                     field.css('background-image', 'url("Images/watchflex.svg")');
 
