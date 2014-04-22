@@ -284,12 +284,23 @@ module PowerViz {
         updateSlots=(id:string,slotArray:any)=>{
 
 
+            console.log(slotArray);
+
+            for(var i = 0; i < slotArray.length; i++){
+                console.log("slot" + " = " + slotArray[i]);
+            }
+
+
 
             var firstarray = slotArray.slice(21,49);
             var second = slotArray.slice(0,21);
 
             var final = firstarray.concat(second);
 
+
+            for(var i = 0; i < final.length; i++){
+                console.log("slot2" + " = " + final[i]);
+            }
 
 
             var counter = 1;
@@ -299,17 +310,22 @@ module PowerViz {
                 var field = $('#field'+(num+1).toString());
                 //field.css('background-image', 'url("' + "Images/watchTest.svg" + '")');
 
-                if(slotArray[num] == 0){
+                if(final[num] == 0){
 
                     field.css('background-image', 'url("Images/watchblank.svg")');
 
-                }else if(slotArray[num] == 1){
+                }else if(final[num] == 1){
 
                     field.css('background-image', 'url("Images/watchwind.svg")');
 
-                }else if(slotArray[num] == 2){
+                }else if(final[num] == 2){
 
                     field.css('background-image', 'url("Images/watchprice.svg")');
+
+                }
+                else if(final[num] == -1){
+
+                    field.css('background-image', 'url("Images/watchgray.svg")');
 
                 }else{
 
