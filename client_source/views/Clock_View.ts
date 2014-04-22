@@ -49,9 +49,11 @@ module PowerViz {
         //The update function is used to update the entire view
         //the redrawcontentfram shifts the timeline
         //the redrawgraph draws a new graph based on inputdata
-        update=()=>{
+        update=(clockArray:any, littleArm:number, largeArm:number)=>{
 
+            this.updateClock(this._name,littleArm,largeArm);
 
+            this.updateSlots(this._name,clockArray);
 
 
         }
@@ -91,6 +93,8 @@ module PowerViz {
 
             this.createFields(id);
             this.distributeFields(id);
+            this.distributeClockarms(id);
+            this.distributeTimeFields(id);
 
 
             }
@@ -108,7 +112,7 @@ module PowerViz {
 
         distributeFields=(id:string)=> {
         var radius = 250;
-        var topOffset = 30;
+        var topOffset = 20;
         var xOffset = 0;
         var rotation = 147;
         var fields = $('.clockfield'),
@@ -164,6 +168,123 @@ module PowerViz {
 
             }
     }
+
+        distributeClockarms=(id:string)=>{
+
+            var container = $('#'+id+'_clockcontainer');
+
+            $('<div/>', {
+               'id': 'big_clockarm','class': 'largeclockarm','background-image': 'Images/viser_stor.svg'
+            }).appendTo(container);
+
+            $('<div/>', {
+                'id': 'small_clockarm','class': 'smallclockarm','background-image': 'Images/viser_lille.svg'
+            }).appendTo(container);
+
+
+            var bigclockarm = $('#big_clockarm');
+
+            var littleclockarm = $('#small_clockarm');
+
+            var container = $('#'+id +'_clockcontainer'),
+                width = container.width(),
+                height = container.height();
+
+
+            bigclockarm.css({
+                left: ((width/2)).toString() + 'px',
+                top: ((height/2-bigclockarm.height()/2)+25).toString() + 'px',
+                transform: 'rotate('+ 358 + 'deg)'
+            });
+
+            littleclockarm.css({
+                left: (width/2).toString() + 'px',
+                top: ((height/2-littleclockarm.height()/2)+25).toString() + 'px',
+                transform: 'rotate('+ 358 + 'deg)'
+            });
+
+
+        }
+
+        distributeTimeFields=(id:string)=>{
+
+            var container = $('#'+id+'_clockcontainer');
+
+            $('<div/>', {
+                'id': 'clock_timefield_1','class': 'clock_timefield text-element'
+            }).html("<h1>3</h1>").appendTo(container);
+
+            $('<div/>', {
+                'id': 'clock_timefield_2','class': 'clock_timefield text-element'
+            }).html("<h1>6</h1>").appendTo(container);
+            $('<div/>', {
+                'id': 'clock_timefield_3','class': 'clock_timefield text-element'
+            }).html("<h1>9</h1>").appendTo(container);
+
+            $('<div/>', {
+                'id': 'clock_timefield_4','class': 'clock_timefield text-element'
+            }).html("<h1>12</h1>").appendTo(container);
+
+
+            var timefield1 = $('#clock_timefield_1');
+            var timefield2 = $('#clock_timefield_2');
+            var timefield3 = $('#clock_timefield_3');
+            var timefield4 = $('#clock_timefield_4');
+
+
+            var container = $('#'+id +'_clockcontainer'),
+                width = container.width(),
+                height = container.height();
+
+            timefield1.css({
+                left: ((width/2 + 280)).toString() + 'px',
+                top: ((height/2)-20).toString() + 'px'
+                //transform: 'rotate('+ 358 + 'deg)'
+            });
+
+            timefield2.css({
+                left: ((width/2 - timefield2.width())+30).toString() + 'px',
+                top: ((height/2 + 270)).toString() + 'px'
+                //transform: 'rotate('+ 358 + 'deg)'
+            });
+
+            timefield3.css({
+                left: ((width/2 - 280 - timefield3.width())).toString() + 'px',
+                top: ((height/2)-20).toString() + 'px'
+                //transform: 'rotate('+ 358 + 'deg)'
+            });
+
+            timefield4.css({
+                left: ((width/2 - timefield4.width())+20).toString() + 'px',
+                top: ((height/2 - 310)).toString() + 'px'
+                //transform: 'rotate('+ 358 + 'deg)'
+            });
+
+
+
+
+        }
+
+        updateClock=(id:string,smallhand:number,largehand:number)=>{
+
+            var bigclockarm = $('#big_clockarm');
+
+            var littleclockarm = $('#small_clockarm');
+
+            bigclockarm.css({
+                transform: 'rotate('+ largehand-2 + 'deg)'
+            });
+
+            littleclockarm.css({
+                transform: 'rotate('+ smallhand-2 + 'deg)'
+            });
+
+        }
+
+        updateSlots=(id:string,slotArray:any)=>{
+
+        }
+
 
         //--------------------
         //Specific for this view.
