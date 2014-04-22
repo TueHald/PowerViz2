@@ -283,6 +283,48 @@ module PowerViz {
 
         updateSlots=(id:string,slotArray:any)=>{
 
+
+
+            var firstarray = slotArray.slice(21,49);
+            var second = slotArray.slice(0,21);
+
+            var final = firstarray.concat(second);
+
+
+
+            var counter = 1;
+
+            for(var num = 0; num<48;num ++){
+
+                var field = $('#field'+(num+1).toString());
+                //field.css('background-image', 'url("' + "Images/watchTest.svg" + '")');
+
+                if(slotArray[num] == 0){
+
+                    field.css('background-image', 'url("Images/watchblank.svg")');
+
+                }else if(slotArray[num] == 1){
+
+                    field.css('background-image', 'url("Images/watchwind.svg")');
+
+                }else if(slotArray[num] == 2){
+
+                    field.css('background-image', 'url("Images/watchprice.svg")');
+
+                }else (slotArray[num] == 3){
+
+                    field.css('background-image', 'url("Images/watchflex.svg")');
+
+                }
+
+
+
+                counter++;
+
+
+            }
+
+
         }
 
 
