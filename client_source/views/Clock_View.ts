@@ -107,23 +107,21 @@ module PowerViz {
         }
 
         distributeFields=(id:string)=> {
-        var radius = 280;
-        var topOffset = 70;
+        var radius = 250;
+        var topOffset = 30;
         var xOffset = 0;
         var rotation = 147;
         var fields = $('.clockfield'),
             container = $('#'+id +'_clockcontainer'),
             width = container.width(),
             height = container.height(),
-            angle = 1,
+            angle = 1.1,
             step = (2*Math.PI) / fields.length,
             counter = 1;
         fields.each(function() {
             var x = (Math.round(width/2 + radius * Math.cos(angle) - $(this).width()/2));
             var y = topOffset+(Math.round(height/2 + radius * Math.sin(angle) - $(this).height()/2));
-            if(window.console) {
-                console.log($(this).text(), x, y);
-            }
+
             $(this).css({
                 left: xOffset+x + 'px',
                 top: y + 'px'
@@ -135,10 +133,10 @@ module PowerViz {
             }
             else if(counter%4 == 0 )
             {
-                angle += step+0.046;
+                angle += step+0.032;
             }
             else{
-                angle += step/2+0.05;
+                angle += step/2+0.055;
             }
             counter++;
 
@@ -151,6 +149,7 @@ module PowerViz {
             for(var num = 0; num<48;num ++){
 
                 var field = $('#field'+(num+1).toString()).css({transform: 'rotate('+ rotation + 'deg)'});
+                field.css('background-image', 'url("' + "Images/watchTest.svg" + '")');
 
                 //field.css({transform: 'rotate('+ rotation + 'deg)'});
                 if(counter%4==0){
