@@ -272,11 +272,11 @@ module PowerViz {
             var littleclockarm = $('#small_clockarm');
 
             bigclockarm.css({
-                transform: 'rotate('+ largehand-2 + 'deg)'
+                transform: 'rotate('+ (largehand-2) + 'deg)'
             });
 
             littleclockarm.css({
-                transform: 'rotate('+ smallhand-2 + 'deg)'
+                transform: 'rotate('+ (smallhand-2) + 'deg)'
             });
 
         }

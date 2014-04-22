@@ -51,9 +51,9 @@ module PowerViz {
             var bigArmAngle = hours * (360/12);
             var smallArmAngle = now.getMinutes() * (360/60);
 
-            var json = jQuery.parseJSON(data);
+            var json:any = jQuery.parseJSON(data);
 
-            
+            this._view.update(json.flexQuarters, smallArmAngle, bigArmAngle);
 
         }
 
