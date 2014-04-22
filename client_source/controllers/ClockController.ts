@@ -48,8 +48,8 @@ module PowerViz {
             if(hours>=12)
                 hours-=12; //Hours is always in the 0-11 interval. 
 
-            var bigArmAngle = hours * (360/12);
-            var smallArmAngle = now.getMinutes() * (360/60);
+            var bigArmAngle = now.getMinutes() * (360/60);
+            var smallArmAngle = hours * (360/12);
 
             var json:any = jQuery.parseJSON(data);
 
