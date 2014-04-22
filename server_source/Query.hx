@@ -58,6 +58,9 @@ class Query {
 			case "getFlexPoints":
 				return PointQueries.getFlexPoints(args);
 
+			case "getFlexWatch":
+				return FlexWatchQueries.getFlexWatchState(args);
+
 			case "status":
 				return StatusQueries.getStatus();
 

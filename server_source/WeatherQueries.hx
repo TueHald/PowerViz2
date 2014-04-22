@@ -96,8 +96,8 @@ class WeatherQueries {
 
 		var temp:Float = 0;
 		for(entry in data.forecast) {
-			temp = entry.windSpeed / 14;
-			result.push(temp > 1.0 ? 1.0 : temp); //Limit to 1.0.
+			temp = entry.windSpeed;
+			result.push(temp); //Limit to 1.0.
 		}
 
 		return result;

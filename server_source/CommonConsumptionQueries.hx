@@ -15,7 +15,10 @@ typedef CommonConsumption = {
 
 class CommonConsumptionQueries {
 
+	//WARNING: This function is a bit hacky, as it mimics another function using a crappy data format. 
 	public static function getCommonConsumption(?hoursBeforeNow:Int, ?hoursAfterNow:Int) : Dynamic {
+
+		var multiply:Float = 10; //Value multiplied with to achieve the proper scale. 
 
 		var now = Date.now();
 		now = now.delta(DateTools.hours(2)); //Fucking sommertid!!!!!
@@ -61,7 +64,7 @@ class CommonConsumptionQueries {
 		var cnx = DbConnect.connect();
 		var qresult = cnx.request(query);
 		for(row in qresult) {
-			result.slots.push({from:"", to:"", dk1:row.load*11, dk2:row.load*11});
+			result.slots.push({from:"", to:"", dk1:row.load*multiply, dk2:row.load*multiply});
 		}
 
 		return result;

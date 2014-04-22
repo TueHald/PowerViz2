@@ -28,7 +28,7 @@ class PowerPrice {
 class PriceQueries {
 
 	private static inline var MINUTES_BETWEEN_DOWNLOADS = 15;
-	private static inline var EXCHANGE_RATE = 7.4623; //Exchange rate for going from euros to dkk. 
+	private static inline var EXCHANGE_RATE = 7.47; //Exchange rate for going from euros to dkk. 
 
 
 	//Returns price data as an array of simple PriceInfo structures. 
