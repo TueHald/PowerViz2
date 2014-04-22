@@ -48,6 +48,11 @@ module PowerViz {
 
 
             //////////////////////ADD VIEWS/////////////////////////////////
+
+            var overView = new Over_View();
+            ViewContainer.instance.registerView("overView", overView);
+            overView.setup();
+
             var priceView = new Price_View();
             ViewContainer.instance.registerView("priceView", priceView);
             priceView.setup();
@@ -60,17 +65,25 @@ module PowerViz {
             ViewContainer.instance.registerView("envView", envView);
             envView.setup();
 
-            /*var pointView = new Point_View();
-            ViewContainer.instance.registerView("pointView", pointView);
-            pointView.setup();*/
 
-            var overView = new Over_View();
-            ViewContainer.instance.registerView("overView", overView);
-            overView.setup();
+            var pointView = new Point_View();
+            ViewContainer.instance.registerView("pointView", pointView);
+            pointView.setup();
+
+            var clockView = new Clock_View();
+            ViewContainer.instance.registerView("clockView", clockView);
+            clockView.setup();
+
+
 
 
 
             //////////////////////ADD CONTROLLERS/////////////////////////////////
+
+
+            var overController = new OverViewController();
+            overController.connectView(overView);
+
             var envController = new EnvController();
             envController.connectView(envView);
 
@@ -80,16 +93,20 @@ module PowerViz {
             var flexController = new FlexController();
             flexController.connectView(flexView);
 
-            /*var pointController = new PointController();
-            pointController.connectView(pointView);*/
+            var pointController = new PointController();
+            pointController.connectView(pointView);
 
-            var overController = new OverViewController();
-            overController.connectView(overView);
+            var clockController = new ClockController();
+            clockController.connectView(clockView);
 
             //ViewContainer.instance.registerView("TestView", testView);
 
 
             //////////////////////ADD TOPVIEWS/////////////////////////////////
+            var overTopView = new Over_TopView();
+            overTopView._refToView = "overView";
+            overTopView.setup();
+
 			var priceTopView = new Price_TopView();
             priceTopView._refToView = "priceView";
             priceTopView.setup();
@@ -102,22 +119,28 @@ module PowerViz {
             envTopView._refToView = "envView";
             envTopView.setup();
 
-            /*var pointTopView = new Point_TopView();
+            var pointTopView = new Point_TopView();
             pointTopView._refToView = "pointView";
-            pointTopView.setup();*/
+            pointTopView.setup();
 
-            var overTopView = new Over_TopView();
-            overTopView._refToView = "overView";
-            overTopView.setup();
+            var clockTopView = new Clock_TopView();
+            clockTopView._refToView = "clockView";
+            clockTopView.setup();
+
+
+
 
 
 
             //////////////////////ADD TOPVIEWS TO CONTAINER/////////////////////////////////
+
+
+            TopViewContainer.instance.addItem(overTopView);
 			TopViewContainer.instance.addItem(priceTopView);
             TopViewContainer.instance.addItem(flexTopView);
             TopViewContainer.instance.addItem(envTopView);
-            /*TopViewContainer.instance.addItem(pointTopView);*/
-            TopViewContainer.instance.addItem(overTopView);
+            TopViewContainer.instance.addItem(pointTopView);
+            TopViewContainer.instance.addItem(clockTopView);
             //flexTopView.enable();
 
             TopViewContainer.instance.setupViews();
@@ -127,7 +150,7 @@ module PowerViz {
 
 			//Now that all views are created, set them up. 
 			//ViewContainer.instance.setupViews();
-			ViewContainer.instance.setActiveView("priceView");
+			ViewContainer.instance.setActiveView("overView");
 
 
 

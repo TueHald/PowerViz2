@@ -197,11 +197,14 @@ module PowerViz {
 
             if(appendIcons){
             //append icons
-            DrawUtils.appendIcons(view,iconPath1,iconPath2,iconName1,iconName2);
+                DrawUtils.appendIcons(view,iconPath1,iconPath2,iconName1,iconName2);
             }
 
 
+
         }
+
+
 
         static drawLegend(viewName:string, legendpath:string){
 
@@ -209,22 +212,67 @@ module PowerViz {
             //get canvas
             var graphCanvas = document.getElementById(viewName +'_Iconcontainer');
             //place 1st icon
-            var iconContainer1 = document.createElement('div');
-            iconContainer1.id = viewName +'_icon_legend';
-            iconContainer1.style.width = "60px";
-            iconContainer1.style.height = "547px";
-            iconContainer1.style.position = "absolute";
-            iconContainer1.style.top = "-350px";
-            iconContainer1.style.marginLeft = "0%";
-            iconContainer1.style.zIndex = "100";
+            var icon1 = document.createElement('div');
+            icon1.id = viewName +'_icon_legend_icon1';
+            icon1.style.width = "80px";
+            icon1.style.height = "105px";
+            icon1.style.position = "absolute";
+            icon1.style.top = "50px";
+            icon1.style.marginLeft = "0%";
+            icon1.style.zIndex = "100";
+            icon1.style.backgroundImage = "url(Images/icon_kr.svg)";
+            icon1.style.backgroundRepeat = "no-repeat";
+            icon1.style.backgroundSize = "100% 100%";
             //append icon to the container
-            graphCanvas.appendChild(iconContainer1);
+            graphCanvas.appendChild(icon1);
+
+            var icon2 = document.createElement('div');
+            icon2.id = viewName +'_icon_legend_icon2';
+            icon2.style.width = "80px";
+            icon2.style.height = "105px";
+            icon2.style.position = "absolute";
+            icon2.style.top = "175px";
+            icon2.style.marginLeft = "0%";
+            icon2.style.zIndex = "100";
+            icon2.style.backgroundImage = "url(Images/icon_dk.svg)";
+            icon2.style.backgroundRepeat = "no-repeat";
+            icon2.style.backgroundSize = "100% 100%";
+            //append icon to the container
+            graphCanvas.appendChild(icon2);
+
+            var icon3 = document.createElement('div');
+            icon3.id = viewName +'_icon_legend_icon3';
+            icon3.style.width = "80px";
+            icon3.style.height = "105px";
+            icon3.style.position = "absolute";
+            icon3.style.top = "300px";
+            icon3.style.marginLeft = "0%";
+            icon3.style.zIndex = "100";
+            icon3.style.backgroundImage = "url(Images/icon_windmill.svg)";
+            icon3.style.backgroundRepeat = "no-repeat";
+            icon3.style.backgroundSize = "100% 100%";
+            //append icon to the container
+            graphCanvas.appendChild(icon3);
+
+            var icon4 = document.createElement('div');
+            icon4.id = viewName +'_icon_legend_icon4';
+            icon4.style.width = "80px";
+            icon4.style.height = "105px";
+            icon4.style.position = "absolute";
+            icon4.style.top = "425px";
+            icon4.style.marginLeft = "0%";
+            icon4.style.zIndex = "100";
+            icon4.style.backgroundImage = "url(Images/icon_house.svg)";
+            icon4.style.backgroundRepeat = "no-repeat";
+            icon4.style.backgroundSize = "100% 100%";
+            //append icon to the container
+            graphCanvas.appendChild(icon4);
 
 
 
 
 
-            //IMPORT VERTICAL LINE SVG FILE
+           /* //IMPORT VERTICAL LINE SVG FILE
             d3.xml(legendpath, "image/svg+xml", function(xml) {
                 var importedNode = document.importNode(xml.documentElement, true);
 
@@ -254,7 +302,7 @@ module PowerViz {
 
 
 
-            });
+            });*/
 
 
         }
