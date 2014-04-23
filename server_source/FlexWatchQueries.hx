@@ -15,6 +15,7 @@ enum UsePower {
 	Load; //Use poser because of load. 
 	Price; //Use power because of price. 
 	None;  //Don't use power!
+	Gray; //Grayed out...
 }
 
 /**
@@ -64,6 +65,9 @@ class FlexWatchQueries {
 		for(i in 0...48) { //Loop through the 48 entries, representing 12 hours. 
 			preResult.push(valuesToUsePower(windData[i], windPctThreshold, 
 				loadData[i], loadPctThreshold, priceData[i], pricePctThreshold));
+			if(i>=44){
+				preResult[i] = Gray; //Last four should be grayed out. 
+			}
 		}
 
 
@@ -81,6 +85,7 @@ class FlexWatchQueries {
 				case Load: 2;
 				case Price: 3;
 				case None: 0;
+				case Gray: -1;
 				default: 0;
 				});
 		}
