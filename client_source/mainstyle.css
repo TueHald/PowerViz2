@@ -172,14 +172,14 @@ Usefull for avoiding the accidental selection of text on screen.*/
 
 }
 .smallclockarm{
-    width: 5px;
-    height: 180px;
+    width: 6px;
+    height: 200px;
     position: absolute;
     background-image:url('Images/viser_lille.svg');
-    -webkit-background-size: 140% 62%;
-    -moz-background-size: 140% 62%;
-    -o-background-size: 140% 62%;
-    background-size: 140% 62%;
+    -webkit-background-size: 160% 65%;
+    -moz-background-size: 160% 65%;
+    -o-background-size: 160% 65%;
+    background-size: 160% 65%;
     background-position:top;
     background-repeat:no-repeat;
 

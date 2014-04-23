@@ -25,12 +25,38 @@ module PowerViz {
 
         _iconPlacementArray = []; //array that holds the first point of every graph
 
+        _sendTimer:any = null;
+        _sendFrequency:number = 0.1*60; //seconds between updates.
+
+        _windNumber:number = null;
+        _priceNumber:number = null;
+        _flexNumber:number = null;
+        _consumpNumber:number = null;
+
+
         constructor() {
             super();
+
             this._consumptionComponent = new ConsumptionComponent();
         }
 
 
+        public onEnable=()=>{
+
+            //Start timer.
+            if(this._sendTimer==null) { //Only start the timer if it is not already running.
+                this._sendTimer = setInterval(this.sendArrayToView, this._sendFrequency*1000);
+            }
+        }
+
+        public onDisable=()=>{
+
+            this._iconPlacementArray = [];
+            if(this._sendTimer!=null) {
+                clearInterval(this._sendTimer);
+                this._sendTimer=null;
+            }
+        }
 
 
         //Connects a view to this. Should be the only method used for connecting a view to a controller.
@@ -49,12 +75,16 @@ module PowerViz {
             this.requestNationalData();
             this.requestPriceData();
 
+
         }
 
         private onConsumptionDataObtained=()=> {
+
+            this._iconPlacementArray = [];
             this.sendWindDataToView();
             this.sendNationalDataToView();
             this.sendPriceDataToView();
+            this.sendConsumptionData();
         }
 
         private requestWindData=()=> {
@@ -92,6 +122,11 @@ module PowerViz {
             return windArray;
         }
 
+        private sendConsumptionData=()=>{
+            this._iconPlacementArray.push({"x":1, "y":this._consumptionComponent.consumptionData[0].y});
+            this._consumpNumber = this._consumptionComponent.consumptionData[0].y;
+        }
+
 
         //This is very much a work in progress.
         private sendWindDataToView=()=> {
@@ -109,9 +144,12 @@ module PowerViz {
                 this._consumptionComponent.allObtained = false;
 
                 this._view.updateWind(this._consumptionComponent.consumptionData, windArray);
+                this._consumpNumber = this._consumptionComponent.consumptionData[0].y;
+                this._windNumber = windArray[0].y;
+
                 this._iconPlacementArray.push({"x":1, "y":this._consumptionComponent.consumptionData[0].y});
                 this._iconPlacementArray.push({"x":2, "y":windArray[0].y});
-                this._view.updateIconPlacement(this._iconPlacementArray);//send icondata to view
+
 
             }
 
@@ -161,8 +199,8 @@ module PowerViz {
 
                 this._view.updateFlex(this._consumptionComponent.consumptionData, progArray);
                 this._iconPlacementArray.push({"x":3, "y":progArray[0].y});
+                this._flexNumber = progArray[0].y;
 
-                //this._iconPlacementArray.push({"x":3, "y":7});
 
             }
 
@@ -213,7 +251,6 @@ module PowerViz {
                 var priceJson = jQuery.parseJSON(this._priceData);
                 var priceArray = this.formPriceData(priceJson);
 
-                console.log(priceArray);
 
                 if(this._view != null)
                     this._view.updatePrice(this._consumptionComponent.consumptionData, priceArray);
@@ -221,11 +258,43 @@ module PowerViz {
                 this._priceDataObtained = false;
                 this._consumptionComponent.allObtained = false;
 
+                this._priceNumber = priceArray[0].y;
+
                 this._iconPlacementArray.push({"x":4, "y":priceArray[0].y});
 
-                //this._iconPlacementArray.push({"x":4, "y":8});
             }
 
+        }
+
+        private sendArrayToView=()=>{
+
+            this._iconPlacementArray = [];
+
+            if(this._priceNumber != null && this._flexNumber != null && this._windNumber != null && this._consumpNumber != null){
+
+                console.log("pushing numbers");
+                this._iconPlacementArray.push({"x":1, "y":this._consumpNumber});
+                this._iconPlacementArray.push({"x":2, "y":this._windNumber});
+                this._iconPlacementArray.push({"x":3, "y":this._flexNumber});
+                this._iconPlacementArray.push({"x":4, "y":this._priceNumber});
+
+            }
+
+            if(this._iconPlacementArray.length < 4){
+
+                console.log("not enough data");
+
+            }else{
+
+                console.log("sending data");
+            this._view.updateIconPlacement(this._iconPlacementArray);//send icondata to view
+
+                this._iconPlacementArray = [];
+                this._priceNumber = null;
+                this._flexNumber = null;
+                this._windNumber = null;
+                this._consumpNumber = null;
+            }
         }
 
     }

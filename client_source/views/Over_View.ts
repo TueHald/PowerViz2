@@ -159,13 +159,54 @@ module PowerViz {
         updateIconPlacement(iconPlacementArray:any){
 
 
+            iconPlacementArray = iconPlacementArray.splice(0,4);
 
-            for(var i = 0;i<iconPlacementArray.length;i++){
+            iconPlacementArray.sort(compare);
 
-                console.log("Value:"+iconPlacementArray[i].x.toString());
+            for(var i = 0; i < iconPlacementArray.length; i++)
+            {
+                console.log(iconPlacementArray[i].y);
+            }
+
+            function compare(a,b) {
+                if (a.y < b.y)
+                    return -1;
+                if (a.y > b.y)
+                    return 1;
+                return 0;
+            }
+
+            iconPlacementArray.reverse();
+
+            for(var count = 3; count > -1; count--){
+
+                var icon = document.getElementById(this._name +'_icon_legend_icon'+(count+1).toString());
+
+                console.log("x is:" + iconPlacementArray[count].x.toString());
+
+                if(iconPlacementArray[count].x == 1){
+                    console.log("making house");
+
+                    icon.style.backgroundImage = "url(Images/icon_house.svg)";
+
+                }else if(iconPlacementArray[count].x == 2){
+                    console.log("making wind");
+                    icon.style.backgroundImage = "url(Images/icon_windmill.svg)";
+
+                }else if(iconPlacementArray[count].x == 3){
+                    console.log("making dk");
+                    icon.style.backgroundImage = "url(Images/icon_dk.svg)";
+
+                }else if(iconPlacementArray[count].x == 4){
+                    console.log("making kr");
+                    icon.style.backgroundImage = "url(Images/icon_kr.svg)";
+
+
+                }
 
             }
 
+/*
             var minIndex = 0;
 
             for(var iconindex = 0;iconindex<4;iconindex++){
@@ -210,7 +251,7 @@ module PowerViz {
 
             }
 
-
+*/
 
         }
 

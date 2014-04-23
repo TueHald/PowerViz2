@@ -144,7 +144,6 @@ module PowerViz {
             }
             counter++;
 
-            console.log("step is:"+step.toString());
 
         });
 
@@ -283,22 +282,10 @@ module PowerViz {
 
         updateSlots=(id:string,slotArray:any)=>{
 
-
-            /*console.log(slotArray);
-
-            for(var i = 0; i < slotArray.length; i++){
-                console.log("slot" + " = " + slotArray[i]);
-            }
-*/
-
-
             var firstarray = slotArray.slice(20,49);
             var second = slotArray.slice(0,20);
 
             var final = firstarray.concat(second);
-
-
-
 
 
             var counter = 1;
