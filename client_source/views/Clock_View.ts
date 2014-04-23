@@ -284,12 +284,12 @@ module PowerViz {
         updateSlots=(id:string,slotArray:any)=>{
 
 
-            console.log(slotArray);
+            /*console.log(slotArray);
 
             for(var i = 0; i < slotArray.length; i++){
                 console.log("slot" + " = " + slotArray[i]);
             }
-
+*/
 
 
             var firstarray = slotArray.slice(20,49);
@@ -298,9 +298,7 @@ module PowerViz {
             var final = firstarray.concat(second);
 
 
-            for(var i = 0; i < final.length; i++){
-                console.log("slot2" + " = " + final[i]);
-            }
+
 
 
             var counter = 1;
