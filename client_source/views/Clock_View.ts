@@ -272,11 +272,11 @@ module PowerViz {
             var littleclockarm = $('#small_clockarm');
 
             bigclockarm.css({
-                transform: 'rotate('+ (largehand-2) + 'deg)'
+                transform: 'rotate('+ (largehand-1) + 'deg)'
             });
 
             littleclockarm.css({
-                transform: 'rotate('+ (smallhand-2) + 'deg)'
+                transform: 'rotate('+ (smallhand-1) + 'deg)'
             });
 
         }
@@ -292,8 +292,8 @@ module PowerViz {
 
 
 
-            var firstarray = slotArray.slice(21,49);
-            var second = slotArray.slice(0,21);
+            var firstarray = slotArray.slice(20,49);
+            var second = slotArray.slice(0,20);
 
             var final = firstarray.concat(second);
 
@@ -320,7 +320,7 @@ module PowerViz {
 
                 }else if(final[num] == 2){
 
-                    field.css('background-image', 'url("Images/watchprice.svg")');
+                    field.css('background-image', 'url("Images/watchflex.svg")');
 
                 }
                 else if(final[num] == -1){
@@ -329,8 +329,8 @@ module PowerViz {
 
                 }else{
 
-                    field.css('background-image', 'url("Images/watchflex.svg")');
 
+                    field.css('background-image', 'url("Images/watchprice.svg")');
                 }
 
 
