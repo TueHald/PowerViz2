@@ -19,8 +19,9 @@ module PowerViz {
 
 		_swiper:any = null; //swiper created using swipe.js.
 
-		_autoswipeTime:number = 120; //Number of seconds between different views when autoswiping.
-		_inactiveWait:number = 180; //Number of seconds before starting autoswipe.
+		_autoswipeTime:number = 180; //Number of seconds between different views when autoswiping.
+		_inactiveWait:number = 120; //Number of seconds before starting autoswipe.
+		_autoswipedId:string = ""; //The id of the screen currently autoswiped to. 
 
 		_inactiveCounter:number = 0; //Counts seconds that the screen is inactive.
 		_inactiveTimer:any = null;
@@ -81,8 +82,20 @@ module PowerViz {
 			}
 
 			if(this._swipeCounter >= this._autoswipeTime) {
-				//this._slider.next();
-				this._swiper.next();
+				console.log(this._autoswipedId);
+				switch(this._autoswipedId) {
+					case "overView":
+						this.moveTo("clockView");
+						break;
+					case "clockView":
+						this.moveTo("overView");
+						break;
+					default:
+						this.moveTo("overView");
+						break;
+
+				}
+				//this._swiper.next();
 				this._swipeCounter = 0;
 			}
 
@@ -96,6 +109,7 @@ module PowerViz {
 		onSwipeBegin=(index:number, element:any)=> { //Invoked when the swiper starts moving.
             this.setActiveView(element.id);
 
+            //Log the interaction if the view container is not in autoswipe mode. 
             if(ClientConfig.getInteractionLogging()==true && this._autoswipeMode==false) {
             	var url:string = "../server/query/?query=sendLogData&houseId=" + ClientConfig.getHouseId() + "&screen=" + element.id;
             	var obtainer = new DataObtainer(url);
@@ -139,7 +153,6 @@ module PowerViz {
 		//Moves the slider to the specified selector id.
 		moveTo=(id:string)=> {
 
-
 			var pos:number=-1;
 			$(".swipe-box").each(function(index, element){
 				var el:any = element; //Hack, because DefTyped file is wrong. So very wrong! FUCK YOU TYPESCRIPT!
@@ -150,6 +163,7 @@ module PowerViz {
 			if(pos<0)
 				return;
 			this._swiper.slide(pos,300);
+			this._autoswipedId = id;
 
 		}
 
@@ -167,6 +181,10 @@ module PowerViz {
 				this._currentView = this._views[id];
 				this._currentView.enable();
 			}
+		}
+
+		getActiveView=()=> {
+
 		}
 
 	}

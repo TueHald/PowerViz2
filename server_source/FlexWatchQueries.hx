@@ -41,7 +41,7 @@ class FlexWatchQueries {
 		//Thresholds:
 		var windThreshold = 8.0; //Everything above this number of meters per second is good. 
 		var priceThreshold = 0.20; //Everything below this amount of øre pr kwh is good.
-		var loadThreshold = 120; //Everything below this load is good. 
+		var loadThreshold = 130; //Everything below this load is good. 
 
 		//Ranges:
 		var windRange = {min:3.0, max:14.0}; //Range of the wind data.
