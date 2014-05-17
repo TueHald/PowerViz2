@@ -10,40 +10,56 @@ module PowerViz {
 		_id:string;
         _refToView:string;
         _selected = false;
+        _textFieldText:string;
 		_controller:TestTopController;
 
 		setup=()=> {
 
             var element = document.createElement("div");
-            element.id = this._name;
+            element.id = this._name +"_container";
             //element.appendChild(document.createTextNode(this._name));
             document.getElementById('top-bar').appendChild(element);
-            element.style.border = "1px solid black";
-            //element.style.width = "0px";
-            //element.style.height = "0px";
+            //element.style.border = "1px solid black";
             this._selected = false;
 
-            var topelement = document.getElementById(this._name);
+            var topelement = document.getElementById(this._name +"_container");
             topelement.className = "bar-element";
-            //topelement.getElementById('top-bar').appendChild(element);
 
-            element.innerHTML = "<h3>This is a heading</h3>";
+            topelement.style.verticalAlign = "middle";
+            topelement.style.marginBottom = "auto";
+            topelement.style.marginTop = "auto";
+            topelement.style.zIndex = "60";
+
+
+            var textfield = document.createElement("div");
+            textfield.id = this._name + "_textfield";
+            textfield.className = "text-bar-element";
+            textfield.innerHTML = "<h1>"+this._textFieldText +"</h1>";
+            textfield.style.textAlign = "center";
+            textfield.style.zIndex = "100";
+
+
+            document.getElementById(this._name +"_container").appendChild(textfield);
+
+
 			
 
 		}
 
 		//Required by the View interface.
+        //specifies what should happend when a topview becomes active
 		enable=()=> {
 			//this._controller.enable();
-            var element = document.getElementById(this._name);
+            var element = document.getElementById(this._name +"_container");
             element.style.backgroundColor = "blue";
 
 		}
 
 		//Required by the View interface.
+        //specifies what should happend when a topview becomes disabled
 		disable=()=> {
 			//this._controller.disable();
-            var element = document.getElementById(this._name);
+            var element = document.getElementById(this._name +"_container");
             element.style.backgroundColor = "gray";
 		}
 

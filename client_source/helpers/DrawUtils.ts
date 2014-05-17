@@ -323,6 +323,9 @@ module PowerViz {
 
         }
 
+            var container = document.getElementById(id+'_graphcanvas');
+
+
 
 
         //This is the accessor function we talked about above
@@ -332,10 +335,10 @@ module PowerViz {
             .interpolate("basis-open");
 
         //The SVG Container
-        var svgContainer = d3.select(id).append("svg")
+        var svgContainer = d3.select("#"+id+'_graphcanvas').append("svg")
             .attr("id",svgname)
-            .attr("width", 1400)
-            .attr("height", 200)
+            .attr("width", container.offsetWidth.toString()+"px")
+            .attr("height", container.offsetHeight.toString() + "px")
             .style("top", "50%")
             .style("position","absolute");
 
@@ -366,8 +369,398 @@ module PowerViz {
 
     }
 
+        //creates a canvas which the graphs can be drawn
+        //view is the calling views name
+        static createGraphCanvas(view:string){
 
+
+            //create a container for the vertical line
+            var graphCanvas = document.createElement('div');
+            graphCanvas.id = view +'_graphcanvas';
+
+
+
+
+            var hor_lineContainer = document.getElementById(view +'_horizontallinecontainer');
+            var ver_lineContainer = document.getElementById(view +'_verticallinecontainer');
+
+
+            graphCanvas.style.width = hor_lineContainer.offsetWidth.toString()+"px";
+            graphCanvas.style.height = "547px";
+
+
+            graphCanvas.style.position = "absolute";
+            graphCanvas.style.left = "50%";
+
+
+            //get the contentframe
+            var contentframe = document.getElementById(view +'_contentframe');
+            contentframe.appendChild(graphCanvas);
+
+            graphCanvas.style.bottom =  ""+(ViewUtils.getTotalHeight()-ver_lineContainer.getBoundingClientRect().top).toString()+"px";
+            graphCanvas.style.marginLeft = "-"+(hor_lineContainer.offsetWidth/2).toString()+"px";
+
+        }
+        //draws a square in the frame
+        //**NOT USED**
+        static drawSquare(id:string, width:number, height:number, color:string){
+
+
+            var canvas = d3.select(id)
+                .append("svg:svg")
+                .attr("width", "100%")//canvasWidth)
+                .attr("height", "100%")
+                .style("position","absolute")
+                .style("margin-right","auto")
+                .style("margin-left","auto");
+
+
+
+            var rectangle = canvas.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", "100%")
+                .attr("height", "100%")
+                .attr("fill",color);
+
+
+        }
+
+        //method to draw contentframe inside the main view
+        //id should be the id of the sourrounding containter
+        //e.g the slider
+        static drawContentFrame(id:string, width:string, height:string){
+
+
+            //variables to be used in parts of the function
+
+            var framewidt = 1227;
+            var distancefromBottom = "12%";
+            var timeDistance = 4;
+
+            //create the contentframe
+            var frame = document.createElement('div');
+            frame.id = id +'_contentframe';
+            frame.style.width = width;
+            frame.style.height = height;
+            frame.style.position = "absolute";
+
+
+            var div = document.getElementById(id);
+
+            div.appendChild(frame);
+
+            //create a container for the vertical line
+            var linecontainer = document.createElement('div');
+            linecontainer.id = id +'_verticallinecontainer';
+            linecontainer.style.width = "10px";
+            linecontainer.style.position = "absolute";
+            linecontainer.style.bottom = "15%";
+            linecontainer.style.marginLeft = "50%";
+            linecontainer.style.marginRight = "50%";
+
+            //get the contentframe
+            var contentframe = document.getElementById(id +'_contentframe');
+            contentframe.appendChild(linecontainer);
+
+
+
+            //IMPORT VERTICAL LINE SVG FILE
+            d3.xml("Images/vertical_line.svg", "image/svg+xml", function(xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+                //console.log(importedNode.attributes.getNamedItem("id").toString());
+
+               var svg = d3.select("#"+id +'_verticallinecontainer').node().appendChild(importedNode);
+
+                //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+
+
+            });
+
+
+
+
+            //create a container for the vertical line
+            var hor_linecontainer = document.createElement('div');
+            hor_linecontainer.id = id +'_horizontallinecontainer';
+            hor_linecontainer.style.width = framewidt.toString() +"px";
+            hor_linecontainer.style.height = "70px"
+            hor_linecontainer.style.position = "absolute";
+            hor_linecontainer.style.left = "50%";
+            hor_linecontainer.style.bottom = "8%";
+            hor_linecontainer.style.marginLeft = "-"+(framewidt/2).toString()+"px";
+            hor_linecontainer.style.display = "block";
+
+
+
+            contentframe = document.getElementById(id +'_contentframe');
+
+            contentframe.appendChild(hor_linecontainer);
+
+            //IMPORT HORIZONTAL LINE SVG FILE
+            d3.xml("Images/horizontal_line.svg", "image/svg+xml", function(xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+
+                //importedNode.attributes.setNamedItem();
+
+                var svg = d3.select("#"+id +'_horizontallinecontainer').node().appendChild(importedNode);
+
+                var parentElement = document.getElementById(id +'_horizontallinecontainer');
+
+
+                //the <any> tag is a cast and should be used for the typescript compiler
+                //else it will throw an exception
+                var child = <any>parentElement.lastChild;
+
+                child.style.width = "100%";
+                child.style.position = "absolute";
+                //child.style.marginLeft = "-"+(child.offsetWidth/2).toString()+"px";
+
+
+            });
+
+            var len = hor_linecontainer.offsetWidth;
+            var x_coord = 0;
+            var y_coord = hor_linecontainer.getBoundingClientRect().top;
+
+
+
+            var time_line_marks_len = len/96;
+            var len_array = [];
+
+
+            //get offset
+            var offset = calcTime();
+            console.log(offset);
+
+            var timeLineArray = createTimeLine();
+
+            var count = x_coord + (time_line_marks_len*offset);
+            console.log(count);
+
+            len_array.push(count)
+
+            for(var i = 0; i<23;i++){
+                len_array.push(count + (time_line_marks_len*4));
+                count = count + (time_line_marks_len*4);
+
+            }
+
+            //create vertical timelineelements
+           for(var j = 0; j<len_array.length;j++){
+
+                var temp_timeline = document.createElement('div');
+                temp_timeline.id = id +'_horizontallinecontainer'+ j.toString();
+                temp_timeline.style.width = "5px";
+                temp_timeline.style.height = "20px";
+                temp_timeline.style.position = "absolute";
+                temp_timeline.style.left = len_array[j].toString()+"px";
+                //temp_timeline.style.bottom = distancefromBottom;
+
+
+
+
+                hor_linecontainer.appendChild(temp_timeline);
+
+                var countstring = "#"+id +'_horizontallinecontainer'+ j.toString();
+
+               if(timeLineArray[j]%timeDistance == 0){
+
+                   var temp_timebox = document.createElement('div');
+                   temp_timebox.id = id +'_horizontalTimecontainer'+ j.toString();
+                   temp_timebox.style.width = "5px";
+                   temp_timebox.style.height = "20px";
+                   temp_timebox.style.position = "absolute";
+                   temp_timebox.style.left = len_array[j].toString()+"px";
+                   temp_timebox.style.bottom = "0%";
+                   temp_timebox.className = "time-element";
+
+                   temp_timebox.innerHTML = timeLineArray[j].toString();
+
+                   hor_linecontainer.appendChild(temp_timebox);
+
+               }
+
+
+
+                v(countstring);
+
+
+
+            }
+
+            //create time boxes
+
+            var time_list = [];
+
+
+
+
+
+
+
+            function v (countstring){
+
+
+
+
+                //IMPORT VERTICAL LINE SVG FILE
+                d3.xml(choose(), "image/svg+xml", function(xml) {
+
+
+                    var importedNode = document.importNode(xml.documentElement, true);
+
+
+
+
+                    var svg = d3.select(countstring).node().appendChild(importedNode);
+
+                    //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+
+
+                });(countstring)
+
+
+              //returns a random path to a file
+              function choose():string{
+
+                  var filename = "Images/timelineelement_0.svg";
+
+                  var random = Math.random();
+
+                  if(random <0.10)
+                  {
+                      return "Images/timelineelement_0.svg";
+                  }
+                  else if(random < 0.2 && random > 0.1 ){
+
+                      return "Images/timelineelement_1.svg";
+                  }
+                  else if(random < 0.3 && random > 0.2 ){
+
+                      return "Images/timelineelement_2.svg";
+                  }
+                  else if(random < 0.4 && random > 0.3 ){
+
+                      return "Images/timelineelement_3.svg";
+                  }else if(random < 0.5 && random > 0.4 ){
+
+                      return "Images/timelineelement_4.svg";
+                  }else if(random < 0.6 && random > 0.5 ){
+
+                      return "Images/timelineelement_5.svg";
+                  }else if(random < 0.7 && random > 0.6 ){
+
+                      return "Images/timelineelement_6.svg";
+                  }else if(random < 0.8 && random > 0.7 ){
+
+                      return "Images/timelineelement_7.svg";
+                  }else if(random < 0.9 && random > 0.8 ){
+
+                      return "Images/timelineelement_8.svg";
+                  }else if(random < 1.0 && random > 0.9 ){
+
+                      return "Images/timelineelement_9.svg";
+                  }
+                  else if(random == 1.0  ){
+
+                      return "Images/timelineelement_10.svg";
+                  }
+
+
+                  return filename;
+
+
+              }
+
+
+
+            }
+
+            function calcTime():number{
+
+
+                var currentdate = new Date();
+
+
+
+                if(currentdate.getMinutes() < 15){
+
+                        return 0;
+                }
+                else if(currentdate.getMinutes() < 30 && currentdate.getMinutes() >= 15){
+
+                        return 3;
+                }
+                else if(currentdate.getMinutes() < 45 && currentdate.getMinutes() >= 30){
+                        return 2;
+                }
+                else if(currentdate.getMinutes() < 60 && currentdate.getMinutes() >= 45){
+                        return 1;
+                }
+                else{
+
+                   return 0;
+                }
+
+            }
+
+            //creates an array of hour numbers to go into the timeline
+            function createTimeLine():any{
+
+
+                var currentdate = new Date();
+                var dateArray = [];
+
+
+
+
+
+
+                var hour = currentdate.getHours() + 1;
+
+
+
+                if(currentdate.getMinutes() <= 15){
+
+                    hour = currentdate.getHours();
+                }
+
+                for(i=12;i>0;i--){
+
+                    if(hour == 0){
+                        hour = 23;
+                    }
+                    else{
+                    hour = hour-1;
+
+                    }
+
+                }
+
+
+                dateArray.push(hour);
+                for(var i = 0; i<22;i++){
+
+                    if(hour == 23)
+                    {hour = -1;}
+                    dateArray.push(hour+1);
+                    hour = hour + 1;
+
+                }
+                return dateArray;
+            }
+
+
+
+        }
+
+
+
+          /////PLACE METHODS WITHIN THIS BRACKET!
     }
+
+
 
 
 

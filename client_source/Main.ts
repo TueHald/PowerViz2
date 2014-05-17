@@ -32,30 +32,40 @@ module PowerViz {
 			//Setup the test sketches:
 			//1. Set the containing div size.
 			//2. Set the image to fit withing the div.
-			this.positionSketch("#sketchFlex", "#PrognoseView");
-			this.positionSketch("#sketchSource", "#viewTwo");
-			this.positionSketch("#sketchPrice", "#viewThree");
+			//this.positionSketch("#sketchFlex", "#PrognoseView");
+			//this.positionSketch("#sketchSource", "#viewTwo");
+			//this.positionSketch("#sketchPrice", "#viewThree");
 
 
 			//Test view:
-			var testView = new TestView();
-			var testController = new TestController();
-			testController.connectView(testView);
-			ViewContainer.instance.registerView("TestView", testView);
+			//var testView = new TestView();
+			//var testController = new TestController();
+			//testController.connectView(testView);
+			//ViewContainer.instance.registerView("TestView", testView);
+
+            var priceView = new Price_View();
+            priceView.setup();
+            var envView = new Env_View();
+            envView.setup();
+            var flexView = new Flex_View();
+            flexView.setup();
+
+            //ViewContainer.instance.registerView("TestView", testView);
+
 
 			//test topview
 
-			var testTopView = new Price_TopView();
-			testTopView.setup();
-            var testTopView2 = new Flex_TopView();
-            testTopView2.setup();
-            var testTopView3 = new Env_TopView();
-            testTopView3.setup();
+			var priceTopView = new Price_TopView();
+            priceTopView.setup();
+            var flexTopView = new Flex_TopView();
+            flexTopView.setup();
+            var envTopView = new Env_TopView();
+            envTopView.setup();
 
-			TopViewContainer.instance.addItem(testTopView);
-            TopViewContainer.instance.addItem(testTopView2);
-            TopViewContainer.instance.addItem(testTopView3);
-            testTopView2.enable();
+			TopViewContainer.instance.addItem(priceTopView);
+            TopViewContainer.instance.addItem(flexTopView);
+            TopViewContainer.instance.addItem(envTopView);
+            //flexTopView.enable();
 
             TopViewContainer.instance.setupViews();
 
@@ -64,7 +74,7 @@ module PowerViz {
 
 			//Now that all views are created, set them up. 
 			ViewContainer.instance.setupViews();
-			ViewContainer.instance.setActiveView("PrognoseView");
+			ViewContainer.instance.setActiveView("belastningView");
 
             //////MICHAELS PLAYGROUND!!!!/////////////
 
@@ -89,25 +99,33 @@ module PowerViz {
 
     function testLine() {
 
-        var margin = 4;
-
-
-
-        //x0,y0,x1,y1,fuzzyness
-        //slopedline(0,80,90,150,5);
+        //create some data
         var lineData = [ { "x": 1,   "y": 5},  { "x": 150,  "y": 60},
                             { "x": 240,  "y": 20}, { "x": 280,  "y": 40},
                            { "x": 490,  "y": 5},  { "x": 1400, "y": 60}];
 
-
+        //create some data 2
         var lineData2 = [ { "x": 1,   "y": 24},  { "x": 75,  "y": 50},
             { "x": 120,  "y": 45}, { "x": 290,  "y": 250},
             { "x": 560,  "y": 0},  { "x": 1400, "y": 300}];
 
-        //var lineData = [ { "x": 1,   "y": 5},  { "x": 600,  "y": 5}];
+        //var el = d3.select("belastningView").append("svg")
+        //    .style("top", "50%")
+        //    .style("position","absolute");
 
-        DrawUtils.drawGraph(lineData,"body", "test1","blue");
-        DrawUtils.drawGraph(lineData2,"body", "test2","red");
+
+        //Draw the Rectangle
+        //var el = d3.select("belastningView").selectAll('div').append("svg")
+
+
+
+
+
+
+
+        //Draw the data
+        //DrawUtils.drawGraph(lineData,"body", "test1","blue");
+        //DrawUtils.drawGraph(lineData2,"body", "test2","red");
 
 
 

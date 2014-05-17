@@ -6,6 +6,8 @@
 ///<reference path="typescriptdefs/jqueryui/jqueryui.d.ts" />
 ///<reference path="typescriptdefs/raphael/raphael.d.ts" />
 ///<reference path="typescriptdefs/d3/d3.d.ts" />
+///<reference path="typescriptdefs/datejs/datejs.d.ts" />
+///<reference path="typescriptdefs/datejs/sugarpak.d.ts" />
 
 //Helper classes:
 ///<reference path="helpers/ViewContainer.ts" />
@@ -28,6 +30,9 @@
 ///<reference path="views/Price_TopView.ts" />
 ///<reference path="views/Env_TopView.ts" />
 ///<reference path="views/Flex_TopView.ts" />
+///<reference path="views/Flex_View.ts" />
+///<reference path="views/Env_View.ts" />
+///<reference path="views/Price_View.ts" />
 
 
 

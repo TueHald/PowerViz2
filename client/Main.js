@@ -186,6 +186,12 @@ var PowerViz;
         ViewUtils.getTopBarWidth = function () {
             return $("#top-bar").width();
         };
+        ViewUtils.getSliderWidth = function () {
+            return $("#slider").width();
+        };
+        ViewUtils.getTotalHeight = function () {
+            return $("#slider").height() + $("#top-bar").height();
+        };
         return ViewUtils;
     })();
     PowerViz.ViewUtils = ViewUtils;
@@ -344,10 +350,11 @@ var PowerViz;
                 console.log("width is:" + _this._viewWidth);
 
                 for (var i in _this._container) {
-                    var element = document.getElementById(_this._container[i]._name);
+                    var element = document.getElementById(_this._container[i]._name + "_container");
 
                     //-2 --> taking note of the border, else the element will not fit
-                    element.style.width = "33.2%";
+                    element.style.width = "33.33%";
+                    element.style.height = "100%";
                     element.style.cssFloat = "left";
 
                     PowerViz.ViewUtils.setElementTopBarHeight(_this._container[i]._id);
@@ -639,6 +646,8 @@ var PowerViz;
                 pathdata = pathdata.concat(tempdata);
             }
 
+            var container = document.getElementById(id + '_graphcanvas');
+
             //This is the accessor function we talked about above
             var lineFunction = d3.svg.line().x(function (d) {
                 return d.x;
@@ -647,7 +656,7 @@ var PowerViz;
             }).interpolate("basis-open");
 
             //The SVG Container
-            var svgContainer = d3.select(id).append("svg").attr("id", svgname).attr("width", 1400).attr("height", 200).style("top", "50%").style("position", "absolute");
+            var svgContainer = d3.select("#" + id + '_graphcanvas').append("svg").attr("id", svgname).attr("width", container.offsetWidth.toString() + "px").attr("height", container.offsetHeight.toString() + "px").style("top", "50%").style("position", "absolute");
 
             //The line SVG Path we draw
             var lineGraph = svgContainer.append("path").attr("d", lineFunction(pathdata)).attr("stroke", color).attr("stroke-width", 4).attr("fill", "none").style("top", "50%").style("position", "absolute");
@@ -661,6 +670,261 @@ var PowerViz;
             vectorLength = Math.sqrt((x * x) + (y * y));
 
             return vectorLength;
+        };
+
+        //creates a canvas which the graphs can be drawn
+        //view is the calling views name
+        DrawUtils.createGraphCanvas = function (view) {
+            //create a container for the vertical line
+            var graphCanvas = document.createElement('div');
+            graphCanvas.id = view + '_graphcanvas';
+
+            var hor_lineContainer = document.getElementById(view + '_horizontallinecontainer');
+            var ver_lineContainer = document.getElementById(view + '_verticallinecontainer');
+
+            graphCanvas.style.width = hor_lineContainer.offsetWidth.toString() + "px";
+            graphCanvas.style.height = "547px";
+
+            graphCanvas.style.position = "absolute";
+            graphCanvas.style.left = "50%";
+
+            //get the contentframe
+            var contentframe = document.getElementById(view + '_contentframe');
+            contentframe.appendChild(graphCanvas);
+
+            graphCanvas.style.bottom = "" + (PowerViz.ViewUtils.getTotalHeight() - ver_lineContainer.getBoundingClientRect().top).toString() + "px";
+            graphCanvas.style.marginLeft = "-" + (hor_lineContainer.offsetWidth / 2).toString() + "px";
+        };
+
+        //draws a square in the frame
+        //**NOT USED**
+        DrawUtils.drawSquare = function (id, width, height, color) {
+            var canvas = d3.select(id).append("svg:svg").attr("width", "100%").attr("height", "100%").style("position", "absolute").style("margin-right", "auto").style("margin-left", "auto");
+
+            var rectangle = canvas.append("rect").attr("x", 0).attr("y", 0).attr("width", "100%").attr("height", "100%").attr("fill", color);
+        };
+
+        //method to draw contentframe inside the main view
+        //id should be the id of the sourrounding containter
+        //e.g the slider
+        DrawUtils.drawContentFrame = function (id, width, height) {
+            //variables to be used in parts of the function
+            var framewidt = 1227;
+            var distancefromBottom = "12%";
+            var timeDistance = 4;
+
+            //create the contentframe
+            var frame = document.createElement('div');
+            frame.id = id + '_contentframe';
+            frame.style.width = width;
+            frame.style.height = height;
+            frame.style.position = "absolute";
+
+            var div = document.getElementById(id);
+
+            div.appendChild(frame);
+
+            //create a container for the vertical line
+            var linecontainer = document.createElement('div');
+            linecontainer.id = id + '_verticallinecontainer';
+            linecontainer.style.width = "10px";
+            linecontainer.style.position = "absolute";
+            linecontainer.style.bottom = "15%";
+            linecontainer.style.marginLeft = "50%";
+            linecontainer.style.marginRight = "50%";
+
+            //get the contentframe
+            var contentframe = document.getElementById(id + '_contentframe');
+            contentframe.appendChild(linecontainer);
+
+            //IMPORT VERTICAL LINE SVG FILE
+            d3.xml("Images/vertical_line.svg", "image/svg+xml", function (xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+
+                //console.log(importedNode.attributes.getNamedItem("id").toString());
+                var svg = d3.select("#" + id + '_verticallinecontainer').node().appendChild(importedNode);
+                //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+            });
+
+            //create a container for the vertical line
+            var hor_linecontainer = document.createElement('div');
+            hor_linecontainer.id = id + '_horizontallinecontainer';
+            hor_linecontainer.style.width = framewidt.toString() + "px";
+            hor_linecontainer.style.height = "70px";
+            hor_linecontainer.style.position = "absolute";
+            hor_linecontainer.style.left = "50%";
+            hor_linecontainer.style.bottom = "8%";
+            hor_linecontainer.style.marginLeft = "-" + (framewidt / 2).toString() + "px";
+            hor_linecontainer.style.display = "block";
+
+            contentframe = document.getElementById(id + '_contentframe');
+
+            contentframe.appendChild(hor_linecontainer);
+
+            //IMPORT HORIZONTAL LINE SVG FILE
+            d3.xml("Images/horizontal_line.svg", "image/svg+xml", function (xml) {
+                var importedNode = document.importNode(xml.documentElement, true);
+
+                //importedNode.attributes.setNamedItem();
+                var svg = d3.select("#" + id + '_horizontallinecontainer').node().appendChild(importedNode);
+
+                var parentElement = document.getElementById(id + '_horizontallinecontainer');
+
+                //the <any> tag is a cast and should be used for the typescript compiler
+                //else it will throw an exception
+                var child = parentElement.lastChild;
+
+                child.style.width = "100%";
+                child.style.position = "absolute";
+                //child.style.marginLeft = "-"+(child.offsetWidth/2).toString()+"px";
+            });
+
+            var len = hor_linecontainer.offsetWidth;
+            var x_coord = 0;
+            var y_coord = hor_linecontainer.getBoundingClientRect().top;
+
+            var time_line_marks_len = len / 96;
+            var len_array = [];
+
+            //get offset
+            var offset = calcTime();
+            console.log(offset);
+
+            var timeLineArray = createTimeLine();
+
+            var count = x_coord + (time_line_marks_len * offset);
+            console.log(count);
+
+            len_array.push(count);
+
+            for (var i = 0; i < 23; i++) {
+                len_array.push(count + (time_line_marks_len * 4));
+                count = count + (time_line_marks_len * 4);
+            }
+
+            for (var j = 0; j < len_array.length; j++) {
+                var temp_timeline = document.createElement('div');
+                temp_timeline.id = id + '_horizontallinecontainer' + j.toString();
+                temp_timeline.style.width = "5px";
+                temp_timeline.style.height = "20px";
+                temp_timeline.style.position = "absolute";
+                temp_timeline.style.left = len_array[j].toString() + "px";
+
+                //temp_timeline.style.bottom = distancefromBottom;
+                hor_linecontainer.appendChild(temp_timeline);
+
+                var countstring = "#" + id + '_horizontallinecontainer' + j.toString();
+
+                if (timeLineArray[j] % timeDistance == 0) {
+                    var temp_timebox = document.createElement('div');
+                    temp_timebox.id = id + '_horizontalTimecontainer' + j.toString();
+                    temp_timebox.style.width = "5px";
+                    temp_timebox.style.height = "20px";
+                    temp_timebox.style.position = "absolute";
+                    temp_timebox.style.left = len_array[j].toString() + "px";
+                    temp_timebox.style.bottom = "0%";
+                    temp_timebox.className = "time-element";
+
+                    temp_timebox.innerHTML = timeLineArray[j].toString();
+
+                    hor_linecontainer.appendChild(temp_timebox);
+                }
+
+                v(countstring);
+            }
+
+            //create time boxes
+            var time_list = [];
+
+            function v(countstring) {
+                //IMPORT VERTICAL LINE SVG FILE
+                d3.xml(choose(), "image/svg+xml", function (xml) {
+                    var importedNode = document.importNode(xml.documentElement, true);
+
+                    var svg = d3.select(countstring).node().appendChild(importedNode);
+                    //console.log(d3.select("#"+id +'_verticallinecontainer').node().attributes.getNamedItem("id").value.toString());
+                });
+                (countstring);
+
+                //returns a random path to a file
+                function choose() {
+                    var filename = "Images/timelineelement_0.svg";
+
+                    var random = Math.random();
+
+                    if (random < 0.10) {
+                        return "Images/timelineelement_0.svg";
+                    } else if (random < 0.2 && random > 0.1) {
+                        return "Images/timelineelement_1.svg";
+                    } else if (random < 0.3 && random > 0.2) {
+                        return "Images/timelineelement_2.svg";
+                    } else if (random < 0.4 && random > 0.3) {
+                        return "Images/timelineelement_3.svg";
+                    } else if (random < 0.5 && random > 0.4) {
+                        return "Images/timelineelement_4.svg";
+                    } else if (random < 0.6 && random > 0.5) {
+                        return "Images/timelineelement_5.svg";
+                    } else if (random < 0.7 && random > 0.6) {
+                        return "Images/timelineelement_6.svg";
+                    } else if (random < 0.8 && random > 0.7) {
+                        return "Images/timelineelement_7.svg";
+                    } else if (random < 0.9 && random > 0.8) {
+                        return "Images/timelineelement_8.svg";
+                    } else if (random < 1.0 && random > 0.9) {
+                        return "Images/timelineelement_9.svg";
+                    } else if (random == 1.0) {
+                        return "Images/timelineelement_10.svg";
+                    }
+
+                    return filename;
+                }
+            }
+
+            function calcTime() {
+                var currentdate = new Date();
+
+                if (currentdate.getMinutes() < 15) {
+                    return 0;
+                } else if (currentdate.getMinutes() < 30 && currentdate.getMinutes() >= 15) {
+                    return 3;
+                } else if (currentdate.getMinutes() < 45 && currentdate.getMinutes() >= 30) {
+                    return 2;
+                } else if (currentdate.getMinutes() < 60 && currentdate.getMinutes() >= 45) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+
+            //creates an array of hour numbers to go into the timeline
+            function createTimeLine() {
+                var currentdate = new Date();
+                var dateArray = [];
+
+                var hour = currentdate.getHours() + 1;
+
+                if (currentdate.getMinutes() <= 15) {
+                    hour = currentdate.getHours();
+                }
+
+                for (i = 12; i > 0; i--) {
+                    if (hour == 0) {
+                        hour = 23;
+                    } else {
+                        hour = hour - 1;
+                    }
+                }
+
+                dateArray.push(hour);
+                for (var i = 0; i < 22; i++) {
+                    if (hour == 23) {
+                        hour = -1;
+                    }
+                    dateArray.push(hour + 1);
+                    hour = hour + 1;
+                }
+                return dateArray;
+            }
         };
         DrawUtils.lineFunction = d3.svg.line().x(function (d) {
             return d.x;
@@ -797,32 +1061,43 @@ var PowerViz;
             this._selected = false;
             this.setup = function () {
                 var element = document.createElement("div");
-                element.id = _this._name;
+                element.id = _this._name + "_container";
 
                 //element.appendChild(document.createTextNode(this._name));
                 document.getElementById('top-bar').appendChild(element);
-                element.style.border = "1px solid black";
 
-                //element.style.width = "0px";
-                //element.style.height = "0px";
+                //element.style.border = "1px solid black";
                 _this._selected = false;
 
-                var topelement = document.getElementById(_this._name);
+                var topelement = document.getElementById(_this._name + "_container");
                 topelement.className = "bar-element";
 
-                //topelement.getElementById('top-bar').appendChild(element);
-                element.innerHTML = "<h3>This is a heading</h3>";
+                topelement.style.verticalAlign = "middle";
+                topelement.style.marginBottom = "auto";
+                topelement.style.marginTop = "auto";
+                topelement.style.zIndex = "60";
+
+                var textfield = document.createElement("div");
+                textfield.id = _this._name + "_textfield";
+                textfield.className = "text-bar-element";
+                textfield.innerHTML = "<h1>" + _this._textFieldText + "</h1>";
+                textfield.style.textAlign = "center";
+                textfield.style.zIndex = "100";
+
+                document.getElementById(_this._name + "_container").appendChild(textfield);
             };
             //Required by the View interface.
+            //specifies what should happend when a topview becomes active
             this.enable = function () {
                 //this._controller.enable();
-                var element = document.getElementById(_this._name);
+                var element = document.getElementById(_this._name + "_container");
                 element.style.backgroundColor = "blue";
             };
             //Required by the View interface.
+            //specifies what should happend when a topview becomes disabled
             this.disable = function () {
                 //this._controller.disable();
-                var element = document.getElementById(_this._name);
+                var element = document.getElementById(_this._name + "_container");
                 element.style.backgroundColor = "gray";
             };
             //Required by the View interface.
@@ -851,9 +1126,10 @@ var PowerViz;
         __extends(Price_TopView, _super);
         function Price_TopView() {
             _super.apply(this, arguments);
-            this._name = "testPrice_TopView";
-            this._id = "#testPrice_TopView";
-            this._refToView = "viewThree";
+            this._name = "price_TopView";
+            this._id = "#price_TopView";
+            this._refToView = "priceView";
+            this._textFieldText = "Pris";
             //Required by the View interface.
             this.beginLoading = function () {
             };
@@ -881,10 +1157,11 @@ var PowerViz;
         __extends(Env_TopView, _super);
         function Env_TopView() {
             _super.apply(this, arguments);
-            this._name = "testEnv_TopView";
-            this._id = "#testEnv_TopView";
+            this._name = "env_TopView";
+            this._id = "#env_TopView";
             //reference to the view, essentially the same as the view name
-            this._refToView = "viewTwo";
+            this._refToView = "envView";
+            this._textFieldText = "Miljø";
             //Required by the View interface.
             this.beginLoading = function () {
             };
@@ -912,9 +1189,10 @@ var PowerViz;
         __extends(Flex_TopView, _super);
         function Flex_TopView() {
             _super.apply(this, arguments);
-            this._name = "testFlex_TopView";
-            this._id = "#testFlex_TopView";
-            this._refToView = "PrognoseView";
+            this._name = "belastning_TopView";
+            this._id = "#belastning_TopView";
+            this._refToView = "belastningView";
+            this._textFieldText = "Belastning";
             //Required by the View interface.
             this.beginLoading = function () {
             };
@@ -932,6 +1210,170 @@ var PowerViz;
         return Flex_TopView;
     })(PowerViz.TopView);
     PowerViz.Flex_TopView = Flex_TopView;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    var Flex_View = (function () {
+        function Flex_View() {
+            var _this = this;
+            this._name = "belastningView";
+            this._id = "#belastningView";
+            //Required by View interface.
+            this.setup = function () {
+                //Set the size of the div:
+                PowerViz.ViewUtils.setElementToViewHeight(_this._id);
+
+                //$(this._id).css("background-color", "yellow");
+                PowerViz.DrawUtils.drawContentFrame(_this._name, "100%", "100%");
+            };
+            //Required by the View interface.
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            //Required by the View interface.
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            //Required by the View interface.
+            this.beginLoading = function () {
+            };
+            //Required by the View interface.
+            this.endLoading = function () {
+            };
+            //--------------------
+            //Specific for this view.
+            this.setHeadline = function (txt) {
+                $(_this._id).text(txt);
+            };
+        }
+        Object.defineProperty(Flex_View.prototype, "controller", {
+            //Not required, but makes linking the controller to the view sligtly easier.
+            //Should only be used by the controller.
+            set: function (c) {
+                this._controller = c;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Flex_View;
+    })();
+    PowerViz.Flex_View = Flex_View;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    var Env_View = (function () {
+        function Env_View() {
+            var _this = this;
+            this._name = "envView";
+            this._id = "#envView";
+            //Required by View interface.
+            this.setup = function () {
+                //Set the size of the div:
+                PowerViz.ViewUtils.setElementToViewHeight(_this._id);
+
+                PowerViz.DrawUtils.drawContentFrame(_this._name, "100%", "100%");
+
+                PowerViz.DrawUtils.createGraphCanvas(_this._name);
+
+                //create some data
+                var lineData = [
+                    { "x": 1, "y": 5 }, { "x": 150, "y": 60 },
+                    { "x": 240, "y": 20 }, { "x": 280, "y": 40 },
+                    { "x": 490, "y": 5 }, { "x": 1400, "y": 60 }];
+
+                //create some data 2
+                var lineData2 = [
+                    { "x": 1, "y": 24 }, { "x": 75, "y": 50 },
+                    { "x": 120, "y": 45 }, { "x": 290, "y": 250 },
+                    { "x": 560, "y": 0 }, { "x": 1400, "y": 300 }];
+
+                PowerViz.DrawUtils.drawGraph(lineData, _this._name, "test1", "blue");
+
+                PowerViz.DrawUtils.drawGraph(lineData2, _this._name, "test1", "red");
+            };
+            //Required by the View interface.
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            //Required by the View interface.
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            //Required by the View interface.
+            this.beginLoading = function () {
+            };
+            //Required by the View interface.
+            this.endLoading = function () {
+            };
+            //--------------------
+            //Specific for this view.
+            this.setHeadline = function (txt) {
+                $(_this._id).text(txt);
+            };
+        }
+        Object.defineProperty(Env_View.prototype, "controller", {
+            //Not required, but makes linking the controller to the view sligtly easier.
+            //Should only be used by the controller.
+            set: function (c) {
+                this._controller = c;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Env_View;
+    })();
+    PowerViz.Env_View = Env_View;
+})(PowerViz || (PowerViz = {}));
+///<reference path="../References.ts" />
+var PowerViz;
+(function (PowerViz) {
+    var Price_View = (function () {
+        function Price_View() {
+            var _this = this;
+            this._name = "priceView";
+            this._id = "#priceView";
+            //Required by View interface.
+            this.setup = function () {
+                //Set the size of the div:
+                PowerViz.ViewUtils.setElementToViewHeight(_this._id);
+
+                //$(this._id).css("background-color", "yellow");
+                PowerViz.DrawUtils.drawContentFrame(_this._name, "100%", "100%");
+            };
+            //Required by the View interface.
+            this.enable = function () {
+                _this._controller.enable();
+            };
+            //Required by the View interface.
+            this.disable = function () {
+                _this._controller.disable();
+            };
+            //Required by the View interface.
+            this.beginLoading = function () {
+            };
+            //Required by the View interface.
+            this.endLoading = function () {
+            };
+            //--------------------
+            //Specific for this view.
+            this.setHeadline = function (txt) {
+                $(_this._id).text(txt);
+            };
+        }
+        Object.defineProperty(Price_View.prototype, "controller", {
+            //Not required, but makes linking the controller to the view sligtly easier.
+            //Should only be used by the controller.
+            set: function (c) {
+                this._controller = c;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Price_View;
+    })();
+    PowerViz.Price_View = Price_View;
 })(PowerViz || (PowerViz = {}));
 //Base class for all controllers
 ///<reference path="../References.ts" />
@@ -1108,35 +1550,41 @@ var PowerViz;
                 //Setup the test sketches:
                 //1. Set the containing div size.
                 //2. Set the image to fit withing the div.
-                _this.positionSketch("#sketchFlex", "#PrognoseView");
-                _this.positionSketch("#sketchSource", "#viewTwo");
-                _this.positionSketch("#sketchPrice", "#viewThree");
-
+                //this.positionSketch("#sketchFlex", "#PrognoseView");
+                //this.positionSketch("#sketchSource", "#viewTwo");
+                //this.positionSketch("#sketchPrice", "#viewThree");
                 //Test view:
-                var testView = new PowerViz.TestView();
-                var testController = new PowerViz.TestController();
-                testController.connectView(testView);
-                PowerViz.ViewContainer.instance.registerView("TestView", testView);
+                //var testView = new TestView();
+                //var testController = new TestController();
+                //testController.connectView(testView);
+                //ViewContainer.instance.registerView("TestView", testView);
+                var priceView = new PowerViz.Price_View();
+                priceView.setup();
+                var envView = new PowerViz.Env_View();
+                envView.setup();
+                var flexView = new PowerViz.Flex_View();
+                flexView.setup();
 
+                //ViewContainer.instance.registerView("TestView", testView);
                 //test topview
-                var testTopView = new PowerViz.Price_TopView();
-                testTopView.setup();
-                var testTopView2 = new PowerViz.Flex_TopView();
-                testTopView2.setup();
-                var testTopView3 = new PowerViz.Env_TopView();
-                testTopView3.setup();
+                var priceTopView = new PowerViz.Price_TopView();
+                priceTopView.setup();
+                var flexTopView = new PowerViz.Flex_TopView();
+                flexTopView.setup();
+                var envTopView = new PowerViz.Env_TopView();
+                envTopView.setup();
 
-                PowerViz.TopViewContainer.instance.addItem(testTopView);
-                PowerViz.TopViewContainer.instance.addItem(testTopView2);
-                PowerViz.TopViewContainer.instance.addItem(testTopView3);
-                testTopView2.enable();
+                PowerViz.TopViewContainer.instance.addItem(priceTopView);
+                PowerViz.TopViewContainer.instance.addItem(flexTopView);
+                PowerViz.TopViewContainer.instance.addItem(envTopView);
 
+                //flexTopView.enable();
                 PowerViz.TopViewContainer.instance.setupViews();
 
                 //end test topview
                 //Now that all views are created, set them up.
                 PowerViz.ViewContainer.instance.setupViews();
-                PowerViz.ViewContainer.instance.setActiveView("PrognoseView");
+                PowerViz.ViewContainer.instance.setActiveView("belastningView");
 
                 //////MICHAELS PLAYGROUND!!!!/////////////
                 testLine();
@@ -1166,22 +1614,24 @@ var PowerViz;
     PowerViz.Main = Main;
 
     function testLine() {
-        var margin = 4;
-
-        //x0,y0,x1,y1,fuzzyness
-        //slopedline(0,80,90,150,5);
+        //create some data
         var lineData = [
             { "x": 1, "y": 5 }, { "x": 150, "y": 60 },
             { "x": 240, "y": 20 }, { "x": 280, "y": 40 },
             { "x": 490, "y": 5 }, { "x": 1400, "y": 60 }];
 
+        //create some data 2
         var lineData2 = [
             { "x": 1, "y": 24 }, { "x": 75, "y": 50 },
             { "x": 120, "y": 45 }, { "x": 290, "y": 250 },
             { "x": 560, "y": 0 }, { "x": 1400, "y": 300 }];
-
-        //var lineData = [ { "x": 1,   "y": 5},  { "x": 600,  "y": 5}];
-        PowerViz.DrawUtils.drawGraph(lineData, "body", "test1", "blue");
-        PowerViz.DrawUtils.drawGraph(lineData2, "body", "test2", "red");
+        //var el = d3.select("belastningView").append("svg")
+        //    .style("top", "50%")
+        //    .style("position","absolute");
+        //Draw the Rectangle
+        //var el = d3.select("belastningView").selectAll('div').append("svg")
+        //Draw the data
+        //DrawUtils.drawGraph(lineData,"body", "test1","blue");
+        //DrawUtils.drawGraph(lineData2,"body", "test2","red");
     }
 })(PowerViz || (PowerViz = {}));

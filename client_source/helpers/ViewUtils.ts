@@ -49,7 +49,14 @@ module PowerViz {
             return  $("#top-bar").width();
 
         }
+        static getSliderWidth():number{
+            return  $("#slider").width();
 
+        }
+        static getTotalHeight():number{
+            return  $("#slider").height()+$("#top-bar").height();
+
+        }
 		
 	}
 }
