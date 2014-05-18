@@ -253,22 +253,23 @@ module PowerViz {
         var err = dx-dy;
         var linedata = [];
 
+
+
         var vectorLength = this.jitterFunction((x0-x1),(y0,y1));
 
-        console.log((100/vectorLength)+fuzzyness);
 
         //set the interval of the points
         var interval = Math.floor((100/vectorLength)+fuzzyness);
         var intervalCount = 0;
 
-        while(true){
+            console.log("int "+interval.toString());
+
+        for(var i=0; i<interval;i++){
 
 
-            if(intervalCount % interval == 0 || ((x0==x1) && (y0==y1))){
-                console.log("x-coordinate: " + x0 + " and y-coordinate: " + y0);
                 addLineData(x0 + Math.floor(Math.random()*6)-2,y0 + Math.floor(Math.random()*6)-2,linedata);
 
-            }
+
 
             intervalCount ++;
             if ((x0==x1) && (y0==y1)) break;
@@ -295,6 +296,8 @@ module PowerViz {
          .attr("stroke-width", 2)
          .attr("fill", "none");*/
 
+
+
         function addLineData(x:number, y: number, array){
 
             array.push({"x": x,   "y": y})
@@ -314,32 +317,57 @@ module PowerViz {
         console.log(CoordinateSet.toString());
         var pathdata = [];
 
-        for(var i=0;i<CoordinateSet.length-1;i++){
+        var container = document.getElementById(id+'_graphcanvas');
 
-            var tempdata = this.slopedline(CoordinateSet[i].x,CoordinateSet[i].y,CoordinateSet[i+1].x,
-                CoordinateSet[i+1].y,14);
+        var y_height = container.offsetHeight/100;
+        var x_len = container.offsetWidth/96;
+
+        //if(CoordinateSet.length < 96){
+
+            //write message to user
+        //    container.innerHTML = "Graf ikke tilgængelig på nuværende tidspunkt!";
+
+
+
+
+       // }
+        //else if(CoordinateSet.length >= 96){
+            //ensure that the array is exactly 96 spaces long
+            var newCoordinateset = CoordinateSet.slice(0,96);
+            console.log(newCoordinateset.length.toString());
+
+        for(var i=0;i<newCoordinateset.length-1;i++){
+
+            var tempdata = this.slopedline(((i)*x_len),(newCoordinateset[i].y*y_height),((i+1)*x_len),
+                (newCoordinateset[i+1].y*y_height),4);
             console.log(tempdata.toString());
             pathdata = pathdata.concat(tempdata);
 
         }
 
-            var container = document.getElementById(id+'_graphcanvas');
+
+        for(var t = 0; t<pathdata.length;t++){
 
 
 
+            pathdata[t].y = (container.offsetHeight-10) - pathdata[t].y;
+
+        }
+
+        console.log(pathdata.length.toString());
 
         //This is the accessor function we talked about above
         var lineFunction = d3.svg.line()
             .x(function(d) { return d.x; })
             .y(function(d) { return d.y; })
-            .interpolate("basis-open");
+            .interpolate("bundle");
 
         //The SVG Container
         var svgContainer = d3.select("#"+id+'_graphcanvas').append("svg")
             .attr("id",svgname)
             .attr("width", container.offsetWidth.toString()+"px")
             .attr("height", container.offsetHeight.toString() + "px")
-            .style("top", "50%")
+            //.style("top", "00%")
             .style("position","absolute");
 
 
@@ -349,9 +377,12 @@ module PowerViz {
             .attr("stroke", color)
             .attr("stroke-width", 4)
             .attr("fill", "none")
+            //comment this in if dashes is needed
             //.style("stroke-dasharray", ("5, 5, 5, 5, 5, 5, 10, 5, 10, 5, 10, 5"))
-            .style("top", "50%")
+            .style("bottom0", "0%")
             .style("position","absolute");
+
+       // }
 
 
     }
@@ -363,6 +394,8 @@ module PowerViz {
 
 
         vectorLength = Math.sqrt((x*x) + (y*y));
+
+
 
         return vectorLength;
 

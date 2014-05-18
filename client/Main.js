@@ -584,17 +584,14 @@ var PowerViz;
 
             var vectorLength = this.jitterFunction((x0 - x1), (y0, y1));
 
-            console.log((100 / vectorLength) + fuzzyness);
-
             //set the interval of the points
             var interval = Math.floor((100 / vectorLength) + fuzzyness);
             var intervalCount = 0;
 
-            while (true) {
-                if (intervalCount % interval == 0 || ((x0 == x1) && (y0 == y1))) {
-                    console.log("x-coordinate: " + x0 + " and y-coordinate: " + y0);
-                    addLineData(x0 + Math.floor(Math.random() * 6) - 2, y0 + Math.floor(Math.random() * 6) - 2, linedata);
-                }
+            console.log("int " + interval.toString());
+
+            for (var i = 0; i < interval; i++) {
+                addLineData(x0 + Math.floor(Math.random() * 6) - 2, y0 + Math.floor(Math.random() * 6) - 2, linedata);
 
                 intervalCount++;
                 if ((x0 == x1) && (y0 == y1))
@@ -640,26 +637,45 @@ var PowerViz;
             console.log(CoordinateSet.toString());
             var pathdata = [];
 
-            for (var i = 0; i < CoordinateSet.length - 1; i++) {
-                var tempdata = this.slopedline(CoordinateSet[i].x, CoordinateSet[i].y, CoordinateSet[i + 1].x, CoordinateSet[i + 1].y, 14);
+            var container = document.getElementById(id + '_graphcanvas');
+
+            var y_height = container.offsetHeight / 100;
+            var x_len = container.offsetWidth / 96;
+
+            //if(CoordinateSet.length < 96){
+            //write message to user
+            //    container.innerHTML = "Graf ikke tilgængelig på nuværende tidspunkt!";
+            // }
+            //else if(CoordinateSet.length >= 96){
+            //ensure that the array is exactly 96 spaces long
+            var newCoordinateset = CoordinateSet.slice(0, 96);
+            console.log(newCoordinateset.length.toString());
+
+            for (var i = 0; i < newCoordinateset.length - 1; i++) {
+                var tempdata = this.slopedline(((i) * x_len), (newCoordinateset[i].y * y_height), ((i + 1) * x_len), (newCoordinateset[i + 1].y * y_height), 4);
                 console.log(tempdata.toString());
                 pathdata = pathdata.concat(tempdata);
             }
 
-            var container = document.getElementById(id + '_graphcanvas');
+            for (var t = 0; t < pathdata.length; t++) {
+                pathdata[t].y = (container.offsetHeight - 10) - pathdata[t].y;
+            }
+
+            console.log(pathdata.length.toString());
 
             //This is the accessor function we talked about above
             var lineFunction = d3.svg.line().x(function (d) {
                 return d.x;
             }).y(function (d) {
                 return d.y;
-            }).interpolate("basis-open");
+            }).interpolate("bundle");
 
             //The SVG Container
-            var svgContainer = d3.select("#" + id + '_graphcanvas').append("svg").attr("id", svgname).attr("width", container.offsetWidth.toString() + "px").attr("height", container.offsetHeight.toString() + "px").style("top", "50%").style("position", "absolute");
+            var svgContainer = d3.select("#" + id + '_graphcanvas').append("svg").attr("id", svgname).attr("width", container.offsetWidth.toString() + "px").attr("height", container.offsetHeight.toString() + "px").style("position", "absolute");
 
             //The line SVG Path we draw
-            var lineGraph = svgContainer.append("path").attr("d", lineFunction(pathdata)).attr("stroke", color).attr("stroke-width", 4).attr("fill", "none").style("top", "50%").style("position", "absolute");
+            var lineGraph = svgContainer.append("path").attr("d", lineFunction(pathdata)).attr("stroke", color).attr("stroke-width", 4).attr("fill", "none").style("bottom0", "0%").style("position", "absolute");
+            // }
         };
 
         //function that calculates vector
@@ -1279,19 +1295,27 @@ var PowerViz;
 
                 //create some data
                 var lineData = [
-                    { "x": 1, "y": 5 }, { "x": 150, "y": 60 },
-                    { "x": 240, "y": 20 }, { "x": 280, "y": 40 },
-                    { "x": 490, "y": 5 }, { "x": 1400, "y": 60 }];
+                    { "x": 0, "y": 0 }, { "x": 1, "y": 0 },
+                    { "x": 2, "y": 0 }, { "x": 3, "y": 50 },
+                    { "x": 4, "y": 60 }, { "x": 5, "y": 80 },
+                    { "x": 2, "y": 60 }, { "x": 3, "y": 50 },
+                    { "x": 4, "y": 40 }, { "x": 5, "y": 30 },
+                    { "x": 2, "y": 20 }, { "x": 3, "y": 20 },
+                    { "x": 4, "y": 0 }, { "x": 5, "y": 0 }];
 
                 //create some data 2
                 var lineData2 = [
-                    { "x": 1, "y": 24 }, { "x": 75, "y": 50 },
-                    { "x": 120, "y": 45 }, { "x": 290, "y": 250 },
-                    { "x": 560, "y": 0 }, { "x": 1400, "y": 300 }];
+                    { "x": 0, "y": 0 }, { "x": 1, "y": 0 },
+                    { "x": 2, "y": 0 }, { "x": 3, "y": 50 },
+                    { "x": 4, "y": 40 }, { "x": 5, "y": 100 },
+                    { "x": 2, "y": 20 }, { "x": 3, "y": 30 },
+                    { "x": 4, "y": 70 }, { "x": 5, "y": 10 },
+                    { "x": 2, "y": 0 }, { "x": 3, "y": 20 },
+                    { "x": 4, "y": 20 }, { "x": 5, "y": 57 }];
 
                 PowerViz.DrawUtils.drawGraph(lineData, _this._name, "test1", "blue");
 
-                PowerViz.DrawUtils.drawGraph(lineData2, _this._name, "test1", "red");
+                PowerViz.DrawUtils.drawGraph(lineData2, _this._name, "test2", "red");
             };
             //Required by the View interface.
             this.enable = function () {

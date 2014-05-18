@@ -21,18 +21,26 @@ module PowerViz {
 
 
             //create some data
-            var lineData = [ { "x": 1,   "y": 5},  { "x": 150,  "y": 60},
-                { "x": 240,  "y": 20}, { "x": 280,  "y": 40},
-                { "x": 490,  "y": 5},  { "x": 1400, "y": 60}];
+            var lineData = [ { "x": 0,   "y": 0},  { "x": 1,  "y": 0},
+                { "x": 2,  "y": 0}, { "x": 3,  "y": 50},
+                { "x": 4,  "y": 60},  { "x": 5, "y": 80},
+                { "x": 2,  "y": 60}, { "x": 3,  "y": 50},
+                { "x": 4,  "y": 40},  { "x": 5, "y": 30},
+                { "x": 2,  "y": 20}, { "x": 3,  "y": 20},
+                { "x": 4,  "y": 0},  { "x": 5, "y": 0}];
 
             //create some data 2
-            var lineData2 = [ { "x": 1,   "y": 24},  { "x": 75,  "y": 50},
-                { "x": 120,  "y": 45}, { "x": 290,  "y": 250},
-                { "x": 560,  "y": 0},  { "x": 1400, "y": 300}];
+            var lineData2 = [ { "x": 0,   "y": 0},  { "x": 1,  "y": 0},
+                { "x": 2,  "y": 0}, { "x": 3,  "y": 50},
+                { "x": 4,  "y": 40},  { "x": 5, "y": 100},
+                { "x": 2,  "y": 20}, { "x": 3,  "y": 30},
+                { "x": 4,  "y": 70},  { "x": 5, "y": 10},
+                { "x": 2,  "y": 0}, { "x": 3,  "y": 20},
+                { "x": 4,  "y": 20},  { "x": 5, "y": 57}];
 
             DrawUtils.drawGraph(lineData,this._name, "test1","blue");
 
-            DrawUtils.drawGraph(lineData2,this._name, "test1","red");
+            DrawUtils.drawGraph(lineData2,this._name, "test2","red");
 
 
         }
